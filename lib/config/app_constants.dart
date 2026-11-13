@@ -1,8 +1,8 @@
 enum Environment { development, production }
  
 class AppConstants {
-  // Codecanyon
-  static const String baseUrl = 'https://webreadyecommerce.razinsoft.com/api';
+  // Production shop API
+  static const String baseUrl = 'https://shop.itrsp.com/api';
   //static const String baseUrl = 'https://armachine.in/api';
 
   // chatak

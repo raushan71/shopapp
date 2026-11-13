@@ -1,0 +1,112 @@
+name: Build Android APK and App Bundle
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - master
+    tags:
+      - "v*"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: android-build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-android:
+    name: Build Android artifacts
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      FLUTTER_VERSION: "3.35.5"
+      HAS_RELEASE_SIGNING: ${{ secrets.ANDROID_KEYSTORE_BASE64 != '' && secrets.ANDROID_KEY_ALIAS != '' && secrets.ANDROID_KEY_PASSWORD != '' && secrets.ANDROID_STORE_PASSWORD != '' }}
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+          cache: gradle
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+
+      - name: Show tool versions
+        run: |
+          flutter --version
+          java -version
+
+      - name: Restore generated Android wrapper files
+        run: flutter create --platforms=android --project-name ready_ecommerce --no-pub .
+
+      - name: Install Flutter dependencies
+        run: flutter pub get
+
+      - name: Configure release signing
+        if: env.HAS_RELEASE_SIGNING == 'true'
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+          ANDROID_STORE_PASSWORD: ${{ secrets.ANDROID_STORE_PASSWORD }}
+        run: |
+          printf '%s' "$ANDROID_KEYSTORE_BASE64" | base64 --decode > android/app/release-keystore.jks
+          {
+            printf 'storePassword=%s\n' "$ANDROID_STORE_PASSWORD"
+            printf 'keyPassword=%s\n' "$ANDROID_KEY_PASSWORD"
+            printf 'keyAlias=%s\n' "$ANDROID_KEY_ALIAS"
+            printf 'storeFile=release-keystore.jks\n'
+          } > android/key.properties
+
+      - name: Build signed release APK and App Bundle
+        if: env.HAS_RELEASE_SIGNING == 'true'
+        run: |
+          flutter build apk --release
+          flutter build appbundle --release
+
+      - name: Build debug APK and App Bundle
+        if: env.HAS_RELEASE_SIGNING != 'true'
+        run: |
+          echo "Release signing secrets are not configured; building debug artifacts."
+          flutter build apk --debug
+          flutter build appbundle --debug
+
+      - name: Collect build files
+        run: |
+          mkdir -p dist
+          find build/app/outputs -type f \( -name '*.apk' -o -name '*.aab' \) -exec cp {} dist/ \;
+          test -n "$(find dist -maxdepth 1 -type f -name '*.apk' -print -quit)"
+          test -n "$(find dist -maxdepth 1 -type f -name '*.aab' -print -quit)"
+          cd dist
+          sha256sum *.apk *.aab > SHA256SUMS.txt
+
+      - name: Upload APK and App Bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: shopapp-android-${{ env.HAS_RELEASE_SIGNING == 'true' && 'release' || 'debug' }}-${{ github.run_number }}
+          path: dist/
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Add build summary
+        run: |
+          if [ "$HAS_RELEASE_SIGNING" = "true" ]; then
+            echo "### Android build: signed release" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "### Android build: debug" >> "$GITHUB_STEP_SUMMARY"
+            echo "Add the four Android signing secrets described in README.md to generate production release files." >> "$GITHUB_STEP_SUMMARY"
+          fi
+          echo "Shop API: https://shop.itrsp.com/api" >> "$GITHUB_STEP_SUMMARY"
+          echo "Download the APK, AAB, and SHA256SUMS.txt from this workflow run's Artifacts section." >> "$GITHUB_STEP_SUMMARY"
