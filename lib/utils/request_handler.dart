@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:hive/hive.dart';
-import 'package:pretty_dio_clean_logger/pretty_dio_clean_logger.dart';
+import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:ready_ecommerce/config/app_constants.dart';
 import 'package:ready_ecommerce/routes.dart';
 import 'package:ready_ecommerce/utils/global_function.dart';
@@ -16,7 +16,7 @@ class ApiInterceptors {
   }
 
   static void _addLoggerInterceptor(Dio dio) {
-    dio.interceptors.add(PrettyDioCleanLogger(
+    dio.interceptors.add(PrettyDioLogger(
       requestHeader: true,
       requestBody: true,
       responseBody: true,
