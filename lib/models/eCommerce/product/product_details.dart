@@ -78,6 +78,8 @@ class Product {
   final List<Color> colors;
   final List<SizeModel> productSizeList;
   final String? brand;
+  final String? colorVariationName;
+  final OrderOptions orderOptions;
   final ShopInfo shop;
   final String description;
   RunningFlashSale? runningFlashSale;
@@ -98,6 +100,8 @@ class Product {
       required this.colors,
       required this.productSizeList,
       required this.brand,
+      required this.colorVariationName,
+      required this.orderOptions,
       required this.shop,
       required this.description,
       this.runningFlashSale,
@@ -119,6 +123,8 @@ class Product {
       List<Color>? colors,
       List<SizeModel>? productSizeList,
       String? brand,
+      String? colorVariationName,
+      OrderOptions? orderOptions,
       ShopInfo? shop,
       String? description,
       RunningFlashSale? runningFlashSale,
@@ -139,6 +145,8 @@ class Product {
         colors: colors ?? this.colors,
         productSizeList: productSizeList ?? this.productSizeList,
         brand: brand ?? this.brand,
+        colorVariationName: colorVariationName ?? this.colorVariationName,
+        orderOptions: orderOptions ?? this.orderOptions,
         shop: shop ?? this.shop,
         description: description ?? this.description,
         runningFlashSale: runningFlashSale ?? this.runningFlashSale,
@@ -160,7 +168,10 @@ class Product {
       'isFavorite': isFavorite,
       'thumbnails': thumbnails.map((x) => x.toMap()).toList(),
       'colors': colors.map((x) => x.toMap()).toList(),
+      'sizes': productSizeList.map((x) => x.toMap()).toList(),
       'brand': brand,
+      'color_variation_name': colorVariationName,
+      'order_options': orderOptions.toMap(),
       'shop': shop.toMap(),
       'description': description,
       "runningFlashSale": runningFlashSale,
@@ -196,7 +207,11 @@ class Product {
           (e) => SizeModel.fromMap(e),
         ),
       ),
-      brand: map['brand'] as String?,
+      brand: (map['brand'] as String?)?.trim(),
+      colorVariationName: map['color_variation_name'] as String?,
+      orderOptions: OrderOptions.fromMap(
+        map['order_options'] as Map<String, dynamic>? ?? const {},
+      ),
       shop: ShopInfo.fromMap(map['shop'] as Map<String, dynamic>),
       description: map['description'] as String,
       runningFlashSale: map["flash_sale"] == null
@@ -326,21 +341,33 @@ class Color {
   final int id;
   final String name;
   final double price;
+  final String? colorCode;
+  final List<Thumbnail> media;
+  final String? swatchImage;
   Color({
     required this.id,
     required this.name,
     required this.price,
+    this.colorCode,
+    this.media = const [],
+    this.swatchImage,
   });
 
   Color copyWith({
     int? id,
     String? name,
     double? price,
+    String? colorCode,
+    List<Thumbnail>? media,
+    String? swatchImage,
   }) {
     return Color(
       id: id ?? this.id,
       name: name ?? this.name,
       price: price ?? this.price,
+      colorCode: colorCode ?? this.colorCode,
+      media: media ?? this.media,
+      swatchImage: swatchImage ?? this.swatchImage,
     );
   }
 
@@ -349,14 +376,23 @@ class Color {
       'id': id,
       'name': name,
       'price': price,
+      'color_code': colorCode,
+      'media': media.map((item) => item.toMap()).toList(),
+      'swatch_image': swatchImage,
     };
   }
 
   factory Color.fromMap(Map<String, dynamic> map) {
     return Color(
-      id: map['id'].toInt() as int,
+      id: (map['id'] as num).toInt(),
       name: map['name'] as String,
-      price: map['price'] as double,
+      price: (map['price'] as num?)?.toDouble() ?? 0,
+      colorCode: map['color_code'] as String?,
+      media: (map['media'] as List<dynamic>? ?? const [])
+          .whereType<Map<String, dynamic>>()
+          .map(Thumbnail.fromMap)
+          .toList(),
+      swatchImage: map['swatch_image'] as String?,
     );
   }
 
@@ -377,6 +413,40 @@ class Color {
 
   @override
   int get hashCode => id.hashCode ^ name.hashCode;
+}
+
+class OrderOptions {
+  final bool doorstepDelivery;
+  final bool storePickup;
+  final bool cashOnDelivery;
+  final bool onlinePayment;
+  final bool showOrderNote;
+
+  const OrderOptions({
+    required this.doorstepDelivery,
+    required this.storePickup,
+    required this.cashOnDelivery,
+    required this.onlinePayment,
+    required this.showOrderNote,
+  });
+
+  factory OrderOptions.fromMap(Map<String, dynamic> map) {
+    return OrderOptions(
+      doorstepDelivery: map['doorstep_delivery'] as bool? ?? true,
+      storePickup: map['store_pickup'] as bool? ?? false,
+      cashOnDelivery: map['cash_on_delivery'] as bool? ?? true,
+      onlinePayment: map['online_payment'] as bool? ?? true,
+      showOrderNote: map['show_order_note'] as bool? ?? false,
+    );
+  }
+
+  Map<String, dynamic> toMap() => {
+        'doorstep_delivery': doorstepDelivery,
+        'store_pickup': storePickup,
+        'cash_on_delivery': cashOnDelivery,
+        'online_payment': onlinePayment,
+        'show_order_note': showOrderNote,
+      };
 }
 
 class SizeModel {

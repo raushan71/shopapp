@@ -511,7 +511,7 @@ class AddToCartBottomSheet extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 5.w),
         child: Row(
           children: [
-            if (product.isDigital == false)
+            if (product.isDigital != true)
               Flexible(
                 flex: 1,
                 child: AbsorbPointer(

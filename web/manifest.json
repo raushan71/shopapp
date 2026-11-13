@@ -1,6 +1,6 @@
 {
-    "name": "ready_ecommerce",
-    "short_name": "ready_ecommerce",
+    "name": "eShop",
+    "short_name": "eShop",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

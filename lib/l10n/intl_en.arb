@@ -30,7 +30,7 @@
   "review": "Review",
   "vistiStore": "Visit Store",
   "similarProducts": "Similar Products",
-  "addToCart": "Add To Cart",
+  "addToCart": "Add to Cart",
   "buyNow": "Buy Now",
   "productInCart": "This product is already in your cart!",
   "myCart": "My Cart",
@@ -229,5 +229,15 @@
   "collectionAddress": "Collection Address",
   "cancellationReason": "Cancellation Reason",
   "myDigitalProducts": "My Digital Products",
-  "thisIsAdigitalProduct": "This is a digital product, you can't change the quantity."
+  "thisIsAdigitalProduct": "This is a digital product, you can't change the quantity.",
+  "availableOrderOptions": "Available Order Options",
+  "chooseOrderOptionsAtCheckout": "Choose from these options during checkout.",
+  "fulfillment": "Fulfillment",
+  "doorstepDelivery": "Doorstep Delivery",
+  "deliveredToAddress": "Delivered to your address",
+  "storePickup": "Store Pickup",
+  "takeAwayStorePickup": "Take Away / Store Pickup",
+  "collectFromShop": "Collect directly from the shop",
+  "payment": "Payment",
+  "payOnline": "Pay Online"
 }

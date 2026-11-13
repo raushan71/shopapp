@@ -27,7 +27,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "accountNumber": MessageLookupByLibrary.simpleMessage("Account Number"),
     "addNew": MessageLookupByLibrary.simpleMessage("Add New"),
     "addNewAddress": MessageLookupByLibrary.simpleMessage("Add New Address"),
-    "addToCart": MessageLookupByLibrary.simpleMessage("Add To Cart"),
+    "addToCart": MessageLookupByLibrary.simpleMessage("Add to Cart"),
     "addressLine2": MessageLookupByLibrary.simpleMessage("Address Line 2"),
     "addressOne": MessageLookupByLibrary.simpleMessage("Address"),
     "addressTag": MessageLookupByLibrary.simpleMessage("Address Tag"),
@@ -49,6 +49,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Are you sure want to order again?",
     ),
     "area": MessageLookupByLibrary.simpleMessage("Area"),
+    "availableOrderOptions": MessageLookupByLibrary.simpleMessage(
+      "Available Order Options",
+    ),
     "buyNow": MessageLookupByLibrary.simpleMessage("Buy Now"),
     "cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
     "cancelOrder": MessageLookupByLibrary.simpleMessage("Cancel Order"),
@@ -68,9 +71,15 @@ class MessageLookup extends MessageLookupByLibrary {
       "Check Internet Connection",
     ),
     "checkout": MessageLookupByLibrary.simpleMessage("Checkout"),
+    "chooseOrderOptionsAtCheckout": MessageLookupByLibrary.simpleMessage(
+      "Choose from these options during checkout.",
+    ),
     "clear": MessageLookupByLibrary.simpleMessage("Clear"),
     "close": MessageLookupByLibrary.simpleMessage("Close"),
     "collect": MessageLookupByLibrary.simpleMessage("Collect"),
+    "collectFromShop": MessageLookupByLibrary.simpleMessage(
+      "Collect directly from the shop",
+    ),
     "collected": MessageLookupByLibrary.simpleMessage("Collected"),
     "collectionAddress": MessageLookupByLibrary.simpleMessage(
       "Collection Address",
@@ -116,11 +125,17 @@ class MessageLookup extends MessageLookupByLibrary {
     "deleteThis": MessageLookupByLibrary.simpleMessage("Delete this"),
     "deliverTo": MessageLookupByLibrary.simpleMessage("Deliver to"),
     "delivered": MessageLookupByLibrary.simpleMessage("Delivered"),
+    "deliveredToAddress": MessageLookupByLibrary.simpleMessage(
+      "Delivered to your address",
+    ),
     "deliveryAddress": MessageLookupByLibrary.simpleMessage("Delivery Address"),
     "deliveryCharge": MessageLookupByLibrary.simpleMessage("Delivery Charge"),
     "discount": MessageLookupByLibrary.simpleMessage("Discount"),
     "dontHaveAccount": MessageLookupByLibrary.simpleMessage(
       "Don\'t have an account?",
+    ),
+    "doorstepDelivery": MessageLookupByLibrary.simpleMessage(
+      "Doorstep Delivery",
     ),
     "downloadInvoice": MessageLookupByLibrary.simpleMessage("Download Invoice"),
     "downloadPaymentSlip": MessageLookupByLibrary.simpleMessage(
@@ -152,6 +167,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "filter": MessageLookupByLibrary.simpleMessage("Filter"),
     "flat": MessageLookupByLibrary.simpleMessage("Flat"),
     "forgotPassword": MessageLookupByLibrary.simpleMessage("Forgot Password"),
+    "fulfillment": MessageLookupByLibrary.simpleMessage("Fulfillment"),
     "fullName": MessageLookupByLibrary.simpleMessage("Full Name"),
     "getInTouch": MessageLookupByLibrary.simpleMessage("Get in Touch"),
     "goToMyOrders": MessageLookupByLibrary.simpleMessage("Go to My Orders"),
@@ -219,7 +235,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "other": MessageLookupByLibrary.simpleMessage("Other"),
     "password": MessageLookupByLibrary.simpleMessage("Password"),
     "payNow": MessageLookupByLibrary.simpleMessage("Pay Now"),
+    "payOnline": MessageLookupByLibrary.simpleMessage("Pay Online"),
     "payableAmount": MessageLookupByLibrary.simpleMessage("Payable Amount"),
+    "payment": MessageLookupByLibrary.simpleMessage("Payment"),
     "paymentFailed": MessageLookupByLibrary.simpleMessage("Payment Failed"),
     "paymentFailedDes": MessageLookupByLibrary.simpleMessage(
       "Sorry, we couldn\'t process your payment. Please try again later.",
@@ -313,11 +331,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "sortBy": MessageLookupByLibrary.simpleMessage("Sort by"),
     "startWriting": MessageLookupByLibrary.simpleMessage("Start writing..."),
     "status": MessageLookupByLibrary.simpleMessage("Status"),
+    "storePickup": MessageLookupByLibrary.simpleMessage("Store Pickup"),
     "storeVoucher": MessageLookupByLibrary.simpleMessage("Store voucher"),
     "subTotal": MessageLookupByLibrary.simpleMessage("Sub Total"),
     "subject": MessageLookupByLibrary.simpleMessage("Subject"),
     "submit": MessageLookupByLibrary.simpleMessage("Submit"),
     "support": MessageLookupByLibrary.simpleMessage("Support"),
+    "takeAwayStorePickup": MessageLookupByLibrary.simpleMessage(
+      "Take Away / Store Pickup",
+    ),
     "termsCondistions": MessageLookupByLibrary.simpleMessage(
       "Terms & Conditions",
     ),

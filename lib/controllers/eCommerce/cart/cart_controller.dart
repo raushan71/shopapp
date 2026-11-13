@@ -36,8 +36,9 @@ class CartController extends StateNotifier<CartState> {
       if (_isSuccessStatus(response.statusCode)) {
         final dynamic cartItemsData = response.data['data']?['cart_items'];
         if (cartItemsData is List) {
-          _cartItems =
-              cartItemsData.map((cartItem) => CartItem.fromJson(cartItem)).toList();
+          _cartItems = cartItemsData
+              .map((cartItem) => CartItem.fromJson(cartItem))
+              .toList();
         } else {
           debugPrint(
             'CartController.addToCart: cart_items missing from response, refreshing cart state.',
@@ -214,7 +215,8 @@ class CartSummeryController extends StateNotifier<Map<String, dynamic>> {
           "applyCoupon": false,
           "giftCharge": 0.0,
           "orderTaxAmount": 0.0,
-          "allVatTaxes": []
+          "allVatTaxes": [],
+          "availableOrderOptions": <String, dynamic>{}
         });
 
   Future<void> calculateCartSummery({
@@ -222,6 +224,7 @@ class CartSummeryController extends StateNotifier<Map<String, dynamic>> {
     required List<int> shopIds,
     bool showSnackbar = false,
     bool? isBuyNow,
+    String fulfillmentType = 'delivery',
     dynamic addressId,
     double? latitude,
     double? longitude,
@@ -231,22 +234,26 @@ class CartSummeryController extends StateNotifier<Map<String, dynamic>> {
             couponId: couponCode,
             shopIds: shopIds,
             isBuyNow: isBuyNow,
+            fulfillmentType: fulfillmentType,
             addressId: addressId,
             latitude: latitude,
             longitude: longitude,
           );
       if (response.statusCode == 200) {
+        final checkout =
+            response.data['data']['checkout'] as Map<String, dynamic>;
         state = {
-          'totalAmount': response.data['data']['checkout']['total_amount'],
-          'payableAmount': response.data['data']['checkout']['payable_amount'],
-          'discount': response.data['data']['checkout']['coupon_discount'],
-          'deliveryCharge': response.data['data']['checkout']
-              ['delivery_charge'],
+          'totalAmount': checkout['total_amount'],
+          'payableAmount': checkout['payable_amount'],
+          'discount': checkout['coupon_discount'],
+          'deliveryCharge': checkout['delivery_charge'],
           'applyCoupon': response.data['data']['apply_coupon'],
-          'giftCharge': response.data['data']['checkout']['gift_charge'],
-          'orderTaxAmount': response.data['data']['checkout']
-              ['order_tax_amount'],
-          'allVatTaxes': response.data['data']['checkout']['all_vat_taxes']
+          'giftCharge': checkout['gift_charge'] ?? 0.0,
+          'orderTaxAmount': checkout['order_tax_amount'] ?? 0.0,
+          'allVatTaxes': checkout['all_vat_taxes'] ?? const [],
+          'availableOrderOptions':
+              checkout['available_options'] as Map<String, dynamic>? ??
+                  const <String, dynamic>{},
         };
       }
       if (showSnackbar) {
@@ -261,7 +268,9 @@ class CartSummeryController extends StateNotifier<Map<String, dynamic>> {
   }
 }
 
- final cartSummeryController = StateNotifierProvider<CartSummeryController, Map<String, dynamic>>((ref) => CartSummeryController(ref));
+final cartSummeryController =
+    StateNotifierProvider<CartSummeryController, Map<String, dynamic>>(
+        (ref) => CartSummeryController(ref));
 
 class BuyNowSummeryController extends StateNotifier<Map<String, dynamic>> {
   final Ref ref;
@@ -311,7 +320,9 @@ class BuyNowSummeryController extends StateNotifier<Map<String, dynamic>> {
   }
 }
 
-final buyNowSummeryController = StateNotifierProvider<BuyNowSummeryController, Map<String, dynamic>>((ref) => BuyNowSummeryController(ref));
+final buyNowSummeryController =
+    StateNotifierProvider<BuyNowSummeryController, Map<String, dynamic>>(
+        (ref) => BuyNowSummeryController(ref));
 
 class CartState {
   final bool isLoading;

@@ -5,6 +5,7 @@ class OrderPlaceModel {
   final String? couponId;
   final String? note;
   final String paymentMethod;
+  final String fulfillmentType;
   List<int> shopIds;
   final int? isBuyNow;
   final double? latitude;
@@ -14,6 +15,7 @@ class OrderPlaceModel {
     required this.couponId,
     required this.note,
     required this.paymentMethod,
+    required this.fulfillmentType,
     required this.shopIds,
     this.isBuyNow,
     this.latitude,
@@ -26,6 +28,7 @@ class OrderPlaceModel {
       'coupon_code': couponId,
       'note': note,
       'payment_method': paymentMethod,
+      'fulfillment_type': fulfillmentType,
       'shop_ids': shopIds,
       'is_buy_now': isBuyNow,
       'latitude': latitude,
@@ -40,6 +43,7 @@ class OrderPlaceModel {
           map['coupon_code'] != null ? map['coupon_code'] as String : null,
       note: map['note'] != null ? map['note'] as String : null,
       paymentMethod: map['payment_method'] as String,
+      fulfillmentType: map['fulfillment_type'] as String? ?? 'delivery',
       shopIds: List<int>.from(
         (map['shop_ids'] as List<int>),
       ),

@@ -49,6 +49,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "هل أنت متاكد من أنك تريد الطلب مرة أخرى؟",
     ),
     "area": MessageLookupByLibrary.simpleMessage("منطقة"),
+    "availableOrderOptions": MessageLookupByLibrary.simpleMessage(
+      "Available Order Options",
+    ),
     "buyNow": MessageLookupByLibrary.simpleMessage("اشتري الآن"),
     "cancel": MessageLookupByLibrary.simpleMessage("يلغي"),
     "cancelOrder": MessageLookupByLibrary.simpleMessage("الغاء الطلب"),
@@ -62,9 +65,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "change": MessageLookupByLibrary.simpleMessage("تغيير"),
     "changePassword": MessageLookupByLibrary.simpleMessage("تغيير كلمة المرور"),
     "checkout": MessageLookupByLibrary.simpleMessage("الدفع"),
+    "chooseOrderOptionsAtCheckout": MessageLookupByLibrary.simpleMessage(
+      "Choose from these options during checkout.",
+    ),
     "clear": MessageLookupByLibrary.simpleMessage("واضح"),
     "close": MessageLookupByLibrary.simpleMessage("اغلاق"),
     "collect": MessageLookupByLibrary.simpleMessage("يجمع"),
+    "collectFromShop": MessageLookupByLibrary.simpleMessage(
+      "Collect directly from the shop",
+    ),
     "collected": MessageLookupByLibrary.simpleMessage("تم جمعها"),
     "collectionAddress": MessageLookupByLibrary.simpleMessage("عنوان التجميع"),
     "collectionLocation": MessageLookupByLibrary.simpleMessage("موقع الاستلام"),
@@ -106,10 +115,16 @@ class MessageLookup extends MessageLookupByLibrary {
     "deleteThis": MessageLookupByLibrary.simpleMessage("امسح هذه"),
     "deliverTo": MessageLookupByLibrary.simpleMessage("يسلم إلى"),
     "delivered": MessageLookupByLibrary.simpleMessage("تم التوصيل"),
+    "deliveredToAddress": MessageLookupByLibrary.simpleMessage(
+      "Delivered to your address",
+    ),
     "deliveryAddress": MessageLookupByLibrary.simpleMessage("عنوان التسليم"),
     "deliveryCharge": MessageLookupByLibrary.simpleMessage("رسوم التوصيل"),
     "discount": MessageLookupByLibrary.simpleMessage("تخفيض"),
     "dontHaveAccount": MessageLookupByLibrary.simpleMessage("ليس لديك حساب؟"),
+    "doorstepDelivery": MessageLookupByLibrary.simpleMessage(
+      "Doorstep Delivery",
+    ),
     "downloadInvoice": MessageLookupByLibrary.simpleMessage("تحميل فاتورة"),
     "downloadPaymentSlip": MessageLookupByLibrary.simpleMessage(
       "تحميل سلسلة الدفع",
@@ -135,6 +150,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "filter": MessageLookupByLibrary.simpleMessage("منقي"),
     "flat": MessageLookupByLibrary.simpleMessage("مستوي"),
     "forgotPassword": MessageLookupByLibrary.simpleMessage("هل نسيت كلمة السر"),
+    "fulfillment": MessageLookupByLibrary.simpleMessage("Fulfillment"),
     "fullName": MessageLookupByLibrary.simpleMessage("الاسم الكامل"),
     "getInTouch": MessageLookupByLibrary.simpleMessage("ابقى على تواصل"),
     "goToMyOrders": MessageLookupByLibrary.simpleMessage("اذهب إلى طلباتي"),
@@ -195,7 +211,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "other": MessageLookupByLibrary.simpleMessage("آخر"),
     "password": MessageLookupByLibrary.simpleMessage("كلمة المرور"),
     "payNow": MessageLookupByLibrary.simpleMessage("ادفع الان"),
+    "payOnline": MessageLookupByLibrary.simpleMessage("Pay Online"),
     "payableAmount": MessageLookupByLibrary.simpleMessage("مبلغ مستحق الدفع"),
+    "payment": MessageLookupByLibrary.simpleMessage("Payment"),
     "paymentFailed": MessageLookupByLibrary.simpleMessage("فشل الدفع"),
     "paymentFailedDes": MessageLookupByLibrary.simpleMessage(
       "عفوا، لم يتم تجهيز الدفع. الرجاء المحاولة مرة أخرى في وقت لاحق.",
@@ -286,11 +304,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "sortBy": MessageLookupByLibrary.simpleMessage("ترتيب حسب"),
     "startWriting": MessageLookupByLibrary.simpleMessage("ابدأ في الكتابة ..."),
     "status": MessageLookupByLibrary.simpleMessage("حالة"),
+    "storePickup": MessageLookupByLibrary.simpleMessage("Store Pickup"),
     "storeVoucher": MessageLookupByLibrary.simpleMessage("قسيمة المتجر"),
     "subTotal": MessageLookupByLibrary.simpleMessage("مجموع"),
     "subject": MessageLookupByLibrary.simpleMessage("موضوع"),
     "submit": MessageLookupByLibrary.simpleMessage("يُقدِّم"),
     "support": MessageLookupByLibrary.simpleMessage("يدعم"),
+    "takeAwayStorePickup": MessageLookupByLibrary.simpleMessage(
+      "Take Away / Store Pickup",
+    ),
     "termsCondistions": MessageLookupByLibrary.simpleMessage("البنود و الظروف"),
     "themeMode": MessageLookupByLibrary.simpleMessage("وضع المظهر"),
     "thisIsAdigitalProduct": MessageLookupByLibrary.simpleMessage(

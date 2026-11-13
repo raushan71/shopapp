@@ -52,13 +52,17 @@ class _ProductDescriptionState extends ConsumerState<ProductDescription> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                widget.productDetails.product.brand ?? '',
-                style: AppTextStyle(context).bodyTextSmall.copyWith(
-                      color: colors(context).primaryColor,
-                      fontWeight: FontWeight.w700,
-                    ),
-              ),
+              if (widget.productDetails.product.brand?.trim().isNotEmpty ==
+                  true)
+                Text(
+                  widget.productDetails.product.brand!.trim(),
+                  style: AppTextStyle(context).bodyTextSmall.copyWith(
+                        color: colors(context).primaryColor,
+                        fontWeight: FontWeight.w700,
+                      ),
+                )
+              else
+                const Spacer(),
               InkWell(
                 onTap: () {
                   final websiteUrl =

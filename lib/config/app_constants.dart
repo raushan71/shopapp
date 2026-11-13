@@ -1,5 +1,5 @@
 enum Environment { development, production }
- 
+
 class AppConstants {
   // Production shop API
   static const String baseUrl = 'https://shop.itrsp.com/api';
@@ -10,8 +10,6 @@ class AppConstants {
 
   // iGM Mart
   // static const String baseUrl = 'https://commercify.imperiumglobalmedia.com/api';
-
-  // static const String baseUrl = 'https://uat.readyecommerce.app/api';
 
   //static const Environment environment = Environment.production;
 

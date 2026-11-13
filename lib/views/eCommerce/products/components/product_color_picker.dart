@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -47,7 +48,12 @@ class _ProductColorPickerState extends ConsumerState<ProductColorPicker> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            S.of(context).color,
+            widget.productDetails.product.colorVariationName
+                        ?.trim()
+                        .isNotEmpty ==
+                    true
+                ? widget.productDetails.product.colorVariationName!.trim()
+                : S.of(context).color,
             style: AppTextStyle(context).bodyText.copyWith(
                   fontWeight: FontWeight.w500,
                 ),
@@ -92,25 +98,39 @@ class _ProductColorPickerState extends ConsumerState<ProductColorPicker> {
                                     : colors(context).accentColor!,
                               ),
                             ),
-                            child: Center(
-                              child: Text(
-                                widget.productDetails.product.colors[index]
-                                        .name[0]
-                                        .toUpperCase() +
-                                    widget.productDetails.product.colors[index]
-                                        .name
-                                        .substring(1),
-                                style: AppTextStyle(context)
-                                    .bodyTextSmall
-                                    .copyWith(
-                                      fontWeight: FontWeight.w500,
-                                      color: ref.watch(
-                                                  selectedProductColorIndex) ==
-                                              index
-                                          ? EcommerceAppColor.primary
-                                          : EcommerceAppColor.gray,
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                if (widget.productDetails.product.colors[index]
+                                        .swatchImage !=
+                                    null) ...[
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(4.r),
+                                    child: CachedNetworkImage(
+                                      imageUrl: widget.productDetails.product
+                                          .colors[index].swatchImage!,
+                                      width: 28.w,
+                                      height: 28.w,
+                                      fit: BoxFit.cover,
                                     ),
-                              ),
+                                  ),
+                                  Gap(6.w),
+                                ],
+                                Text(
+                                  _displayName(widget.productDetails.product
+                                      .colors[index].name),
+                                  style: AppTextStyle(context)
+                                      .bodyTextSmall
+                                      .copyWith(
+                                        fontWeight: FontWeight.w500,
+                                        color: ref.watch(
+                                                    selectedProductColorIndex) ==
+                                                index
+                                            ? EcommerceAppColor.primary
+                                            : EcommerceAppColor.gray,
+                                      ),
+                                ),
+                              ],
                             ),
                           ),
                         ),
@@ -124,5 +144,11 @@ class _ProductColorPickerState extends ConsumerState<ProductColorPicker> {
         ],
       ),
     );
+  }
+
+  String _displayName(String name) {
+    final trimmedName = name.trim();
+    if (trimmedName.isEmpty) return '';
+    return '${trimmedName[0].toUpperCase()}${trimmedName.substring(1)}';
   }
 }

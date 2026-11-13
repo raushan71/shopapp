@@ -75,7 +75,7 @@ class _NotificationCardState extends State<NotificationCard> {
         border: Border.all(color: colors(context).accentColor!),
         image: const DecorationImage(
           image: CachedNetworkImageProvider(
-            'https://demo.readyecommerce.app/assets/favicon.png',
+            'https://shop.itrsp.com/storage/optimized/media/6/1793802094-64x64-q80.webp',
             maxWidth: 30,
           ),
         ),

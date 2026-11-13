@@ -51,6 +51,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "আপনি কি আমাদের পুনরায় অর্ডার করতে চান?",
     ),
     "area": MessageLookupByLibrary.simpleMessage("অঞ্চল"),
+    "availableOrderOptions": MessageLookupByLibrary.simpleMessage(
+      "Available Order Options",
+    ),
     "buyNow": MessageLookupByLibrary.simpleMessage("এখন কিনুন"),
     "cancel": MessageLookupByLibrary.simpleMessage("বাতিল"),
     "cancelOrder": MessageLookupByLibrary.simpleMessage("আদেশ বাতিল"),
@@ -72,9 +75,15 @@ class MessageLookup extends MessageLookupByLibrary {
       "ইন্টারনেট সংযোগ পরীক্ষা করুন",
     ),
     "checkout": MessageLookupByLibrary.simpleMessage("চেকআউট"),
+    "chooseOrderOptionsAtCheckout": MessageLookupByLibrary.simpleMessage(
+      "Choose from these options during checkout.",
+    ),
     "clear": MessageLookupByLibrary.simpleMessage("পরিষ্কার"),
     "close": MessageLookupByLibrary.simpleMessage("বন্ধ"),
     "collect": MessageLookupByLibrary.simpleMessage("সংগ্রহ করুন"),
+    "collectFromShop": MessageLookupByLibrary.simpleMessage(
+      "Collect directly from the shop",
+    ),
     "collected": MessageLookupByLibrary.simpleMessage("সংগৃহীত"),
     "collectionAddress": MessageLookupByLibrary.simpleMessage(
       "সংগ্রহের ঠিকানা",
@@ -124,11 +133,17 @@ class MessageLookup extends MessageLookupByLibrary {
     "deleteThis": MessageLookupByLibrary.simpleMessage("এটা মুছে ফেলুন"),
     "deliverTo": MessageLookupByLibrary.simpleMessage("ডেলিভারি অ্যাড্রেস "),
     "delivered": MessageLookupByLibrary.simpleMessage("বিতরণ"),
+    "deliveredToAddress": MessageLookupByLibrary.simpleMessage(
+      "Delivered to your address",
+    ),
     "deliveryAddress": MessageLookupByLibrary.simpleMessage("ডেলিভারী ঠিকানা"),
     "deliveryCharge": MessageLookupByLibrary.simpleMessage("ডেলিভারি চার্জ"),
     "discount": MessageLookupByLibrary.simpleMessage("ডিসকাউন্ট"),
     "dontHaveAccount": MessageLookupByLibrary.simpleMessage(
       "একটি অ্যাকাউন্ট নেই?",
+    ),
+    "doorstepDelivery": MessageLookupByLibrary.simpleMessage(
+      "Doorstep Delivery",
     ),
     "downloadInvoice": MessageLookupByLibrary.simpleMessage(
       "চালান ডাউনলোড করুন",
@@ -159,6 +174,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "forgotPassword": MessageLookupByLibrary.simpleMessage(
       "পাসওয়ার্ড ভুলে গেছেন?",
     ),
+    "fulfillment": MessageLookupByLibrary.simpleMessage("Fulfillment"),
     "fullName": MessageLookupByLibrary.simpleMessage("পুরো নাম"),
     "getInTouch": MessageLookupByLibrary.simpleMessage("যোগাযোগ করুন"),
     "goToMyOrders": MessageLookupByLibrary.simpleMessage("আমার অর্ডারে যান"),
@@ -226,7 +242,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "other": MessageLookupByLibrary.simpleMessage("অন্য"),
     "password": MessageLookupByLibrary.simpleMessage("পাসওয়ার্ড"),
     "payNow": MessageLookupByLibrary.simpleMessage("এখন পরিশোধ করুন"),
+    "payOnline": MessageLookupByLibrary.simpleMessage("Pay Online"),
     "payableAmount": MessageLookupByLibrary.simpleMessage("প্রদেয় পরিমান"),
+    "payment": MessageLookupByLibrary.simpleMessage("Payment"),
     "paymentFailed": MessageLookupByLibrary.simpleMessage("পেমেন্ট ব্যর্থ"),
     "paymentFailedDes": MessageLookupByLibrary.simpleMessage(
       "দুঃখিত, আমরা আপনার পেমেন্ট প্রক্রিয়া করতে পারি না। আবার চেষ্টা করুন।",
@@ -321,11 +339,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "sortBy": MessageLookupByLibrary.simpleMessage("ক্রমানুসার"),
     "startWriting": MessageLookupByLibrary.simpleMessage("লেখা শুরু করুন ..."),
     "status": MessageLookupByLibrary.simpleMessage("স্থিতি"),
+    "storePickup": MessageLookupByLibrary.simpleMessage("Store Pickup"),
     "storeVoucher": MessageLookupByLibrary.simpleMessage("স্টোর ভাউচার"),
     "subTotal": MessageLookupByLibrary.simpleMessage("সাবটোটাল"),
     "subject": MessageLookupByLibrary.simpleMessage("বিষয়"),
     "submit": MessageLookupByLibrary.simpleMessage("জমা দিন"),
     "support": MessageLookupByLibrary.simpleMessage("সাপোর্ট "),
+    "takeAwayStorePickup": MessageLookupByLibrary.simpleMessage(
+      "Take Away / Store Pickup",
+    ),
     "termsCondistions": MessageLookupByLibrary.simpleMessage("শর্তাবলী"),
     "themeMode": MessageLookupByLibrary.simpleMessage("থিম মোড"),
     "thisIsAdigitalProduct": MessageLookupByLibrary.simpleMessage(

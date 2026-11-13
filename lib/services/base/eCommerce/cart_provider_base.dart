@@ -13,7 +13,9 @@ abstract class CartProviderBase {
   Future<Response> cartSummery({
     required String? couponId,
     required List<int> shopIds,
-   /// required dynamic  addressId,
+    dynamic addressId,
+    bool? isBuyNow,
+    String fulfillmentType,
     double? latitude,
     double? longitude,
   });

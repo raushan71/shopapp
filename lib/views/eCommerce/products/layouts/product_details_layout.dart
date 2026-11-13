@@ -23,6 +23,7 @@ import 'package:ready_ecommerce/services/common/hive_service_provider.dart';
 import 'package:ready_ecommerce/utils/context_less_navigation.dart';
 import 'package:ready_ecommerce/utils/global_function.dart';
 import 'package:ready_ecommerce/views/eCommerce/products/components/product_color_picker.dart';
+import 'package:ready_ecommerce/views/eCommerce/products/components/available_order_options.dart';
 import 'package:ready_ecommerce/views/eCommerce/products/components/product_description.dart';
 import 'package:ready_ecommerce/views/eCommerce/products/components/product_details_and_review.dart';
 import 'package:ready_ecommerce/views/eCommerce/products/components/product_image_page_view.dart';
@@ -135,6 +136,10 @@ class _EcommerceProductDetailsLayoutState
                             child: ProductSizePicker(
                                 productDetails: productDetails),
                           ),
+                          Gap(14.h),
+                          AvailableOrderOptions(
+                            options: productDetails.product.orderOptions,
+                          ),
                           Visibility(
                             visible: ref
                                 .read(masterControllerProvider.notifier)
@@ -213,7 +218,7 @@ class _EcommerceProductDetailsLayoutState
         padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
         child: Row(
           children: [
-            if (productDetails.product.isDigital == false)
+            if (productDetails.product.isDigital != true)
               Flexible(
                 flex: 1,
                 child: AbsorbPointer(

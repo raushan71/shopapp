@@ -49,39 +49,54 @@ class _ProductImagePageViewState extends ConsumerState<ProductImagePageView> {
   @override
   Widget build(BuildContext context) {
     final currentPage = ref.watch(currentPageController);
+    final selectedColorIndex = ref.watch(selectedProductColorIndex);
+    final productColors = widget.productDetails.product.colors;
+    final variantMedia = selectedColorIndex != null &&
+            selectedColorIndex >= 0 &&
+            selectedColorIndex < productColors.length
+        ? productColors[selectedColorIndex].media
+        : const <Thumbnail>[];
+    final displayMedia = variantMedia.isNotEmpty
+        ? variantMedia
+        : widget.productDetails.product.thumbnails;
+
+    ref.listen<int?>(selectedProductColorIndex, (previous, next) {
+      if (previous == next) return;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted || !pageController.hasClients) return;
+        pageController.jumpToPage(0);
+        ref.read(currentPageController.notifier).state = 0;
+      });
+    });
+
     return Stack(
       alignment: Alignment.center,
       children: [
         SizedBox(
           height: 420.h,
           child: PageView.builder(
+            key: ValueKey(selectedColorIndex),
             controller: pageController,
-            itemCount: widget.productDetails.product.thumbnails.length,
+            itemCount: displayMedia.length,
             itemBuilder: (context, index) {
-              final fileSystem =
-                  widget.productDetails.product.thumbnails[index].type;
+              final media = displayMedia[index];
+              final fileSystem = media.type;
               if (fileSystem == FileSystem.image.name) {
                 return CachedNetworkImage(
-                  imageUrl: widget
-                          .productDetails.product.thumbnails[index].thumbnail ??
-                      '',
+                  imageUrl: media.thumbnail ?? '',
                   fit: BoxFit.contain,
                 );
               } else if (fileSystem == FileSystem.file.name) {
                 return VideoPlayer(
-                  videoUrl:
-                      // 'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4'
-                      widget.productDetails.product.thumbnails[index].url ?? '',
+                  videoUrl: media.url ?? '',
                 );
               } else {
                 return Container(
                   padding: EdgeInsets.only(top: 100.h),
                   width: double.infinity,
                   child: IframeCard(
-                    iframeUrl:
-                        widget.productDetails.product.thumbnails[index].url ??
-                            '',
-                    ),
+                    iframeUrl: media.url ?? '',
+                  ),
                 );
               }
             },
@@ -98,7 +113,7 @@ class _ProductImagePageViewState extends ConsumerState<ProductImagePageView> {
             child: Wrap(
               alignment: WrapAlignment.center,
               children: List.generate(
-                widget.productDetails.product.thumbnails.length,
+                displayMedia.length,
                 (index) => AnimatedContainer(
                   duration: const Duration(milliseconds: 300),
                   margin: const EdgeInsets.symmetric(horizontal: 2),

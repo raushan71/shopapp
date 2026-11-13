@@ -52,6 +52,7 @@ class CartService implements CartProviderBase {
     required List<int> shopIds,
     dynamic addressId,
     bool? isBuyNow,
+    String fulfillmentType = 'delivery',
     double? latitude,
     double? longitude,
   }) async {
@@ -62,9 +63,10 @@ class CartService implements CartProviderBase {
       'coupon_code': couponId,
       'shop_ids': shopIds,
       'is_buy_now': isBuyNow,
+      'fulfillment_type': fulfillmentType,
       'address_id': addressId,
-      'latitude': latitude ?? hiveLat,
-      'longitude': longitude ?? hiveLng,
+      'latitude': fulfillmentType == 'delivery' ? latitude ?? hiveLat : null,
+      'longitude': fulfillmentType == 'delivery' ? longitude ?? hiveLng : null,
     };
 
     final response = await ref.read(apiClientProvider).post(

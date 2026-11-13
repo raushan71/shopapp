@@ -274,9 +274,9 @@ class S {
     );
   }
 
-  /// `Add To Cart`
+  /// `Add to Cart`
   String get addToCart {
-    return Intl.message('Add To Cart', name: 'addToCart', desc: '', args: []);
+    return Intl.message('Add to Cart', name: 'addToCart', desc: '', args: []);
   }
 
   /// `Buy Now`
@@ -1817,6 +1817,91 @@ class S {
       desc: '',
       args: [],
     );
+  }
+
+  /// `Available Order Options`
+  String get availableOrderOptions {
+    return Intl.message(
+      'Available Order Options',
+      name: 'availableOrderOptions',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Choose from these options during checkout.`
+  String get chooseOrderOptionsAtCheckout {
+    return Intl.message(
+      'Choose from these options during checkout.',
+      name: 'chooseOrderOptionsAtCheckout',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Fulfillment`
+  String get fulfillment {
+    return Intl.message('Fulfillment', name: 'fulfillment', desc: '', args: []);
+  }
+
+  /// `Doorstep Delivery`
+  String get doorstepDelivery {
+    return Intl.message(
+      'Doorstep Delivery',
+      name: 'doorstepDelivery',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Delivered to your address`
+  String get deliveredToAddress {
+    return Intl.message(
+      'Delivered to your address',
+      name: 'deliveredToAddress',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Store Pickup`
+  String get storePickup {
+    return Intl.message(
+      'Store Pickup',
+      name: 'storePickup',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Take Away / Store Pickup`
+  String get takeAwayStorePickup {
+    return Intl.message(
+      'Take Away / Store Pickup',
+      name: 'takeAwayStorePickup',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Collect directly from the shop`
+  String get collectFromShop {
+    return Intl.message(
+      'Collect directly from the shop',
+      name: 'collectFromShop',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Payment`
+  String get payment {
+    return Intl.message('Payment', name: 'payment', desc: '', args: []);
+  }
+
+  /// `Pay Online`
+  String get payOnline {
+    return Intl.message('Pay Online', name: 'payOnline', desc: '', args: []);
   }
 }
 
