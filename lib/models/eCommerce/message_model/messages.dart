@@ -43,7 +43,7 @@ class Messages {
             : ProductMessage.fromMap(data['product'] as Map<String, dynamic>),
         type: data['type'] as String?,
         message: data['message'] as dynamic,
-        isSeen: data['is_seen'] as int?,
+        isSeen: _parseIsSeen(data['is_seen']),
         createdAt: data['created_at'] == null
             ? null
             : DateTime.parse(data['created_at'] as String),
@@ -75,4 +75,17 @@ class Messages {
   ///
   /// Converts [Message] to a JSON string.
   String toJson() => json.encode(toMap());
+}
+
+int? _parseIsSeen(dynamic value) {
+  if (value == null) return null;
+  if (value is bool) return value ? 1 : 0;
+  if (value is num) return value.toInt();
+  if (value is String) {
+    final normalizedValue = value.toLowerCase();
+    if (normalizedValue == 'true') return 1;
+    if (normalizedValue == 'false') return 0;
+    return int.tryParse(value);
+  }
+  return null;
 }

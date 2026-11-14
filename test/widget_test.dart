@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:ready_ecommerce/models/eCommerce/cart/cart_product.dart';
+import 'package:ready_ecommerce/models/eCommerce/message_model/messages.dart';
 import 'package:ready_ecommerce/models/eCommerce/order/order_place_model.dart';
 import 'package:ready_ecommerce/models/eCommerce/product/product_details.dart';
 
@@ -126,5 +127,12 @@ void main() {
     expect(cart.cartProduct.single.totalReviews, '2');
     expect(cart.cartProduct.single.toJson()['color']['id'], 1);
     expect(cart.cartProduct.single.toJson()['size']['id'], 4);
+  });
+
+  test('chat message parses boolean and numeric seen status', () {
+    expect(Messages.fromMap({'is_seen': true}).isSeen, 1);
+    expect(Messages.fromMap({'is_seen': false}).isSeen, 0);
+    expect(Messages.fromMap({'is_seen': 1}).isSeen, 1);
+    expect(Messages.fromMap({'is_seen': '0'}).isSeen, 0);
   });
 }
