@@ -9,11 +9,8 @@ import 'package:ready_ecommerce/config/theme.dart';
 import 'package:ready_ecommerce/controllers/eCommerce/message/message_controller.dart';
 import 'package:ready_ecommerce/controllers/eCommerce/pusher/pusher_controller.dart';
 import 'package:ready_ecommerce/gen/assets.gen.dart';
-import 'package:ready_ecommerce/models/eCommerce/message_model/messages.dart';
-import 'package:ready_ecommerce/models/eCommerce/message_model/user.dart';
 import 'package:ready_ecommerce/models/eCommerce/shop_message_model/product.dart';
 import 'package:ready_ecommerce/models/eCommerce/shop_message_model/shop.dart';
-import 'package:ready_ecommerce/services/common/hive_service_provider.dart';
 import 'package:ready_ecommerce/utils/global_function.dart';
 import 'package:ready_ecommerce/views/eCommerce/my_message/components/product_card_widget.dart';
 
@@ -34,6 +31,7 @@ class _MyChatLayoutState extends ConsumerState<MyChatLayout> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(activeChatShopIdProvider.notifier).state = widget.shop.id;
       ref.read(pusherControllerProvider.notifier).init();
       ref
           .read(getMessageControllerProvider.notifier)
@@ -51,6 +49,44 @@ class _MyChatLayoutState extends ConsumerState<MyChatLayout> {
     });
   }
 
+  @override
+  void dispose() {
+    if (ref.read(activeChatShopIdProvider) == widget.shop.id) {
+      ref.read(activeChatShopIdProvider.notifier).state = null;
+    }
+    messageController.dispose();
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _sendMessage() async {
+    if (ref.read(sendMessageControllerProvider)) return;
+    if (!(_formKey.currentState?.validate() ?? false)) return;
+
+    final messageText = messageController.text.trim();
+    final response =
+        await ref.read(sendMessageControllerProvider.notifier).sendMessage(
+              shopId: widget.shop.id ?? 0,
+              message: messageText,
+            );
+
+    if (!mounted) return;
+    if (!response.isSuccess) {
+      GlobalFunction.showCustomSnackbar(
+        message: response.message,
+        isSuccess: false,
+      );
+      return;
+    }
+
+    messageController.clear();
+    await ref.read(getMessageControllerProvider.notifier).getMessage(
+          shopId: widget.shop.id ?? 0,
+          isInitial: true,
+        );
+    _scrollToBottom();
+  }
+
   void _scrollToBottom() {
     Future.delayed(Duration(milliseconds: 100), () {
       if (_scrollController.hasClients) {
@@ -66,6 +102,7 @@ class _MyChatLayoutState extends ConsumerState<MyChatLayout> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final isSending = ref.watch(sendMessageControllerProvider);
     return PopScope(
       onPopInvokedWithResult: (result, t) {
         ref.read(getShopsControllerProvider.notifier).getShops();
@@ -122,7 +159,7 @@ class _MyChatLayoutState extends ConsumerState<MyChatLayout> {
                 ),
             data: (data) {
               // _scrollToBottom();
-              final messages = data ?? [];
+              final messages = data;
               return Column(
                 children: [
                   // Messages
@@ -184,7 +221,7 @@ class _MyChatLayoutState extends ConsumerState<MyChatLayout> {
                             child: TextFormField(
                               controller: messageController,
                               validator: (value) {
-                                if (value == null || value.isEmpty) {
+                                if (value == null || value.trim().isEmpty) {
                                   return "Value cannot be empty";
                                 }
                                 return null;
@@ -208,60 +245,26 @@ class _MyChatLayoutState extends ConsumerState<MyChatLayout> {
                                 ),
                                 contentPadding: EdgeInsets.symmetric(
                                     horizontal: 16.w, vertical: 10.h),
-                                suffixIcon:
-                                    //  ref
-                                    //         .watch(sendMessageControllerProvider)
-                                    //     ? SizedBox(
-                                    //         width: 20.w,
-                                    //         height: 20.h,
-                                    //         child: Padding(
-                                    //           padding: const EdgeInsets.all(8.0),
-                                    //           child: CircularProgressIndicator(),
-                                    //         ))
-                                    //     :
-                                    IconButton(
-                                  icon: SvgPicture.asset(
-                                    Assets.svg.sendRight,
-                                    // width: 20.w,
-                                    // height: 20.h,
-                                  ),
-                                  onPressed: () async {
-                                    if (_formKey.currentState!.validate()) {
-                                      final saveUser = await ref
-                                          .read(hiveServiceProvider)
-                                          .getUserInfo();
-                                      UserMessage? users;
-                                      if (saveUser != null) {
-                                        users = UserMessage(
-                                          name: saveUser.name,
-                                          id: saveUser.id,
-                                          profilePhoto: saveUser.profilePhoto,
-                                        );
-                                      }
-                                      final messageText =
-                                          messageController.text;
-                                      final messageModel = Messages(
-                                          type: "user",
-                                          message: messageController.text,
-                                          user: users);
-                                      ref
-                                          .read(getMessageControllerProvider
-                                              .notifier)
-                                          .addNewMessage(messageModel)
-                                          .then((val) async {
-                                        messageController.clear();
-                                        await ref
-                                            .read(sendMessageControllerProvider
-                                                .notifier)
-                                            .sendMessage(
-                                              shopId: widget.shop.id ?? 0,
-                                              message: messageText,
-                                            );
-                                      });
-                                    }
-                                  },
-                                ),
+                                suffixIcon: isSending
+                                    ? Padding(
+                                        padding: EdgeInsets.all(13.r),
+                                        child: SizedBox(
+                                          width: 20.w,
+                                          height: 20.h,
+                                          child:
+                                              const CircularProgressIndicator(
+                                            strokeWidth: 2,
+                                          ),
+                                        ),
+                                      )
+                                    : IconButton(
+                                        icon: SvgPicture.asset(
+                                          Assets.svg.sendRight,
+                                        ),
+                                        onPressed: _sendMessage,
+                                      ),
                               ),
+                              onFieldSubmitted: (_) => _sendMessage(),
                             ),
                           ),
                         )

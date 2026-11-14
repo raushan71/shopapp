@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:ready_ecommerce/models/eCommerce/cart/cart_product.dart';
 import 'package:ready_ecommerce/models/eCommerce/order/order_place_model.dart';
 import 'package:ready_ecommerce/models/eCommerce/product/product_details.dart';
 
@@ -88,5 +89,42 @@ void main() {
 
     expect(order.toMap()['fulfillment_type'], 'pickup');
     expect(order.toMap()['address_id'], isNull);
+  });
+
+  test('cart parses mixed numeric API values and preserves variants', () {
+    final cart = CartItem.fromJson({
+      'shop_id': '2',
+      'shop_name': 'Shop',
+      'shop_logo': '',
+      'shop_rating': 4,
+      'products': [
+        {
+          'id': 18,
+          'quantity': '3',
+          'name': 'Leggings',
+          'thumbnail': '',
+          'brand': null,
+          'price': 499,
+          'discount_price': '399.5',
+          'discount_percentage': 20,
+          'rating': 4,
+          'total_reviews': 2,
+          'total_sold': 8,
+          'color': {'id': 1, 'name': 'Black', 'price': 10},
+          'size': {'id': 4, 'name': 'Large', 'price': '15'},
+          'unit': null,
+          'gift': null,
+          'is_digital': false,
+        },
+      ],
+    });
+
+    expect(cart.shopId, 2);
+    expect(cart.cartProduct.single.quantity, 3);
+    expect(cart.cartProduct.single.price, 499.0);
+    expect(cart.cartProduct.single.discountPrice, 399.5);
+    expect(cart.cartProduct.single.totalReviews, '2');
+    expect(cart.cartProduct.single.toJson()['color']['id'], 1);
+    expect(cart.cartProduct.single.toJson()['size']['id'], 4);
   });
 }

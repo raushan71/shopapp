@@ -36,21 +36,19 @@ class CartController extends StateNotifier<CartState> {
       if (_isSuccessStatus(response.statusCode)) {
         final dynamic cartItemsData = response.data['data']?['cart_items'];
         if (cartItemsData is List) {
-          _cartItems = cartItemsData
-              .map((cartItem) => CartItem.fromJson(cartItem))
-              .toList();
+          _cartItems = _parseCartItems(cartItemsData);
         } else {
           debugPrint(
             'CartController.addToCart: cart_items missing from response, refreshing cart state.',
           );
           await getAllCarts();
         }
-        ref.read(shopIdsProvider.notifier).toogleAllShopId();
+        state = CartState(isLoading: false, cartItems: cartItems);
+        ref.read(shopIdsProvider.notifier).addAllShopIds();
         GlobalFunction.showCustomSnackbar(
           message: response.data['message'] ?? 'Cart updated successfully',
           isSuccess: true,
         );
-        state = CartState(isLoading: false, cartItems: cartItems);
         return true;
       }
 
@@ -75,47 +73,76 @@ class CartController extends StateNotifier<CartState> {
     }
   }
 
-  Future<void> increment({required int productId}) async {
+  Future<bool> increment({required int productId}) async {
     try {
       state = CartState(isLoading: true, cartItems: cartItems);
       final response =
           await ref.read(cartServiceProvider).increentQty(productId: productId);
-      if (response.statusCode == 200) {
-        final List<dynamic> data = response.data['data']['cart_items'];
-        _cartItems =
-            data.map((cartItem) => CartItem.fromJson(cartItem)).toList();
+      if (_isSuccessStatus(response.statusCode)) {
+        final dynamic data = response.data['data']?['cart_items'];
+        if (data is List) {
+          _cartItems = _parseCartItems(data);
+        } else {
+          await getAllCarts();
+        }
+        state = CartState(isLoading: false, cartItems: cartItems);
+        return true;
       }
       // GlobalFunction.showCustomSnackbar(
       //   message: response.data['message'],
       //   isSuccess: response.statusCode == 200 ? true : false,
       // );
       state = CartState(isLoading: false, cartItems: cartItems);
+      GlobalFunction.showCustomSnackbar(
+        message: response.data['message'] ?? 'Unable to update quantity',
+        isSuccess: false,
+      );
+      return false;
     } catch (error) {
       state = CartState(isLoading: false, cartItems: cartItems);
       debugPrint(error.toString());
+      GlobalFunction.showCustomSnackbar(
+        message: 'Unable to update quantity. Please try again.',
+        isSuccess: false,
+      );
+      return false;
     }
   }
 
-  Future<void> decrement({required int productId}) async {
+  Future<bool> decrement({required int productId}) async {
     try {
       state = CartState(isLoading: true, cartItems: cartItems);
       final response = await ref
           .read(cartServiceProvider)
           .decrementQty(productId: productId);
-      if (response.statusCode == 200) {
-        final List<dynamic> data = response.data['data']['cart_items'];
-        _cartItems =
-            data.map((cartItem) => CartItem.fromJson(cartItem)).toList();
+      if (_isSuccessStatus(response.statusCode)) {
+        final dynamic data = response.data['data']?['cart_items'];
+        if (data is List) {
+          _cartItems = _parseCartItems(data);
+        } else {
+          await getAllCarts();
+        }
+        state = CartState(isLoading: false, cartItems: cartItems);
+        return true;
       }
       // GlobalFunction.showCustomSnackbar(
       //   message: response.data['message'],
       //   isSuccess: response.statusCode == 200 ? true : false,
       // );
       state = CartState(isLoading: false, cartItems: cartItems);
+      GlobalFunction.showCustomSnackbar(
+        message: response.data['message'] ?? 'Unable to update quantity',
+        isSuccess: false,
+      );
+      return false;
     } catch (error) {
       state = CartState(isLoading: false, cartItems: cartItems);
-
       debugPrint(error.toString());
+      GlobalFunction.showCustomSnackbar(
+        message: 'Unable to update quantity. Please try again.',
+        isSuccess: false,
+      );
+      return false;
     }
   }
 
@@ -124,8 +151,9 @@ class CartController extends StateNotifier<CartState> {
       final response = await ref.read(cartServiceProvider).getAllCarts();
       if (response.statusCode == 200) {
         final List<dynamic> data = response.data['data']['cart_items'];
-        _cartItems =
-            data.map((cartItem) => CartItem.fromJson(cartItem)).toList();
+        _cartItems = _parseCartItems(data);
+        state = CartState(isLoading: false, cartItems: cartItems);
+        ref.read(shopIdsProvider.notifier).retainAvailableShopIds();
       }
       state = CartState(isLoading: false, cartItems: cartItems);
     } catch (error) {
@@ -195,6 +223,13 @@ class CartController extends StateNotifier<CartState> {
     } finally {
       state = CartState(isLoading: false, cartItems: cartItems);
     }
+  }
+
+  List<CartItem> _parseCartItems(List<dynamic> data) {
+    return data
+        .whereType<Map>()
+        .map((item) => CartItem.fromJson(item.cast<String, dynamic>()))
+        .toList();
   }
 }
 

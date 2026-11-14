@@ -26,27 +26,55 @@ class AvailableOrderOptions extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      margin: EdgeInsets.symmetric(horizontal: 20.w),
-      padding: EdgeInsets.all(16.w),
+      padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
       decoration: BoxDecoration(
         color: GlobalFunction.getContainerColor(),
-        borderRadius: BorderRadius.circular(8.r),
+        border: Border.symmetric(
+          horizontal: BorderSide(
+            color: colors(context).accentColor ?? Colors.transparent,
+          ),
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            S.of(context).availableOrderOptions,
-            style: AppTextStyle(context).subTitle,
-          ),
-          Gap(4.h),
-          Text(
-            S.of(context).chooseOrderOptionsAtCheckout,
-            style: AppTextStyle(context).bodyTextSmall.copyWith(
-                  color: colors(context).bodyTextSmallColor,
+          Row(
+            children: [
+              Container(
+                width: 40.w,
+                height: 40.w,
+                decoration: BoxDecoration(
+                  color: colors(context).primaryColor!.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(12.r),
                 ),
+                child: Icon(
+                  Icons.inventory_2_outlined,
+                  size: 21.sp,
+                  color: colors(context).primaryColor,
+                ),
+              ),
+              Gap(12.w),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      S.of(context).availableOrderOptions,
+                      style: AppTextStyle(context).subTitle,
+                    ),
+                    Gap(2.h),
+                    Text(
+                      S.of(context).chooseOrderOptionsAtCheckout,
+                      style: AppTextStyle(context).bodyTextSmall.copyWith(
+                            color: colors(context).bodyTextSmallColor,
+                          ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
-          Gap(14.h),
+          Gap(18.h),
           if (options.doorstepDelivery || options.storePickup) ...[
             _sectionTitle(context, S.of(context).fulfillment),
             Gap(8.h),
@@ -104,13 +132,27 @@ class AvailableOrderOptions extends StatelessWidget {
     required String title,
     String? subtitle,
   }) {
-    return Padding(
-      padding: EdgeInsets.only(bottom: 8.h),
+    return Container(
+      width: double.infinity,
+      margin: EdgeInsets.only(bottom: 8.h),
+      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 11.h),
+      decoration: BoxDecoration(
+        color: colors(context).accentColor,
+        borderRadius: BorderRadius.circular(10.r),
+      ),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Icon(icon, size: 21.sp, color: colors(context).primaryColor),
-          Gap(10.w),
+          Container(
+            width: 34.w,
+            height: 34.w,
+            decoration: BoxDecoration(
+              color: colors(context).primaryColor!.withValues(alpha: 0.1),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(icon, size: 18.sp, color: colors(context).primaryColor),
+          ),
+          Gap(12.w),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -131,7 +173,8 @@ class AvailableOrderOptions extends StatelessWidget {
               ],
             ),
           ),
-          Icon(Icons.check_circle, size: 19.sp, color: Colors.green),
+          Icon(Icons.check_circle_rounded,
+              size: 20.sp, color: Colors.green.shade600),
         ],
       ),
     );

@@ -25,6 +25,8 @@ final getTotalUnreadMessagesControllerProvider =
     StateNotifierProvider.autoDispose<GetTotalUnreadMessagesController,
         AsyncValue<int?>>((ref) => GetTotalUnreadMessagesController(ref));
 
+final activeChatShopIdProvider = StateProvider<int?>((ref) => null);
+
 class StoreMessageController extends StateNotifier<bool> {
   final Ref ref;
   StoreMessageController(this.ref) : super(false);
@@ -37,9 +39,18 @@ class StoreMessageController extends StateNotifier<bool> {
     try {
       state = true;
       final response = await ref.read(messageServiceProvider).storeMessage(
-          shopId: shopId, userId: userId, productId: productId, type: "user");
+          shopId: shopId,
+          userId: userId,
+          productId: productId,
+          type: type ?? "user");
       state = false;
-      return CommonResponse(isSuccess: true, message: response.data['message']);
+      return CommonResponse(
+        isSuccess: _isSuccessStatus(response.statusCode),
+        message: response.data['message'] ??
+            (_isSuccessStatus(response.statusCode)
+                ? 'Conversation ready'
+                : 'Unable to start conversation'),
+      );
     } catch (error) {
       debugPrint(error.toString());
       if (mounted) {
@@ -64,9 +75,15 @@ class SendMessageController extends StateNotifier<bool> {
       state = true;
       final response = await ref
           .read(messageServiceProvider)
-          .sendMessage(shopId: shopId, message: message, type: "user");
+          .sendMessage(shopId: shopId, message: message, type: type ?? "user");
       state = false;
-      return CommonResponse(isSuccess: true, message: response.data['message']);
+      return CommonResponse(
+        isSuccess: _isSuccessStatus(response.statusCode),
+        message: response.data['message'] ??
+            (_isSuccessStatus(response.statusCode)
+                ? 'Message sent'
+                : 'Unable to send message'),
+      );
     } catch (error) {
       debugPrint(error.toString());
       if (mounted) {
@@ -137,12 +154,19 @@ class GetMessageController extends StateNotifier<AsyncValue<List<Messages>>> {
 
   Future<void> addNewMessage(Messages newMessage) async {
     final currentState = state.value ?? [];
+    if (newMessage.id != null &&
+        currentState.any((message) => message.id == newMessage.id)) {
+      return;
+    }
     state = AsyncValue.data([
       newMessage,
       ...currentState,
     ]);
   }
 }
+
+bool _isSuccessStatus(int? statusCode) =>
+    statusCode != null && statusCode >= 200 && statusCode < 300;
 
 class GetShopsController extends StateNotifier<AsyncValue<ShopMessageModel?>> {
   final Ref ref;

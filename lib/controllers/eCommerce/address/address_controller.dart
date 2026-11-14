@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ready_ecommerce/models/eCommerce/address/add_address.dart';
 import 'package:ready_ecommerce/models/eCommerce/common/common_response.dart';
+import 'package:ready_ecommerce/controllers/misc/misc_controller.dart';
 import 'package:ready_ecommerce/services/common/hive_service_provider.dart';
 import 'package:ready_ecommerce/services/eCommerce/address_service/address_service.dart';
 
-final addressControllerProvider = StateNotifierProvider<AddressController, bool>((ref) => AddressController(ref));
+final addressControllerProvider =
+    StateNotifierProvider<AddressController, bool>(
+        (ref) => AddressController(ref));
 
 class AddressController extends StateNotifier<bool> {
   final Ref ref;
@@ -17,7 +20,9 @@ class AddressController extends StateNotifier<bool> {
   Future<CommonResponse> addAddress({required AddAddress addAddress}) async {
     try {
       state = true;
-      final response = await ref.read(addressServiceProvider).addAddress(addAddress: addAddress);
+      final response = await ref
+          .read(addressServiceProvider)
+          .addAddress(addAddress: addAddress);
       state = false;
       return CommonResponse(isSuccess: true, message: response.data['message']);
     } catch (error) {
@@ -66,13 +71,33 @@ class AddressController extends StateNotifier<bool> {
           addressData.map((address) => AddAddress.fromMap(address)).toList();
       if (_addressList.isEmpty) {
         ref.read(hiveServiceProvider).clearDefaultAddress();
-      }
-      for (AddAddress address in _addressList) {
-        if (address.isDefault == true) {
-          ref
-              .read(hiveServiceProvider)
-              .saveDefaultDeliveryAddress(address: address);
+        ref.read(selectedDeliveryAddress.notifier).state = null;
+      } else {
+        final savedAddress =
+            await ref.read(hiveServiceProvider).getDefaultAddress();
+        AddAddress? preferredAddress;
+
+        for (final address in _addressList) {
+          if (address.isDefault) {
+            preferredAddress = address;
+            break;
+          }
         }
+
+        if (preferredAddress == null && savedAddress?.addressId != null) {
+          for (final address in _addressList) {
+            if (address.addressId == savedAddress!.addressId) {
+              preferredAddress = address;
+              break;
+            }
+          }
+        }
+
+        preferredAddress ??= _addressList.first;
+        await ref
+            .read(hiveServiceProvider)
+            .saveDefaultDeliveryAddress(address: preferredAddress);
+        ref.read(selectedDeliveryAddress.notifier).state = preferredAddress;
       }
 
       state = false;

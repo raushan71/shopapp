@@ -13,6 +13,7 @@ import 'package:ready_ecommerce/controllers/misc/misc_controller.dart';
 import 'package:ready_ecommerce/generated/l10n.dart';
 import 'package:ready_ecommerce/models/eCommerce/address/add_address.dart';
 import 'package:ready_ecommerce/routes.dart';
+import 'package:ready_ecommerce/services/common/hive_service_provider.dart';
 import 'package:ready_ecommerce/utils/context_less_navigation.dart';
 import 'package:ready_ecommerce/utils/global_function.dart';
 import 'package:ready_ecommerce/views/eCommerce/checkout/components/address_card.dart';
@@ -60,12 +61,16 @@ class _AddressModalBottomSheetState
     );
   }
 
-  void _handleTap(AddAddress address) {
+  Future<void> _handleTap(AddAddress address) async {
     if (widget.isGift == true) {
       ref.read(selectedGiftDeliveryAddress.notifier).state = address;
     } else {
       ref.read(selectedDeliveryAddress.notifier).state = address;
+      await ref
+          .read(hiveServiceProvider)
+          .saveDefaultDeliveryAddress(address: address);
     }
+    if (!mounted) return;
     context.nav.pop();
 
     ref.read(cartSummeryController.notifier).calculateCartSummery(

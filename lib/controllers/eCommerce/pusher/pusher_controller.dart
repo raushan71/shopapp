@@ -15,11 +15,16 @@ final pusherControllerProvider =
 class PusherController extends StateNotifier<void> {
   final Ref ref;
   final PusherService _pusherService = PusherService();
+  Future<void>? _initialization;
 
   PusherController(this.ref) : super(null);
 
   /// Initialize Pusher and connect
-  Future<void> init() async {
+  Future<void> init() {
+    return _initialization ??= _initialize();
+  }
+
+  Future<void> _initialize() async {
     await _pusherService.init(
       onEvent: _handleEvent,
       onConnectionChange: _handleConnectionChange,
@@ -29,15 +34,15 @@ class PusherController extends StateNotifier<void> {
     // Subscribe to authenticated user's channel
     final user = await ref.read(hiveServiceProvider).getUserInfo();
     if (user?.id != null) {
-      subscribeToUser(user!.id!);
+      await subscribeToUser(user!.id!);
     }
   }
 
   /// Subscribe to user's personal channel
-  void subscribeToUser(int userId) {
+  Future<void> subscribeToUser(int userId) async {
     final channel = "chat_user_$userId";
     debugPrint("Subscribing to channel: $channel");
-    _pusherService.subscribe(channel);
+    await _pusherService.subscribe(channel);
   }
 
   /// Handle incoming events
@@ -51,12 +56,30 @@ class PusherController extends StateNotifier<void> {
         return;
       }
       final decoded = jsonDecode(event.data);
-      final message = Messages.fromMap(decoded["message"]);
+      final dynamic messageData = decoded is Map<String, dynamic>
+          ? decoded["message"] ?? decoded
+          : decoded;
+      final Map<String, dynamic> messageMap = messageData is String
+          ? jsonDecode(messageData) as Map<String, dynamic>
+          : Map<String, dynamic>.from(messageData as Map);
+      final message = Messages.fromMap(messageMap);
       debugPrint("Parsed message: ${message.toMap()}");
 
-      ref.read(getMessageControllerProvider.notifier).addNewMessage(message);
+      final activeShopId = ref.read(activeChatShopIdProvider);
+      if (activeShopId != null) {
+        if (message.shop?.id == activeShopId) {
+          ref
+              .read(getMessageControllerProvider.notifier)
+              .addNewMessage(message);
+        } else if (message.shop?.id == null) {
+          ref.read(getMessageControllerProvider.notifier).getMessage(
+                shopId: activeShopId,
+                isInitial: true,
+              );
+        }
+      }
       ref.read(getShopsControllerProvider.notifier).getShops();
-      ref.refresh(getTotalUnreadMessagesControllerProvider);
+      ref.invalidate(getTotalUnreadMessagesControllerProvider);
     } catch (e, stk) {
       debugPrint("Error parsing message: $e | $stk");
       return;

@@ -55,8 +55,8 @@ class ShopIdsNotifier extends StateNotifier<Set<int>> {
   ShopIdsNotifier(this.ref) : super({});
 
   void toogleAllShopId() {
-    if (state.length < ref.watch(cartController).cartItems.length) {
-      for (CartItem cartItem in ref.watch(cartController).cartItems) {
+    if (state.length < ref.read(cartController).cartItems.length) {
+      for (CartItem cartItem in ref.read(cartController).cartItems) {
         state = Set<int>.from(state)..add(cartItem.shopId);
       }
     } else {
@@ -65,9 +65,21 @@ class ShopIdsNotifier extends StateNotifier<Set<int>> {
   }
 
   void addAllShopIds() {
-    for (CartItem cartItem in ref.watch(cartController).cartItems) {
+    for (CartItem cartItem in ref.read(cartController).cartItems) {
       debugPrint('This is a shop id:${cartItem.shopId}');
       state = Set<int>.from(state)..add(cartItem.shopId);
+    }
+  }
+
+  void retainAvailableShopIds() {
+    final availableIds = ref
+        .read(cartController)
+        .cartItems
+        .map((cartItem) => cartItem.shopId)
+        .toSet();
+    state = Set<int>.from(state)..retainAll(availableIds);
+    if (state.isEmpty && availableIds.isNotEmpty) {
+      state = availableIds;
     }
   }
 

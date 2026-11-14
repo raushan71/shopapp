@@ -25,7 +25,7 @@ void main() async {
   );
   await setupFlutterNotifications();
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
-  firebaseMessagingForgroundHandler();
+  await firebaseMessagingForgroundHandler();
 
   String? fcmToken = await FirebaseMessaging.instance.getToken();
   debugPrint("FCM Token: $fcmToken");

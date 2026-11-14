@@ -12,53 +12,37 @@ class PusherService {
   PusherService._internal();
 
   late PusherChannelsFlutter _pusher;
+  bool _isInitialized = false;
+  bool _isConnected = false;
+  final Set<String> _subscribedChannels = <String>{};
 
   Future<void> init({
     required void Function(PusherEvent) onEvent,
     void Function(String?, String?)? onConnectionChange,
     void Function(String?, int?, dynamic)? onError,
   }) async {
-    _pusher = PusherChannelsFlutter.getInstance();
-
-    await _pusher.init(
-      apiKey: AppConstants.pusherApiKey,
-      cluster: AppConstants.pusherCluster,
-      onEvent: onEvent,
-      onConnectionStateChange: onConnectionChange,
-      onError: onError,
-    );
-
-    await _pusher.connect();
-  }
-
-  void subscribe(String channelName) {
-    _pusher.subscribe(channelName: channelName);
-    debugPrint("Subscribed to channel: $channelName");
-  }
-
-  // void subscribeToUserChannel(int userId) {
-  //   final channelName = "chat_user_$userId";
-  //   _pusher.subscribe(channelName: channelName);
-  //   debugPrint("Subscribed to channel: $channelName");
-  // }
-
-  void _onPusherEvent(PusherEvent event) {
-    debugPrint("Event received: ${event.eventName}");
-    debugPrint("Data: ${event.data}");
-  }
-
-  void _onSubscriptionSucceeded(String? event, String channelName) {
-    debugPrint("Subscription succeeded on $channelName");
-  }
-
-  void _onConnectionStateChange(String? currentState, String? previousState) {
-    debugPrint("Pusher state: $previousState → $currentState");
-  }
-
-  void _onError(String? message, int? code, dynamic exception) {
-    debugPrint("Pusher error: $message (code: $code)");
-    if (exception != null) {
-      debugPrint("Exception: $exception");
+    if (!_isInitialized) {
+      _pusher = PusherChannelsFlutter.getInstance();
+      await _pusher.init(
+        apiKey: AppConstants.pusherApiKey,
+        cluster: AppConstants.pusherCluster,
+        onEvent: onEvent,
+        onConnectionStateChange: onConnectionChange,
+        onError: onError,
+      );
+      _isInitialized = true;
     }
+
+    if (!_isConnected) {
+      await _pusher.connect();
+      _isConnected = true;
+    }
+  }
+
+  Future<void> subscribe(String channelName) async {
+    if (_subscribedChannels.contains(channelName)) return;
+    await _pusher.subscribe(channelName: channelName);
+    _subscribedChannels.add(channelName);
+    debugPrint("Subscribed to channel: $channelName");
   }
 }

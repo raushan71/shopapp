@@ -87,13 +87,21 @@ class ShopInformation extends StatelessWidget {
                         logo: productDetails.product.shop.logo,
                       );
 
-                      ref
+                      final response = await ref
                           .read(storeMessageControllerProvider.notifier)
                           .storeMessage(
                             shopId: productDetails.product.shop.id,
                             userId: saveUser!.id!,
                             productId: productDetails.product.id,
                           );
+                      if (!context.mounted) return;
+                      if (!response.isSuccess) {
+                        GlobalFunction.showCustomSnackbar(
+                          message: response.message,
+                          isSuccess: false,
+                        );
+                        return;
+                      }
                       context.nav.pushNamed(
                         Routes.getChatViewRouteName(
                             AppConstants.appServiceName),

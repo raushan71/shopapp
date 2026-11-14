@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
@@ -12,7 +14,6 @@ import 'package:ready_ecommerce/firebase_options.dart';
 //   debugPrint('Handling a background message ${message.messageId}');
 // }
 
-
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -23,19 +24,33 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   }
 
   await setupFlutterNotifications();
-  showFlutterNotification(message);
+  // Notification payloads are displayed by Android/iOS while the app is in
+  // the background. Data-only payloads need a local notification.
+  if (message.notification == null) {
+    await showFlutterNotification(message);
+  }
 
   debugPrint('Background message: ${message.messageId}');
 }
 
 Future<void> firebaseMessagingForgroundHandler() async {
-  FirebaseMessaging.onMessage.listen((message) {
-    debugPrint(message.data.toString());
-    debugPrint(message.data.toString());
-    debugPrint(message.toString());
+  await FirebaseMessaging.instance.requestPermission(
+    alert: true,
+    badge: true,
+    sound: true,
+    provisional: false,
+  );
+
+  FirebaseMessaging.onMessage.listen((message) async {
     debugPrint('Handling a ForeGround message ${message.messageId}');
-    debugPrint('Handling a ForeGround message ${message.notification}');
-    showFlutterNotification(message);
+    await showFlutterNotification(message);
+  });
+
+  FirebaseMessaging.onMessageOpenedApp.listen(handleMessage);
+  handleMessage(await FirebaseMessaging.instance.getInitialMessage());
+
+  FirebaseMessaging.instance.onTokenRefresh.listen((token) {
+    debugPrint('FCM token refreshed: $token');
   });
 }
 
@@ -85,30 +100,42 @@ Future<void> setupFlutterNotifications() async {
   isFlutterLocalNotificationsInitialized = true;
 }
 
-void showFlutterNotification(RemoteMessage message) {
-  RemoteNotification? notification = message.notification;
-  AndroidNotification? android = message.notification?.android;
-  final AppleNotification? iOS = message.notification?.apple;
-  if (notification != null && (android != null || iOS != null) && !kIsWeb) {
-    flutterLocalNotificationsPlugin.show(
-      notification.hashCode,
-      notification.title,
-      notification.body,
-      NotificationDetails(
-        android: AndroidNotificationDetails(
-          channel.id,
-          channel.name,
-          channelDescription: channel.description,
-          icon: '@drawable/notification_icon',
-        ),
-        iOS: const DarwinNotificationDetails(
-          presentAlert: true,
-          presentBadge: true,
-          presentSound: true,
-        ),
-      ),
-    );
+Future<void> showFlutterNotification(RemoteMessage message) async {
+  if (kIsWeb) return;
+  if (defaultTargetPlatform == TargetPlatform.iOS &&
+      message.notification != null) {
+    return;
   }
+
+  final notification = message.notification;
+  final title = notification?.title ?? message.data['title']?.toString();
+  final body = notification?.body ?? message.data['body']?.toString();
+  if ((title == null || title.isEmpty) && (body == null || body.isEmpty)) {
+    debugPrint('Notification ignored because it has no title or body.');
+    return;
+  }
+
+  await flutterLocalNotificationsPlugin.show(
+    message.messageId?.hashCode ?? message.hashCode,
+    title,
+    body,
+    NotificationDetails(
+      android: AndroidNotificationDetails(
+        channel.id,
+        channel.name,
+        channelDescription: channel.description,
+        icon: '@drawable/notification_icon',
+        importance: Importance.high,
+        priority: Priority.high,
+      ),
+      iOS: const DarwinNotificationDetails(
+        presentAlert: true,
+        presentBadge: true,
+        presentSound: true,
+      ),
+    ),
+    payload: message.data.isEmpty ? null : jsonEncode(message.data),
+  );
 }
 
 // handle notification navigation
