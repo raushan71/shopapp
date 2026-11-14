@@ -3,8 +3,29 @@ import 'package:ready_ecommerce/models/eCommerce/cart/cart_product.dart';
 import 'package:ready_ecommerce/models/eCommerce/message_model/messages.dart';
 import 'package:ready_ecommerce/models/eCommerce/order/order_place_model.dart';
 import 'package:ready_ecommerce/models/eCommerce/product/product_details.dart';
+import 'package:ready_ecommerce/models/common/master_model.dart';
 
 void main() {
+  test('master settings parse the Google login business flag safely', () {
+    final enabled = SocialAuths.fromJson({
+      'google': {
+        'name': 'Google',
+        'client_id': 'client-id',
+        'is_active': true,
+        'redirect_url': 'postmessage',
+      },
+    });
+    final disabled = SocialAuths.fromJson({
+      'google': {'is_active': false},
+    });
+    final missing = SocialAuths.fromJson(const {});
+
+    expect(enabled.google.isActive, isTrue);
+    expect(enabled.google.clientId, 'client-id');
+    expect(disabled.google.isActive, isFalse);
+    expect(missing.google.isActive, isFalse);
+  });
+
   test('product details parse variant media and available order options', () {
     final details = ProductDetails.fromMap({
       'product': {

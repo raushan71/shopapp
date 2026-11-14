@@ -41,6 +41,7 @@ class Data {
   late final bool orderPlaceAccountVerify;
   late final String registerOtpType;
   late final String forgotOtpType;
+  late final SocialAuths socialAuths;
 
   late final ThemeColors themeColors;
   late final bool phoneRequired;
@@ -58,6 +59,7 @@ class Data {
     registerOtpVerify = false;
     orderPlaceAccountVerify = false;
     forgotOtpType = '';
+    socialAuths = SocialAuths.empty();
     themeColors = ThemeColors.empty();
     phoneRequired = false;
     phoneMinLength = 0;
@@ -82,6 +84,9 @@ class Data {
     orderPlaceAccountVerify = json['order_place_account_verify'];
     registerOtpVerify = json['register_otp_verify'];
     forgotOtpType = json['forgot_otp_type'];
+    socialAuths = SocialAuths.fromJson(
+      json['social_auths'] as Map<String, dynamic>? ?? const {},
+    );
     themeColors = ThemeColors.fromJson(json['theme_colors']);
     phoneRequired = json['phone_required'];
     phoneMinLength = json['phone_min_length'];
@@ -96,9 +101,66 @@ class Data {
     data['theme_colors'] = themeColors.toJson();
     data['app_name'] = appName;
     data['web_logo'] = splashLogo;
+    data['social_auths'] = socialAuths.toJson();
     data['payment_gateways'] = paymentGateways.map((e) => e.toJson()).toList();
     return data;
   }
+}
+
+class SocialAuths {
+  final SocialAuth google;
+
+  const SocialAuths({required this.google});
+
+  SocialAuths.empty() : google = SocialAuth.empty();
+
+  factory SocialAuths.fromJson(Map<String, dynamic> json) {
+    return SocialAuths(
+      google: SocialAuth.fromJson(
+        json['google'] as Map<String, dynamic>? ?? const {},
+      ),
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+        'google': google.toJson(),
+      };
+}
+
+class SocialAuth {
+  final String name;
+  final String? clientId;
+  final bool isActive;
+  final String? redirectUrl;
+
+  const SocialAuth({
+    required this.name,
+    required this.clientId,
+    required this.isActive,
+    required this.redirectUrl,
+  });
+
+  SocialAuth.empty()
+      : name = 'Google',
+        clientId = null,
+        isActive = false,
+        redirectUrl = null;
+
+  factory SocialAuth.fromJson(Map<String, dynamic> json) {
+    return SocialAuth(
+      name: json['name'] as String? ?? 'Google',
+      clientId: json['client_id'] as String?,
+      isActive: json['is_active'] == true,
+      redirectUrl: json['redirect_url'] as String?,
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+        'name': name,
+        'client_id': clientId,
+        'is_active': isActive,
+        'redirect_url': redirectUrl,
+      };
 }
 
 class Currency {

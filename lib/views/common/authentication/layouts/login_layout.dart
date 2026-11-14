@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:ready_ecommerce/components/ecommerce/app_logo.dart';
 import 'package:ready_ecommerce/components/ecommerce/custom_button.dart';
@@ -10,6 +11,7 @@ import 'package:ready_ecommerce/config/app_color.dart';
 import 'package:ready_ecommerce/config/app_constants.dart';
 import 'package:ready_ecommerce/config/app_text_style.dart';
 import 'package:ready_ecommerce/config/theme.dart';
+import 'package:ready_ecommerce/controllers/common/master_controller.dart';
 import 'package:ready_ecommerce/controllers/eCommerce/address/address_controller.dart';
 import 'package:ready_ecommerce/controllers/eCommerce/authentication/authentication_controller.dart';
 import 'package:ready_ecommerce/controllers/misc/misc_controller.dart';
@@ -217,6 +219,7 @@ class _LoginLayoutState extends State<LoginLayout> {
                               password: passwordController.text,
                             )
                             .then((response) {
+                          if (!context.mounted) return;
                           ref
                               .read(addressControllerProvider.notifier)
                               .getAddress();
@@ -229,6 +232,46 @@ class _LoginLayoutState extends State<LoginLayout> {
                     },
                   );
           }),
+          Consumer(
+            builder: (context, ref, _) {
+              ref.watch(masterControllerProvider);
+              final googleLoginEnabled = ref
+                  .read(masterControllerProvider.notifier)
+                  .materModel
+                  .data
+                  .socialAuths
+                  .google
+                  .isActive;
+
+              if (!googleLoginEnabled) {
+                return const SizedBox.shrink();
+              }
+
+              return Center(
+                child: Padding(
+                  padding: EdgeInsets.only(top: 20.h),
+                  child: Semantics(
+                    label: 'Google login',
+                    image: true,
+                    child: Container(
+                      width: 48.r,
+                      height: 48.r,
+                      padding: EdgeInsets.all(12.r),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Theme.of(context).scaffoldBackgroundColor,
+                        border: Border.all(
+                          color: colors(context).hintTextColor ??
+                              EcommerceAppColor.lightGray,
+                        ),
+                      ),
+                      child: SvgPicture.asset('assets/svg/google.svg'),
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
           Consumer(
             builder: (context, ref, _) {
               return Align(
