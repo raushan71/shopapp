@@ -5,38 +5,37 @@ import 'package:ready_ecommerce/config/app_constants.dart';
 import 'package:ready_ecommerce/models/eCommerce/address/areas_model.dart';
 import 'package:ready_ecommerce/utils/api_client.dart';
 
-class AreasControllerNotifier extends StateNotifier<AsyncValue<List<AreasModel>>>{
+class AreasControllerNotifier
+    extends StateNotifier<AsyncValue<List<AreasModel>>> {
   final Ref ref;
 
-  AreasControllerNotifier(this.ref): super(AsyncLoading()){
+  AreasControllerNotifier(this.ref) : super(const AsyncLoading()) {
     getAreasList();
   }
 
-    Future<void>getAreasList()async{
-     try{
-       final response = await ref.read(apiClientProvider).get(AppConstants.areasListUrl);
+  Future<void> getAreasList() async {
+    state = const AsyncLoading();
+    try {
+      final response =
+          await ref.read(apiClientProvider).get(AppConstants.areasListUrl);
 
-       if(response.statusCode == 200){
-         List<dynamic> jsonResponse = response.data['data']['areas'];
+      if (response.statusCode == 200) {
+        final areasList = parseAreasPayload(response.data);
 
-         final areasList = jsonResponse.map((json) => AreasModel.fromJson(json)).toList();
+        state = AsyncData(areasList);
+      } else {
+        throw Exception(response.data['message']);
+      }
+    } catch (error, stackTrace) {
+      log("areas_api error: $error");
+      log("areas_api stackTrace: $stackTrace");
 
-         state = AsyncData(areasList);
-
-       }else {
-         throw Exception(response.data['message']);
-       }
-     }catch(error,stackTrace){
-       log("offer_api error: $error");
-       log("offer_api stackTrace: $stackTrace");
-
-       state = AsyncError(error, stackTrace);
-     }
-
+      state = AsyncError(error, stackTrace);
     }
-
+  }
 }
 
-final areasProvider = StateNotifierProvider<AreasControllerNotifier,AsyncValue<List<AreasModel>>>((ref){
+final areasProvider = StateNotifierProvider<AreasControllerNotifier,
+    AsyncValue<List<AreasModel>>>((ref) {
   return AreasControllerNotifier(ref);
 });

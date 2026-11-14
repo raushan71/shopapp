@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:ready_ecommerce/models/eCommerce/address/areas_model.dart';
 import 'package:ready_ecommerce/models/eCommerce/cart/cart_product.dart';
 import 'package:ready_ecommerce/models/eCommerce/message_model/messages.dart';
 import 'package:ready_ecommerce/models/eCommerce/order/order_place_model.dart';
@@ -6,6 +7,26 @@ import 'package:ready_ecommerce/models/eCommerce/product/product_details.dart';
 import 'package:ready_ecommerce/models/common/master_model.dart';
 
 void main() {
+  test('areas parser accepts nested and direct API response shapes', () {
+    final nested = parseAreasPayload({
+      'data': {
+        'areas': [
+          {'id': '7', 'name': 'Central'}
+        ]
+      }
+    });
+    final direct = parseAreasPayload({
+      'data': [
+        {'id': 8, 'name': 'North'}
+      ]
+    });
+
+    expect(nested.single.id, 7);
+    expect(nested.single.name, 'Central');
+    expect(direct.single.id, 8);
+    expect(direct.single.name, 'North');
+  });
+
   test('master settings parse the Google login business flag safely', () {
     final enabled = SocialAuths.fromJson({
       'google': {

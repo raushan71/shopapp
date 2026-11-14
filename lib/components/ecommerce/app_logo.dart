@@ -8,11 +8,13 @@ class AppLogo extends StatefulWidget {
   final bool isAnimation;
   final bool? withAppName;
   final bool centerAlign;
+  final double sizeScale;
   const AppLogo({
     super.key,
     this.withAppName = true,
     this.isAnimation = true,
     this.centerAlign = true,
+    this.sizeScale = 1,
   });
 
   @override
@@ -67,8 +69,8 @@ class _AppLogoState extends State<AppLogo> with SingleTickerProviderStateMixin {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Assets.png.favicon.image(
-          width: 180.w,
-          height: 70.h,
+          width: 180.w * widget.sizeScale,
+          height: 70.h * widget.sizeScale,
           fit: BoxFit.contain,
         ),
         // if (widget.withAppName ?? false)

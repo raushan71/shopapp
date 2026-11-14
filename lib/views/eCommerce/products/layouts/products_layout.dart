@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -168,7 +170,7 @@ class _EcommerceProductsLayoutState
             SliverPersistentHeader(
               pinned: true,
               delegate: _SliverAppBarDelegate(
-                maxExtentS: widget.subCategories!.isNotEmpty ? 110.h : 60.h,
+                maxExtentS: _filterHeaderHeight,
                 child: _buildFilterRow(context),
               ),
             )
@@ -177,6 +179,15 @@ class _EcommerceProductsLayoutState
         body: _buildProductsWidget(context),
       ),
     );
+  }
+
+  double get _filterHeaderHeight {
+    final height = widget.subCategories!.isNotEmpty ? 110.0 : 60.0;
+
+    // InputDecorator keeps a minimum logical height while ScreenUtil's `.h`
+    // can shrink on shorter screens. Keep the sliver large enough for the
+    // search row, spacing, and divider/filter list in either case.
+    return math.max(height, height.h);
   }
 
   Widget _customHeaderAppBarWidget() {

@@ -18,8 +18,9 @@ import 'package:ready_ecommerce/controllers/eCommerce/address/address_controller
 import 'package:ready_ecommerce/controllers/eCommerce/address/areas_controller.dart';
 import 'package:ready_ecommerce/generated/l10n.dart';
 import 'package:ready_ecommerce/models/eCommerce/address/add_address.dart';
+import 'package:ready_ecommerce/models/eCommerce/address/areas_model.dart';
+import 'package:ready_ecommerce/models/eCommerce/address/delivery_location.dart';
 import 'package:ready_ecommerce/routes.dart';
-import 'package:ready_ecommerce/services/common/hive_service_provider.dart';
 import 'package:ready_ecommerce/utils/context_less_navigation.dart';
 import 'package:ready_ecommerce/utils/global_function.dart';
 
@@ -43,7 +44,7 @@ class _AddUpdateAddressLayoutState
 
   final TextEditingController phoneNumController = TextEditingController();
 
- // final TextEditingController areaController = TextEditingController();
+  // final TextEditingController areaController = TextEditingController();
 
 //  final TextEditingController flatNumController = TextEditingController();
 
@@ -51,7 +52,7 @@ class _AddUpdateAddressLayoutState
 
   final TextEditingController addressLine1Controller = TextEditingController();
 
- // final TextEditingController addressLine2Controller = TextEditingController();
+  // final TextEditingController addressLine2Controller = TextEditingController();
 
   int activeIndex = 0;
 
@@ -68,9 +69,9 @@ class _AddUpdateAddressLayoutState
     FocusNode()
   ];
   bool isDefaultAddress = false;
-
-
-
+  int? selectedAreaId;
+  double? selectedLatitude;
+  double? selectedLongitude;
 
   // @override
   // void initState() {
@@ -96,10 +97,6 @@ class _AddUpdateAddressLayoutState
   //   }
   // }
 
-
-
-
-
   @override
   void initState() {
     super.initState();
@@ -113,8 +110,10 @@ class _AddUpdateAddressLayoutState
       addressTag = widget.address!.addressType;
       isDefaultAddress = widget.address!.isDefault;
       activeIndex = addressTags.indexOf(widget.address!.addressType);
-
-      selectedArea = null;
+      selectedArea = widget.address!.area;
+      selectedAreaId = widget.address!.areaId;
+      selectedLatitude = widget.address!.latitude;
+      selectedLongitude = widget.address!.longitude;
 
       // Schedule the area selection for after the first frame
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -135,22 +134,22 @@ class _AddUpdateAddressLayoutState
         log("--areasList loaded, count: ${areasList.length}");
 
         try {
-          final match = areasList.firstWhere(
-                (area) {
-              log("--comparing area.id: ${area.id} with ${widget.address!.areaId}");
-              return area.id == widget.address!.areaId;
-            },
-            orElse: () {
-              log("--No match found, using first area");
-              return areasList.first;
-            },
-          );
+          AreasModel? match;
+          for (final area in areasList) {
+            if (area.id == widget.address!.areaId) {
+              match = area;
+              break;
+            }
+          }
+
+          if (match == null) return;
 
           log("--match found--->> id: ${match.id}, name: ${match.name}");
 
           if (mounted) {
             setState(() {
-              selectedArea = match.name;
+              selectedArea = match!.name;
+              selectedAreaId = match.id;
             });
           }
         } catch (e) {
@@ -172,18 +171,18 @@ class _AddUpdateAddressLayoutState
     );
   }
 
-
   @override
   void dispose() {
     nameControler.dispose();
     phoneNumController.dispose();
     //areaController.dispose();
     //flatNumController.dispose();
-   // postalCodeController.dispose();
+    // postalCodeController.dispose();
     addressLine1Controller.dispose();
-   // addressLine2Controller.dispose();
+    // addressLine2Controller.dispose();
     super.dispose();
   }
+
   String? selectedArea;
 
   @override
@@ -269,98 +268,35 @@ class _AddUpdateAddressLayoutState
                           hintText: S.of(context).addressOne,
                         ),
                       ),
-
                       Gap(14.h),
                       CustomButton(
-                          buttonText: widget.address != null ? "Update Delivery Location" : "Pin Delivery Location",
-                          onPressed: (){
-
-                            debugPrint('Address: ${widget.address}');
-                            debugPrint('Latitude: ${widget.address?.latitude}');
-                            debugPrint('Longitude: ${widget.address?.longitude}');
-
-                            context.nav.pushNamed(
+                          buttonText: widget.address != null
+                              ? "Update Delivery Location"
+                              : "Pin Delivery Location",
+                          onPressed: () async {
+                            final location =
+                                await context.nav.pushNamed<DeliveryLocation>(
                               Routes.getTrackOrderRouteName(
                                 AppConstants.appServiceName,
                               ),
                               arguments: [
-                                widget.address != null,
-                                widget.address?.latitude,
-                                widget.address?.longitude,
+                                selectedLatitude != null &&
+                                    selectedLongitude != null,
+                                selectedLatitude,
+                                selectedLongitude,
                               ],
                             );
-                          }
-                      ),
+
+                            if (!mounted || location == null) return;
+
+                            setState(() {
+                              selectedLatitude = location.latitude;
+                              selectedLongitude = location.longitude;
+                              addressLine1Controller.text = location.address;
+                            });
+                          }),
                       Gap(14.h),
-
-                      PopupMenuButton<String>(
-                        offset: Offset(0, 52),
-                        onSelected: (value) {
-                          setState(() {
-                            selectedArea = value;
-                          });
-                        },
-                        itemBuilder: (context) {
-                          return areaState.when(
-                            data: (areasList) {
-                              return areasList.map((area) {
-                                return PopupMenuItem<String>(
-                                  value: area.name,
-                                  child: Text(
-                                    area.name ?? '',
-                                    style: TextStyle(color: colors(context).primaryColor),
-                                  ),
-                                );
-                              }).toList();
-                            },
-                            loading: () => [
-                              PopupMenuItem<String>(
-                                value: '',
-                                child: Text(
-                                  'Loading...',
-                                  style: TextStyle(color: colors(context).primaryColor),
-                                ),
-                              )
-                            ],
-                            error: (err, stack) => [
-                              PopupMenuItem<String>(
-                                value: '',
-                                child: Text(
-                                  'Error',
-                                  style: TextStyle(color: Colors.red),
-                                ),
-                              )
-                            ],
-                          );
-                        },
-                        child: Container(
-                          padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
-                          decoration: BoxDecoration(
-                            border: Border.all(color: colors(context).primaryColor!),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                selectedArea ?? 'Select Area',
-                                style: TextStyle(
-                                  color: colors(context).primaryColor,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                              const SizedBox(width: 8),
-                              Icon(
-                                Icons.arrow_drop_down,
-                                color: colors(context).primaryColor,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-
-
-
+                      _buildAreaSelector(areaState),
                       Gap(14.h),
                       buildAddressTag(),
                       Gap(14.h),
@@ -382,26 +318,23 @@ class _AddUpdateAddressLayoutState
                           const Spacer(),
                           widget.address?.addressId != null
                               ? TextButton(
-                                  onPressed: () {
-                                    ref
-                                        .read(
-                                            addressControllerProvider.notifier)
-                                        .deleteAddress(
-                                          addressId:
-                                              widget.address?.addressId ?? 0,
-                                        )
-                                        .then((response) {
-                                      if (response.isSuccess) {
-                                        GlobalFunction.showCustomSnackbar(
-                                            message: response.message,
-                                            isSuccess: response.isSuccess);
-                                        ref
-                                            .read(addressControllerProvider
-                                                .notifier)
-                                            .getAddress();
-                                        context.nav.pop();
-                                      }
-                                    });
+                                  onPressed: () async {
+                                    final controller = ref.read(
+                                        addressControllerProvider.notifier);
+                                    final response =
+                                        await controller.deleteAddress(
+                                      addressId: widget.address?.addressId ?? 0,
+                                    );
+
+                                    if (!context.mounted) return;
+                                    GlobalFunction.showCustomSnackbar(
+                                      message: response.message,
+                                      isSuccess: response.isSuccess,
+                                    );
+                                    if (response.isSuccess) {
+                                      await controller.getAddress();
+                                      if (context.mounted) context.nav.pop();
+                                    }
                                   },
                                   child: Text(
                                     S.of(context).deleteThis,
@@ -430,93 +363,152 @@ class _AddUpdateAddressLayoutState
                   )
                 : CustomButton(
                     buttonText: S.of(context).save,
-                    onPressed: () {
+                    onPressed: () async {
                       if (_formkey.currentState!.validate()) {
-                        final latitude = ref.read(hiveServiceProvider).getLatitude();
-                        final longitude = ref.read(hiveServiceProvider).getLongitude();
+                        final latitude = selectedLatitude;
+                        final longitude = selectedLongitude;
 
-                        if (latitude == null || longitude == null ) {
+                        if (latitude == null || longitude == null) {
                           GlobalFunction.showCustomSnackbar(
-                            message: "Please pin your delivery location on the map",
+                            message:
+                                "Please pin your delivery location on the map",
                             isSuccess: false,
                           );
                           return;
                         }
-                        if (selectedArea == null) {
+                        if (selectedAreaId == null) {
                           GlobalFunction.showCustomSnackbar(
                             message: "Please select your Area",
                             isSuccess: false,
                           );
                           return;
                         }
-                        int? selectedAreaId;
-                        areaState.when(
-                          data: (areasList) {
-                            final match = areasList.firstWhere(
-                                  (area) => area.name == selectedArea,
-
-                            );
-                            selectedAreaId = match.id;
-                          },
-                          loading: () {
-                            selectedAreaId = null;
-                          },
-                          error: (err, stack) {
-                            selectedAreaId = null;
-                          },
-                        );
-
                         final AddAddress address = AddAddress(
                           addressId: widget.address?.addressId,
                           name: nameControler.text,
                           phone: phoneNumController.text,
-                         // area: areaController.text,
-                         // flatNo: flatNumController.text,
+                          area: selectedArea,
+                          // flatNo: flatNumController.text,
                           //postCode: postalCodeController.text,
                           addressLine: addressLine1Controller.text,
-                         // addressLine2: addressLine2Controller.text,
+                          // addressLine2: addressLine2Controller.text,
                           latitude: latitude,
                           longitude: longitude,
                           areaId: selectedAreaId,
                           addressType: addressTag,
                           isDefault: isDefaultAddress,
                         );
-                        if (widget.address != null) {
-                          ref
-                              .read(addressControllerProvider.notifier)
-                              .updateAddress(addAddress: address)
-                              .then((response) {
-                            if (response.isSuccess) {
-                              GlobalFunction.showCustomSnackbar(
-                                  message: response.message,
-                                  isSuccess: response.isSuccess);
-                              ref
-                                  .read(addressControllerProvider.notifier)
-                                  .getAddress();
-                              context.nav.pop();
-                            }
-                          });
-                        } else {
-                          ref
-                              .read(addressControllerProvider.notifier)
-                              .addAddress(addAddress: address)
-                              .then((response) {
-                            if (response.isSuccess) {
-                              GlobalFunction.showCustomSnackbar(
-                                  message: response.message,
-                                  isSuccess: response.isSuccess);
-                              ref
-                                  .read(addressControllerProvider.notifier)
-                                  .getAddress();
-                              context.nav.pop();
-                            }
-                          });
+                        final controller =
+                            ref.read(addressControllerProvider.notifier);
+                        final response = widget.address != null
+                            ? await controller.updateAddress(
+                                addAddress: address)
+                            : await controller.addAddress(addAddress: address);
+
+                        if (!context.mounted) return;
+                        GlobalFunction.showCustomSnackbar(
+                          message: response.message,
+                          isSuccess: response.isSuccess,
+                        );
+                        if (response.isSuccess) {
+                          await controller.getAddress();
+                          if (context.mounted) context.nav.pop();
                         }
                       }
                     },
                   ),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildAreaSelector(AsyncValue<List<AreasModel>> areaState) {
+    return areaState.when(
+      data: (areasList) {
+        if (areasList.isEmpty) {
+          return _areaSelectorContainer(
+            label: 'No delivery areas available',
+            trailing: const Icon(Icons.info_outline),
+          );
+        }
+
+        return PopupMenuButton<int>(
+          offset: const Offset(0, 52),
+          onSelected: (areaId) {
+            final area = areasList.firstWhere((item) => item.id == areaId);
+            setState(() {
+              selectedAreaId = area.id;
+              selectedArea = area.name;
+            });
+          },
+          itemBuilder: (context) => areasList
+              .where((area) => area.id != null && area.name != null)
+              .map<PopupMenuEntry<int>>(
+                (area) => PopupMenuItem<int>(
+                  value: area.id!,
+                  child: Text(
+                    area.name!,
+                    style: TextStyle(color: colors(context).primaryColor),
+                  ),
+                ),
+              )
+              .toList(),
+          child: _areaSelectorContainer(
+            label: selectedArea ?? 'Select Area',
+            trailing: Icon(
+              Icons.arrow_drop_down,
+              color: colors(context).primaryColor,
+            ),
+          ),
+        );
+      },
+      loading: () => _areaSelectorContainer(
+        label: 'Loading areas...',
+        trailing: const SizedBox.square(
+          dimension: 18,
+          child: CircularProgressIndicator(strokeWidth: 2),
+        ),
+      ),
+      error: (error, stackTrace) => InkWell(
+        borderRadius: BorderRadius.circular(8),
+        onTap: () => ref.read(areasProvider.notifier).getAreasList(),
+        child: _areaSelectorContainer(
+          label: 'Unable to load areas. Tap to retry',
+          textColor: colors(context).errorColor,
+          trailing: Icon(Icons.refresh, color: colors(context).errorColor),
+        ),
+      ),
+    );
+  }
+
+  Widget _areaSelectorContainer({
+    required String label,
+    required Widget trailing,
+    Color? textColor,
+  }) {
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
+      decoration: BoxDecoration(
+        border: Border.all(color: colors(context).primaryColor!),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              label,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                color: textColor ?? colors(context).primaryColor,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+          const SizedBox(width: 8),
+          trailing,
+        ],
       ),
     );
   }
@@ -556,7 +548,9 @@ class _AddUpdateAddressLayoutState
                       color: activeIndex == index
                           ? colors(context).primaryColor ??
                               EcommerceAppColor.primary
-                          : colors(context).bodyTextColor!.withOpacity(0.5),
+                          : colors(context)
+                              .bodyTextColor!
+                              .withValues(alpha: 0.5),
                     ),
                   ),
                   child: Center(

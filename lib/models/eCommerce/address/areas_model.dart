@@ -29,8 +29,9 @@ class AreasModel {
   AreasModel({this.id, this.name, this.deliveryAmount});
 
   AreasModel.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    name = json['name'];
+    final rawId = json['id'];
+    id = rawId is int ? rawId : int.tryParse(rawId?.toString() ?? '');
+    name = json['name']?.toString();
     deliveryAmount = json['delivery_amount'];
   }
 
@@ -41,4 +42,29 @@ class AreasModel {
     data['delivery_amount'] = deliveryAmount;
     return data;
   }
+}
+
+List<AreasModel> parseAreasPayload(dynamic payload) {
+  final rawAreas = _extractAreas(payload);
+
+  return rawAreas
+      .whereType<Map>()
+      .map((area) => AreasModel.fromJson(Map<String, dynamic>.from(area)))
+      .where((area) => area.id != null && area.name?.trim().isNotEmpty == true)
+      .toList();
+}
+
+List<dynamic> _extractAreas(dynamic payload) {
+  if (payload is List) return payload;
+
+  if (payload is Map) {
+    if (payload.containsKey('areas')) {
+      return _extractAreas(payload['areas']);
+    }
+    if (payload.containsKey('data')) {
+      return _extractAreas(payload['data']);
+    }
+  }
+
+  throw const FormatException('The areas response has an unsupported format.');
 }

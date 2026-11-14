@@ -23,7 +23,6 @@ import 'package:ready_ecommerce/routes.dart';
 import 'package:ready_ecommerce/services/common/hive_service_provider.dart';
 import 'package:ready_ecommerce/utils/context_less_navigation.dart';
 import 'package:ready_ecommerce/utils/global_function.dart';
-import 'package:ready_ecommerce/views/eCommerce/categories/components/sub_categories_bottom_sheet.dart';
 import 'package:ready_ecommerce/views/eCommerce/checkout/components/address_modal_bottom_sheet.dart';
 import 'package:ready_ecommerce/views/eCommerce/home/components/category_card.dart';
 import 'package:ready_ecommerce/views/eCommerce/home/components/popular_product_card.dart';
@@ -362,13 +361,17 @@ class _EcommerceHomeViewLayoutState
                           ),
                         ),
                         barrierColor:
-                            colors(context).accentColor!.withOpacity(0.8),
+                            colors(context).accentColor!.withValues(alpha: 0.8),
                         context: context,
                         builder: (_) => const AddressModalBottomSheet(),
                       ),
                       child: _buildHeaderRow(context),
                     )
-                  : const AppLogo(isAnimation: true, centerAlign: false),
+                  : const AppLogo(
+                      isAnimation: true,
+                      centerAlign: false,
+                      sizeScale: 0.8,
+                    ),
             ],
           ),
         );
@@ -417,7 +420,7 @@ class _EcommerceHomeViewLayoutState
       style: OutlinedButton.styleFrom(
         backgroundColor: GlobalFunction.getBackgroundColor(context: context) !=
                 colors(context).dark
-            ? EcommerceAppColor.primary.withOpacity(0.1)
+            ? EcommerceAppColor.primary.withValues(alpha: 0.1)
             : colors(context).accentColor,
         padding: EdgeInsets.symmetric(horizontal: 10.w),
         side: BorderSide(color: EcommerceAppColor.primary, width: 1),
@@ -470,39 +473,37 @@ class _EcommerceHomeViewLayoutState
 
   Widget _buildLeftRow(BuildContext context) {
     return Expanded(
-      child: Row(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const AppLogo(withAppName: false, isAnimation: true),
-          Gap(10.w),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(S.of(context).deliverTo,
-                    style: AppTextStyle(context)
-                        .bodyTextSmall
-                        .copyWith(fontWeight: FontWeight.w700)),
-                ValueListenableBuilder(
-                  valueListenable: Hive.box(AppConstants.userBox).listenable(),
-                  builder: (context, box, _) {
-                    final addressData =
-                        box.get(AppConstants.defaultAddress, defaultValue: "");
-                    debugPrint(
-                        "Retrieved addressData: $addressData, Type: ${addressData.runtimeType}");
+          const AppLogo(
+            withAppName: false,
+            isAnimation: true,
+            centerAlign: false,
+            sizeScale: 0.8,
+          ),
+          Gap(4.h),
+          Text(S.of(context).deliverTo,
+              style: AppTextStyle(context)
+                  .bodyTextSmall
+                  .copyWith(fontWeight: FontWeight.w700)),
+          ValueListenableBuilder(
+            valueListenable: Hive.box(AppConstants.userBox).listenable(),
+            builder: (context, box, _) {
+              final addressData =
+                  box.get(AppConstants.defaultAddress, defaultValue: "");
 
-                    return Text(
-                      addressData.isNotEmpty
-                          ? _defaultAddress(context, addressData)
-                          : "",
-                      overflow: TextOverflow.ellipsis,
-                      style: AppTextStyle(context)
-                          .bodyText
-                          .copyWith(fontSize: 11, fontWeight: FontWeight.w600),
-                    );
-                  },
-                )
-              ],
-            ),
+              return Text(
+                addressData is Map && addressData.isNotEmpty
+                    ? _defaultAddress(context, addressData)
+                    : "",
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: AppTextStyle(context)
+                    .bodyText
+                    .copyWith(fontSize: 11, fontWeight: FontWeight.w600),
+              );
+            },
           ),
         ],
       ),
@@ -660,7 +661,7 @@ Widget _buildScrollingContainers() {
           margin: const EdgeInsets.symmetric(horizontal: 2),
           height: 2.h,
           width: 5.w,
-          color: EcommerceAppColor.lightGray.withOpacity(0.5),
+          color: EcommerceAppColor.lightGray.withValues(alpha: 0.5),
         ),
       ),
     ),
