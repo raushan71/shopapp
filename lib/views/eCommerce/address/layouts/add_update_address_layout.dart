@@ -9,7 +9,6 @@ import 'package:gap/gap.dart';
 import 'package:ready_ecommerce/components/ecommerce/custom_button.dart';
 import 'package:ready_ecommerce/components/ecommerce/custom_text_field.dart';
 import 'package:ready_ecommerce/config/app_color.dart';
-import 'package:ready_ecommerce/config/app_constants.dart';
 import 'package:ready_ecommerce/config/app_text_style.dart';
 import 'package:ready_ecommerce/config/theme.dart';
 import 'package:ready_ecommerce/controllers/common/master_controller.dart';
@@ -17,9 +16,9 @@ import 'package:ready_ecommerce/controllers/eCommerce/address/address_controller
 import 'package:ready_ecommerce/generated/l10n.dart';
 import 'package:ready_ecommerce/models/eCommerce/address/add_address.dart';
 import 'package:ready_ecommerce/models/eCommerce/address/delivery_location.dart';
-import 'package:ready_ecommerce/routes.dart';
 import 'package:ready_ecommerce/utils/context_less_navigation.dart';
 import 'package:ready_ecommerce/utils/global_function.dart';
+import 'package:ready_ecommerce/views/eCommerce/order_track/order_track_view.dart';
 
 class AddUpdateAddressLayout extends ConsumerStatefulWidget {
   final AddAddress? address;
@@ -49,6 +48,8 @@ class _AddUpdateAddressLayoutState
 
   final TextEditingController addressLine1Controller = TextEditingController();
 
+  final TextEditingController addressLine2Controller = TextEditingController();
+
   int activeIndex = 0;
 
   List<String> addressTags = ['Home', 'Office', 'other'];
@@ -66,7 +67,6 @@ class _AddUpdateAddressLayoutState
   bool isDefaultAddress = false;
   double? selectedLatitude;
   double? selectedLongitude;
-  String? selectedAddressLine2;
 
   // @override
   // void initState() {
@@ -104,7 +104,7 @@ class _AddUpdateAddressLayoutState
       activeIndex = addressTags.indexOf(widget.address!.addressType);
       selectedLatitude = widget.address!.latitude;
       selectedLongitude = widget.address!.longitude;
-      selectedAddressLine2 = widget.address!.addressLine2;
+      addressLine2Controller.text = widget.address!.addressLine2 ?? '';
     } else {
       addressTag = addressTags.first;
     }
@@ -118,6 +118,7 @@ class _AddUpdateAddressLayoutState
     //flatNumController.dispose();
     postalCodeController.dispose();
     addressLine1Controller.dispose();
+    addressLine2Controller.dispose();
     super.dispose();
   }
 
@@ -189,32 +190,24 @@ class _AddUpdateAddressLayoutState
                       ),
                       Gap(14.h),
                       CustomTextFormField(
-                        name: S.of(context).area,
-                        hintText: '${S.of(context).area} (Optional)',
-                        textInputType: TextInputType.text,
-                        controller: areaController,
-                        focusNode: fNodes[2],
-                        textInputAction: TextInputAction.next,
-                        validator: null,
-                      ),
-                      Gap(14.h),
-                      CustomTextFormField(
-                        name: S.of(context).postalCode,
-                        hintText: '${S.of(context).postalCode} (Optional)',
-                        textInputType: TextInputType.number,
-                        controller: postalCodeController,
-                        focusNode: fNodes[3],
-                        textInputAction: TextInputAction.next,
-                        validator: null,
-                      ),
-                      Gap(14.h),
-                      CustomTextFormField(
                         name: S.of(context).addressOne,
-                        hintText: '${S.of(context).addressOne} (Optional)',
+                        hintText: S.of(context).addressOne,
                         textInputType: TextInputType.text,
                         controller: addressLine1Controller,
                         focusNode: fNodes[5],
                         textInputAction: TextInputAction.next,
+                        validator: null,
+                      ),
+                      Gap(14.h),
+                      CustomTextFormField(
+                        name: S.of(context).addressLine2,
+                        hintText: S.of(context).addressLine2,
+                        textInputType: TextInputType.streetAddress,
+                        controller: addressLine2Controller,
+                        textInputAction: TextInputAction.done,
+                        readOnly: true,
+                        minLines: 2,
+                        maxLines: 3,
                         validator: null,
                       ),
                       Gap(14.h),
@@ -223,17 +216,18 @@ class _AddUpdateAddressLayoutState
                               ? "Update Delivery Location"
                               : "Pin Delivery Location",
                           onPressed: () async {
-                            final location =
-                                await context.nav.pushNamed<DeliveryLocation>(
-                              Routes.getTrackOrderRouteName(
-                                AppConstants.appServiceName,
+                            FocusScope.of(context).unfocus();
+
+                            final location = await Navigator.of(context)
+                                .push<DeliveryLocation>(
+                              MaterialPageRoute<DeliveryLocation>(
+                                builder: (_) => EcommerceOrderTrackView(
+                                  hasAddress: selectedLatitude != null &&
+                                      selectedLongitude != null,
+                                  latitude: selectedLatitude,
+                                  longitude: selectedLongitude,
+                                ),
                               ),
-                              arguments: [
-                                selectedLatitude != null &&
-                                    selectedLongitude != null,
-                                selectedLatitude,
-                                selectedLongitude,
-                              ],
                             );
 
                             if (!mounted || location == null) return;
@@ -241,7 +235,7 @@ class _AddUpdateAddressLayoutState
                             setState(() {
                               selectedLatitude = location.latitude;
                               selectedLongitude = location.longitude;
-                              selectedAddressLine2 = location.address;
+                              addressLine2Controller.text = location.address;
                             });
                           }),
                       Gap(14.h),
@@ -332,7 +326,8 @@ class _AddUpdateAddressLayoutState
                           postCode: _optionalText(postalCodeController.text),
                           addressLine:
                               _optionalText(addressLine1Controller.text),
-                          addressLine2: selectedAddressLine2,
+                          addressLine2:
+                              _optionalText(addressLine2Controller.text),
                           latitude: latitude,
                           longitude: longitude,
                           addressType: addressTag,
