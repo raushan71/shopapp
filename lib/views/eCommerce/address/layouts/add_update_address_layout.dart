@@ -199,18 +199,20 @@ class _AddUpdateAddressLayoutState
                         validator: null,
                       ),
                       Gap(14.h),
-                      CustomTextFormField(
-                        name: S.of(context).addressLine2,
-                        hintText: S.of(context).addressLine2,
-                        textInputType: TextInputType.streetAddress,
-                        controller: addressLine2Controller,
-                        textInputAction: TextInputAction.done,
-                        readOnly: true,
-                        minLines: 2,
-                        maxLines: 3,
-                        validator: null,
-                      ),
-                      Gap(14.h),
+                      if (addressLine2Controller.text.trim().isNotEmpty) ...[
+                        CustomTextFormField(
+                          name: S.of(context).addressLine2,
+                          hintText: S.of(context).addressLine2,
+                          textInputType: TextInputType.streetAddress,
+                          controller: addressLine2Controller,
+                          textInputAction: TextInputAction.done,
+                          readOnly: true,
+                          minLines: 2,
+                          maxLines: 3,
+                          validator: null,
+                        ),
+                        Gap(14.h),
+                      ],
                       CustomButton(
                           buttonText: widget.address != null
                               ? "Update Delivery Location"
