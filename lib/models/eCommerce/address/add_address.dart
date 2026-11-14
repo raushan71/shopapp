@@ -145,7 +145,6 @@
 //       DefaultAddressModel.fromMap(json.decode(source) as Map<String, dynamic>);
 // }
 
-
 import 'dart:convert';
 
 bool _parseIsDefault(dynamic value) {
@@ -165,13 +164,12 @@ class AddAddress {
   final String? area;
   final String? flatNo;
   final String? postCode;
-  final String addressLine;
+  final String? addressLine;
   final String? addressLine2;
   final String addressType;
   final double? latitude;
   final double? longitude;
   final bool isDefault;
-  final int? areaId;
 
   AddAddress({
     this.addressId,
@@ -180,12 +178,11 @@ class AddAddress {
     this.area,
     this.flatNo,
     this.postCode,
-    required this.addressLine,
+    this.addressLine,
     this.addressLine2,
     required this.addressType,
     this.latitude,
     this.longitude,
-    this.areaId,
     required this.isDefault,
   });
 
@@ -203,7 +200,6 @@ class AddAddress {
       'latitude': latitude,
       'longitude': longitude,
       'is_default': isDefault ? 1 : 0,
-      'area_id': areaId,
     };
   }
 
@@ -215,7 +211,7 @@ class AddAddress {
       area: map['area'] as String?,
       flatNo: map['flat_no'] as String?,
       postCode: map['post_code'] as String?,
-      addressLine: map['address_line'] as String,
+      addressLine: map['address_line'] as String?,
       addressLine2: map['address_line2'] as String?,
       addressType: map['address_type'] as String,
       latitude: map['latitude'] != null
@@ -224,8 +220,6 @@ class AddAddress {
       longitude: map['longitude'] != null
           ? double.tryParse(map['longitude'].toString())
           : null,
-
-      areaId: map['area_id'] as int?,
       isDefault: _parseIsDefault(map['is_default']),
     );
   }
@@ -243,13 +237,12 @@ class DefaultAddressModel {
   final String? area;
   final String? flatNo;
   final String? postCode;
-  final String addressLine;
+  final String? addressLine;
   final String? addressLine2;
   final String addressType;
   final String? latitude;
   final String? longitude;
   final bool isDefault;
-  final int? areaId;
 
   DefaultAddressModel({
     this.addressId,
@@ -258,12 +251,11 @@ class DefaultAddressModel {
     this.area,
     this.flatNo,
     this.postCode,
-    required this.addressLine,
+    this.addressLine,
     this.addressLine2,
     required this.addressType,
     this.latitude,
     this.longitude,
-    this.areaId,
     required this.isDefault,
   });
 
@@ -281,7 +273,6 @@ class DefaultAddressModel {
       'latitude': latitude,
       'longitude': longitude,
       'is_default': isDefault ? 1 : 0,
-      'area_id': areaId,
     };
   }
 
@@ -293,12 +284,11 @@ class DefaultAddressModel {
       area: map['area'] as String?,
       flatNo: map['flat_no'] as String?,
       postCode: map['post_code'] as String?,
-      addressLine: map['address_line'] as String,
+      addressLine: map['address_line'] as String?,
       addressLine2: map['address_line2'] as String?,
       addressType: map['address_type'] as String,
       latitude: map['latitude']?.toString(),
       longitude: map['longitude']?.toString(),
-      areaId: map['area_id'] as int?,
       isDefault: _parseIsDefault(map['is_default']),
     );
   }

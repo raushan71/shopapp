@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:ready_ecommerce/models/eCommerce/address/add_address.dart';
 import 'package:ready_ecommerce/models/eCommerce/address/areas_model.dart';
 import 'package:ready_ecommerce/models/eCommerce/cart/cart_product.dart';
 import 'package:ready_ecommerce/models/eCommerce/message_model/messages.dart';
@@ -7,6 +8,51 @@ import 'package:ready_ecommerce/models/eCommerce/product/product_details.dart';
 import 'package:ready_ecommerce/models/common/master_model.dart';
 
 void main() {
+  test('delivery address payload keeps manual fields and pinned location', () {
+    final address = AddAddress(
+      name: 'Customer',
+      phone: '9999999999',
+      area: null,
+      postCode: null,
+      addressLine: null,
+      addressLine2: 'Pinned GPS address',
+      addressType: 'Home',
+      latitude: 12.9716,
+      longitude: 77.5946,
+      isDefault: false,
+    );
+
+    final payload = address.toMap();
+
+    expect(payload['area'], isNull);
+    expect(payload['post_code'], isNull);
+    expect(payload['address_line'], isNull);
+    expect(payload['address_line2'], 'Pinned GPS address');
+    expect(payload['latitude'], 12.9716);
+    expect(payload['longitude'], 77.5946);
+    expect(payload.containsKey('area_id'), isFalse);
+
+    final parsed = AddAddress.fromMap({
+      'id': 1,
+      'name': 'Customer',
+      'phone': '9999999999',
+      'area': null,
+      'flat_no': null,
+      'post_code': null,
+      'address_line': null,
+      'address_line2': 'Pinned GPS address',
+      'address_type': 'Home',
+      'latitude': '12.9716',
+      'longitude': '77.5946',
+      'is_default': 0,
+    });
+
+    expect(parsed.addressLine, isNull);
+    expect(parsed.addressLine2, 'Pinned GPS address');
+    expect(parsed.latitude, 12.9716);
+    expect(parsed.longitude, 77.5946);
+  });
+
   test('areas parser accepts nested and direct API response shapes', () {
     final nested = parseAreasPayload({
       'data': {

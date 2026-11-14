@@ -119,7 +119,6 @@ class HiveService {
         addressType: address.addressType,
         latitude: address.latitude?.toString(),
         longitude: address.longitude?.toString(),
-        areaId: address.areaId,
         isDefault: address.isDefault);
     final userBox = Hive.box(AppConstants.userBox);
     userBox.put(AppConstants.defaultAddress, addressModel.toMap());
