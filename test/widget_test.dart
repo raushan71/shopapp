@@ -166,6 +166,25 @@ void main() {
     expect(details.product.orderOptions.onlinePayment, isTrue);
   });
 
+  test('shop delivery estimate safely handles missing and numeric values', () {
+    Map<String, dynamic> shopPayload(Object? estimatedDeliveryTime) => {
+          'id': 2,
+          'name': 'Shop2',
+          'logo': 'https://example.com/logo.webp',
+          'estimated_delivery_time': estimatedDeliveryTime,
+          'delivery_charge': 0,
+        };
+
+    expect(
+      ShopInfo.fromMap(shopPayload(null)).estimatedDeliveryTime,
+      isEmpty,
+    );
+    expect(
+      ShopInfo.fromMap(shopPayload(2)).estimatedDeliveryTime,
+      '2',
+    );
+  });
+
   test('order payload includes pickup fulfillment without an address', () {
     final order = OrderPlaceModel(
       addressId: null,

@@ -521,7 +521,8 @@ class ShopInfo {
       id: map['id'].toInt() as int,
       name: map['name'] as String,
       logo: map['logo'] as String,
-      estimatedDeliveryTime: map['estimated_delivery_time'] as String,
+      estimatedDeliveryTime:
+          map['estimated_delivery_time']?.toString().trim() ?? '',
       deliveryCharge: map['delivery_charge'].toDouble() as double,
     );
   }

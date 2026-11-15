@@ -29,6 +29,12 @@ class ShopInformation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final estimatedDeliveryDays = int.tryParse(
+      productDetails.product.shop.estimatedDeliveryTime.trim(),
+    );
+    final hasEstimatedDeliveryTime =
+        estimatedDeliveryDays != null && estimatedDeliveryDays > 0;
+
     return Consumer(builder: (context, ref, _) {
       return Container(
         width: double.infinity,
@@ -161,17 +167,20 @@ class ShopInformation extends StatelessWidget {
                 ),
               );
             }),
-            Gap(10.h),
-            Divider(
-              color: colors(context).accentColor,
-            ),
-            Gap(10.h),
-            _buildShopInfoRow(
-              icon: Assets.svg.clock,
-              text: S.of(context).estdTime,
-              value: productDetails.product.shop.estimatedDeliveryTime,
-              context: context,
-            ),
+            if (hasEstimatedDeliveryTime) ...[
+              Gap(10.h),
+              Divider(
+                color: colors(context).accentColor,
+              ),
+              Gap(10.h),
+              _buildShopInfoRow(
+                icon: Assets.svg.clock,
+                text: S.of(context).estdTime,
+                value:
+                    '$estimatedDeliveryDays to ${estimatedDeliveryDays + 1} ${S.of(context).days}',
+                context: context,
+              ),
+            ],
           ],
         ),
       );
