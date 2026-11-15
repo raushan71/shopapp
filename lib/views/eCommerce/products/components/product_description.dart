@@ -41,6 +41,9 @@ class _ProductDescriptionState extends ConsumerState<ProductDescription> {
 
   @override
   Widget build(BuildContext context) {
+    final hasBrand =
+        widget.productDetails.product.brand?.trim().isNotEmpty == true;
+
     return AnimatedContainer(
       duration: const Duration(milliseconds: 500),
       padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
@@ -49,36 +52,22 @@ class _ProductDescriptionState extends ConsumerState<ProductDescription> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              if (widget.productDetails.product.brand?.trim().isNotEmpty ==
-                  true)
+          if (hasBrand) ...[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
                 Text(
                   widget.productDetails.product.brand!.trim(),
                   style: AppTextStyle(context).bodyTextSmall.copyWith(
                         color: colors(context).primaryColor,
                         fontWeight: FontWeight.w700,
                       ),
-                )
-              else
-                const Spacer(),
-              InkWell(
-                onTap: () {
-                  final websiteUrl =
-                      AppConstants.baseUrl.replaceAll("api", "products");
-                  Share.share(
-                      "check out my website $websiteUrl/${widget.productDetails.product.id}/details");
-                },
-                child: Card(
-                    child: Padding(
-                  padding: const EdgeInsets.all(6.0),
-                  child: Icon(Icons.share, color: colors(context).primaryColor),
-                )),
-              ),
-            ],
-          ),
-          Gap(10.h),
+                ),
+                _buildShareButton(context),
+              ],
+            ),
+            Gap(10.h),
+          ],
           Text(
             widget.productDetails.product.name,
             style: AppTextStyle(context)
@@ -121,7 +110,7 @@ class _ProductDescriptionState extends ConsumerState<ProductDescription> {
             ),
           ),
           Gap(5.h),
-          _buildReviewAndSoldCount(context: context),
+          _buildReviewAndSoldCount(context: context, hasBrand: hasBrand),
           Gap(5.h),
           _buildPriceAndAddToCart(context: context),
           Gap(10.h),
@@ -135,7 +124,26 @@ class _ProductDescriptionState extends ConsumerState<ProductDescription> {
     );
   }
 
-  Widget _buildReviewAndSoldCount({required BuildContext context}) {
+  Widget _buildShareButton(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        final websiteUrl = AppConstants.baseUrl.replaceAll("api", "products");
+        Share.share(
+            "check out my website $websiteUrl/${widget.productDetails.product.id}/details");
+      },
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(6.0),
+          child: Icon(Icons.share, color: colors(context).primaryColor),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildReviewAndSoldCount({
+    required BuildContext context,
+    required bool hasBrand,
+  }) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -173,44 +181,50 @@ class _ProductDescriptionState extends ConsumerState<ProductDescription> {
             ),
           ],
         ),
-        AnimatedSize(
-          duration: const Duration(milliseconds: 250),
-          child: IconButton(
-            padding: EdgeInsets.zero,
-            visualDensity: VisualDensity.compact,
-            onPressed: () {
-              if (ref.read(hiveServiceProvider).userIsLoggedIn()) {
-                setState(() {
-                  isFavorite = !isFavorite;
-                });
-                ref
-                    .read(productControllerProvider.notifier)
-                    .favoriteProductAddRemove(
-                      productId: widget.productDetails.product.id,
-                    );
-              } else {
-                showDialog(
-                    context: context,
-                    builder: (_) => ConfirmationDialog(
-                          title:
-                              'You are unable to favorite products without login!',
-                          confirmButtonText: 'Login',
-                          onPressed: () {
-                            context.nav.pushNamedAndRemoveUntil(
-                                Routes.login, (route) => false);
-                          },
-                        ));
-              }
-            },
-            icon: Icon(
-              isFavorite ? Icons.favorite : Icons.favorite_outline_rounded,
-              size: isFavorite ? 31.sp : 30.sp,
-              color: isFavorite
-                  ? colors(context).errorColor
-                  : colors(context).bodyTextSmallColor,
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            AnimatedSize(
+              duration: const Duration(milliseconds: 250),
+              child: IconButton(
+                padding: EdgeInsets.zero,
+                visualDensity: VisualDensity.compact,
+                onPressed: () {
+                  if (ref.read(hiveServiceProvider).userIsLoggedIn()) {
+                    setState(() {
+                      isFavorite = !isFavorite;
+                    });
+                    ref
+                        .read(productControllerProvider.notifier)
+                        .favoriteProductAddRemove(
+                          productId: widget.productDetails.product.id,
+                        );
+                  } else {
+                    showDialog(
+                        context: context,
+                        builder: (_) => ConfirmationDialog(
+                              title:
+                                  'You are unable to favorite products without login!',
+                              confirmButtonText: 'Login',
+                              onPressed: () {
+                                context.nav.pushNamedAndRemoveUntil(
+                                    Routes.login, (route) => false);
+                              },
+                            ));
+                  }
+                },
+                icon: Icon(
+                  isFavorite ? Icons.favorite : Icons.favorite_outline_rounded,
+                  size: isFavorite ? 31.sp : 30.sp,
+                  color: isFavorite
+                      ? colors(context).errorColor
+                      : colors(context).bodyTextSmallColor,
+                ),
+              ),
             ),
-          ),
-        )
+            if (!hasBrand) _buildShareButton(context),
+          ],
+        ),
       ],
     );
   }
