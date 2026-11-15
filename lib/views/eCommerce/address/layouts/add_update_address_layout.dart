@@ -196,7 +196,17 @@ class _AddUpdateAddressLayoutState
                         controller: addressLine1Controller,
                         focusNode: fNodes[5],
                         textInputAction: TextInputAction.next,
-                        validator: null,
+                        validator: (value) {
+                          if (selectedLatitude != null &&
+                              selectedLongitude != null) {
+                            return null;
+                          }
+                          return GlobalFunction.commonValidator(
+                            context: context,
+                            value: value?.trim() ?? '',
+                            hintText: S.of(context).addressOne,
+                          );
+                        },
                       ),
                       Gap(14.h),
                       if (addressLine2Controller.text.trim().isNotEmpty) ...[
@@ -215,8 +225,8 @@ class _AddUpdateAddressLayoutState
                       ],
                       CustomButton(
                           buttonText: widget.address != null
-                              ? "Update Delivery Location"
-                              : "Pin Delivery Location",
+                              ? "Update Delivery Location (Optional)"
+                              : "Pin Delivery Location (Optional)",
                           onPressed: () async {
                             FocusScope.of(context).unfocus();
 
@@ -308,17 +318,6 @@ class _AddUpdateAddressLayoutState
                     buttonText: S.of(context).save,
                     onPressed: () async {
                       if (_formkey.currentState!.validate()) {
-                        final latitude = selectedLatitude;
-                        final longitude = selectedLongitude;
-
-                        if (latitude == null || longitude == null) {
-                          GlobalFunction.showCustomSnackbar(
-                            message:
-                                "Please pin your delivery location on the map",
-                            isSuccess: false,
-                          );
-                          return;
-                        }
                         final AddAddress address = AddAddress(
                           addressId: widget.address?.addressId,
                           name: nameControler.text,
@@ -330,8 +329,8 @@ class _AddUpdateAddressLayoutState
                               _optionalText(addressLine1Controller.text),
                           addressLine2:
                               _optionalText(addressLine2Controller.text),
-                          latitude: latitude,
-                          longitude: longitude,
+                          latitude: selectedLatitude,
+                          longitude: selectedLongitude,
                           addressType: addressTag,
                           isDefault: isDefaultAddress,
                         );
