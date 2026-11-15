@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:ready_ecommerce/generated/intl/messages_ar.dart';
 import 'package:ready_ecommerce/models/eCommerce/common/common_response.dart';
 import 'package:ready_ecommerce/models/eCommerce/order/add_product_review_model.dart';
 import 'package:ready_ecommerce/models/eCommerce/order/buy_now_order_place.dart';
@@ -24,6 +23,9 @@ class OrderController extends StateNotifier<bool> {
   int? get totalOrder => _totalOrder;
   List<OrderModel> _orders = [];
   List<OrderModel> get orders => _orders;
+  String? _ordersError;
+  String? get ordersError => _ordersError;
+  int _ordersRequestId = 0;
 
   Future<CommonResponse> placeOrder(
       {required OrderPlaceModel orderPlaceModel}) async {
@@ -91,33 +93,47 @@ class OrderController extends StateNotifier<bool> {
     }
   }
 
-  Future<void> getOrders({
+  Future<bool> getOrders({
     required String? orderStatus,
     required int page,
     required int perPage,
     required bool isPagination,
   }) async {
+    final requestId = ++_ordersRequestId;
+    _ordersError = null;
+    if (!isPagination) {
+      _orders = [];
+      _totalOrder = null;
+    }
+    state = true;
     try {
-      state = true;
       final response = await ref.read(orderServiceProvider).getOrders(
             orderStatus: orderStatus,
             page: page,
             perPage: perPage,
           );
 
-      _totalOrder = response.data['data']['total'];
+      if (!mounted || requestId != _ordersRequestId) return false;
+      final total = int.parse(response.data['data']['total'].toString());
       final List<dynamic> ordersData = response.data['data']['orders'];
-      List<OrderModel> orders =
+      final orders =
           ordersData.map((order) => OrderModel.fromJson(order)).toList();
+      _totalOrder = total;
       if (isPagination) {
         _orders.addAll(orders);
       } else {
         _orders = orders;
       }
-      state = false;
-    } catch (error) {
+      return true;
+    } catch (error, stackTrace) {
       debugPrint(error.toString());
-      state = false;
+      debugPrint(stackTrace.toString());
+      if (mounted && requestId == _ordersRequestId) {
+        _ordersError = 'Unable to load your orders. Please try again.';
+      }
+      return false;
+    } finally {
+      if (mounted && requestId == _ordersRequestId) state = false;
     }
   }
 

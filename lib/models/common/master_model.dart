@@ -1,3 +1,5 @@
+import 'package:ready_ecommerce/models/common/all_country_model/country.dart';
+
 class MasterModel {
   MasterModel({
     required this.message,
@@ -27,11 +29,13 @@ class Data {
     required this.currency,
     required this.paymentGateways,
     required this.isMultiVendor,
+    this.defaultCountry,
   });
   late final Currency currency;
   late final List<Currencies> currencies;
   late final List<PaymentGateways> paymentGateways;
   late final bool isMultiVendor;
+  late final Country? defaultCountry;
   late final String appLogo;
   late final String appName;
   late final String splashLogo;
@@ -52,6 +56,7 @@ class Data {
     currencies = [];
     paymentGateways = [];
     isMultiVendor = false;
+    defaultCountry = null;
     appLogo = '';
     appName = '';
     splashLogo = '';
@@ -75,6 +80,9 @@ class Data {
         .toList();
 
     isMultiVendor = json['multi_vendor'];
+    defaultCountry = json['default_country'] == null
+        ? null
+        : Country.fromMap(json['default_country'] as Map<String, dynamic>);
     appLogo = json['app_logo'];
     appName = json['app_name'];
     splashLogo = json['web_logo'];
@@ -97,6 +105,7 @@ class Data {
     final data = <String, dynamic>{};
     data['currency'] = currency.toJson();
     data['multi_vendor'] = isMultiVendor;
+    data['default_country'] = defaultCountry?.toMap();
     data['app_logo'] = appLogo;
     data['theme_colors'] = themeColors.toJson();
     data['app_name'] = appName;

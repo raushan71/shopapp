@@ -43,8 +43,10 @@ class MyOrderCard extends StatelessWidget {
             width: double.infinity,
             child: Column(
               children: [
-                _buildAddressCardWidget(context),
-                Gap(14.h),
+                if (order.address != null) ...[
+                  _buildAddressCardWidget(context),
+                  Gap(14.h),
+                ],
                 _buildRowWidget(
                   context: context,
                   key: S.of(context).orderId,
@@ -127,7 +129,7 @@ class MyOrderCard extends StatelessWidget {
             child: Text(
               GlobalFunction.formatDeliveryAddress(
                 context: context,
-                address: order.address,
+                address: order.address!,
               ),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,

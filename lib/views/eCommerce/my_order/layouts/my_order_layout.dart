@@ -41,43 +41,57 @@ class MyOrderLayout extends ConsumerStatefulWidget {
 }
 
 class _MyOrderLayoutState extends ConsumerState<MyOrderLayout> {
-  ScrollController orderScrollController = ScrollController();
+  final ScrollController orderScrollController = ScrollController();
 
   int page = 1;
   int perPage = 20;
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      ref.refresh(selectedMyOrderIndexProvider.notifier).state;
-      ref.read(orderControllerProvider.notifier).getOrders(
-            orderStatus: widget.orderStatus,
-            page: page,
-            perPage: perPage,
-            isPagination: false,
-          );
-    });
-    orderScrollController.addListener(() {
-      orderScrollListener();
-    });
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      if (!mounted) return;
+      ref.read(selectedMyOrderIndexProvider.notifier).state = 0;
+      _loadOrders();
+    });
+    orderScrollController.addListener(orderScrollListener);
+  }
+
+  String? get _selectedOrderStatus {
+    if (widget.orderStatus != null) return widget.orderStatus;
+    final index = ref.read(selectedMyOrderIndexProvider);
+    return index == 0
+        ? null
+        : MyOrderLayout.getOrderStatus(context)[index]['key'] as String;
+  }
+
+  Future<void> _loadOrders({bool isPagination = false}) async {
+    final nextPage = isPagination ? page + 1 : 1;
+    final success = await ref.read(orderControllerProvider.notifier).getOrders(
+          orderStatus: _selectedOrderStatus,
+          page: nextPage,
+          perPage: perPage,
+          isPagination: isPagination,
+        );
+    if (mounted && success) page = nextPage;
   }
 
   void orderScrollListener() {
-    if (orderScrollController.offset >=
-        orderScrollController.position.maxScrollExtent) {
-      if (ref.watch(orderControllerProvider.notifier).orders.length <
-              ref.watch(orderControllerProvider.notifier).totalOrder! &&
-          ref.watch(orderControllerProvider) == false) {
-        page++;
-        ref.read(orderControllerProvider.notifier).getOrders(
-              isPagination: true,
-              page: page,
-              perPage: perPage,
-              orderStatus: MyOrderLayout.getOrderStatus(context)[
-                  ref.read(selectedMyOrderIndexProvider.notifier).state]['key'],
-            );
-      }
+    if (!orderScrollController.hasClients ||
+        ref.read(orderControllerProvider)) {
+      return;
     }
+    final controller = ref.read(orderControllerProvider.notifier);
+    if (orderScrollController.position.extentAfter < 200 &&
+        controller.ordersError == null &&
+        controller.orders.length < (controller.totalOrder ?? 0)) {
+      _loadOrders(isPagination: true);
+    }
+  }
+
+  @override
+  void dispose() {
+    orderScrollController.dispose();
+    super.dispose();
   }
 
   @override
@@ -105,43 +119,86 @@ class _MyOrderLayoutState extends ConsumerState<MyOrderLayout> {
   }
 
   Widget _buildOrderListWidget() {
+    final isLoading = ref.watch(orderControllerProvider);
+    final controller = ref.read(orderControllerProvider.notifier);
+    final orders = controller.orders;
     return Expanded(
-      child: ref.watch(orderControllerProvider)
+      child: isLoading && orders.isEmpty
           ? const Center(
               child: CircularProgressIndicator(),
             )
-          : AnimationLimiter(
-              child: ref.watch(orderControllerProvider.notifier).orders.isEmpty
-                  ? Center(
-                      child: Text(
-                        'Order not found!',
-                        style: AppTextStyle(context).subTitle,
-                      ),
-                    )
-                  : ListView.builder(
-                      itemCount: ref
-                          .watch(orderControllerProvider.notifier)
-                          .orders
-                          .length,
-                      itemBuilder: ((context, index) {
-                        final OrderModel order = ref
-                            .watch(orderControllerProvider.notifier)
-                            .orders[index];
-                        return AnimationConfiguration.staggeredList(
-                          position: index,
-                          duration: const Duration(milliseconds: 375),
-                          child: SlideAnimation(
-                            verticalOffset: 50.h,
-                            child: FadeInAnimation(
-                              child: MyOrderCard(
-                                order: order,
+          : RefreshIndicator(
+              onRefresh: () => _loadOrders(),
+              child: AnimationLimiter(
+                child: CustomScrollView(
+                  controller: orderScrollController,
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  slivers: [
+                    if (orders.isEmpty)
+                      SliverFillRemaining(
+                        hasScrollBody: false,
+                        child: Center(
+                          child: controller.ordersError != null
+                              ? _buildOrderError(
+                                  controller.ordersError!,
+                                  () => _loadOrders(),
+                                )
+                              : Text(
+                                  'Order not found!',
+                                  style: AppTextStyle(context).subTitle,
+                                ),
+                        ),
+                      )
+                    else
+                      SliverList.builder(
+                        itemCount: orders.length,
+                        itemBuilder: (context, index) {
+                          final OrderModel order = orders[index];
+                          return AnimationConfiguration.staggeredList(
+                            position: index,
+                            duration: const Duration(milliseconds: 375),
+                            child: SlideAnimation(
+                              verticalOffset: 50.h,
+                              child: FadeInAnimation(
+                                child: MyOrderCard(
+                                  order: order,
+                                ),
                               ),
                             ),
-                          ),
-                        );
-                      }),
-                    ),
+                          );
+                        },
+                      ),
+                    if (isLoading)
+                      const SliverToBoxAdapter(
+                        child: Padding(
+                          padding: EdgeInsets.all(16),
+                          child: Center(child: CircularProgressIndicator()),
+                        ),
+                      ),
+                    if (orders.isNotEmpty && controller.ordersError != null)
+                      SliverToBoxAdapter(
+                        child: _buildOrderError(
+                          controller.ordersError!,
+                          () => _loadOrders(isPagination: true),
+                        ),
+                      ),
+                  ],
+                ),
+              ),
             ),
+    );
+  }
+
+  Widget _buildOrderError(String message, VoidCallback onRetry) {
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(message, textAlign: TextAlign.center),
+          TextButton(onPressed: onRetry, child: const Text('Retry')),
+        ],
+      ),
     );
   }
 
@@ -161,14 +218,10 @@ class _MyOrderLayoutState extends ConsumerState<MyOrderLayout> {
                 index) {
               ref.read(selectedMyOrderIndexProvider.notifier).state = index;
               page = 1;
-              ref.read(orderControllerProvider.notifier).getOrders(
-                    orderStatus: index != 0
-                        ? MyOrderLayout.getOrderStatus(context)[index]['key']
-                        : null,
-                    page: page,
-                    perPage: perPage,
-                    isPagination: false,
-                  );
+              if (orderScrollController.hasClients) {
+                orderScrollController.jumpTo(0);
+              }
+              _loadOrders();
             }
           },
           child: AnimatedContainer(

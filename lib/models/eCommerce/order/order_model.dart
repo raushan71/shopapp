@@ -14,16 +14,17 @@ class OrderModel {
   late final double amount;
   late final String orderStatus;
   late final String createdAt;
-  late final Address address;
+  late final Address? address;
 
   OrderModel.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
+    id = int.parse(json['id'].toString());
     orderCode = json['order_code'];
-    quantity = json['quantity'];
-    amount = json['amount'];
+    quantity = int.parse(json['quantity'].toString());
+    amount = double.parse(json['amount'].toString());
     orderStatus = json['order_status'];
     createdAt = json['created_at'];
-    address = Address.fromJson(json['address']);
+    address =
+        json['address'] == null ? null : Address.fromJson(json['address']);
   }
 
   Map<String, dynamic> toJson() {
@@ -34,7 +35,7 @@ class OrderModel {
     data['amount'] = amount;
     data['order_status'] = orderStatus;
     data['created_at'] = createdAt;
-    data['address'] = address.toJson();
+    data['address'] = address?.toJson();
     return data;
   }
 }
@@ -64,15 +65,15 @@ class Address {
   late final bool isDefault;
 
   Address.fromJson(Map<dynamic, dynamic> json) {
-    id = json['id'];
-    name = json['name'];
-    phone = json['phone'];
-    area = json['area'] ?? '';
-    flatNo = json['flat_no'] ?? '';
-    addressType = json['address_type'];
-    addressLine = json['address_line'];
-    addressLine2 = json['address_line2'] ?? '';
-    postCode = json['post_code'] ?? '';
+    id = int.tryParse(json['id']?.toString() ?? '') ?? 0;
+    name = json['name']?.toString() ?? '';
+    phone = json['phone']?.toString() ?? '';
+    area = json['area']?.toString() ?? '';
+    flatNo = json['flat_no']?.toString() ?? '';
+    addressType = json['address_type']?.toString() ?? '';
+    addressLine = json['address_line']?.toString() ?? '';
+    addressLine2 = json['address_line2']?.toString() ?? '';
+    postCode = json['post_code']?.toString() ?? '';
     isDefault = _parseOrderAddressDefault(json['is_default']);
   }
 

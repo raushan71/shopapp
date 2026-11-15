@@ -19,20 +19,19 @@ import 'package:ready_ecommerce/models/eCommerce/authentication/sign_up.dart';
 import 'package:ready_ecommerce/routes.dart';
 import 'package:ready_ecommerce/utils/context_less_navigation.dart';
 import 'package:ready_ecommerce/utils/global_function.dart';
-import 'package:ready_ecommerce/views/common/authentication/layouts/confirm_otp_layout.dart';
 import 'package:ready_ecommerce/views/common/authentication/layouts/registration_otp_view.dart';
 
 import '../../../../config/app_constants.dart';
 import '../../../../controllers/common/master_controller.dart';
 
-class SignUpLayout extends StatefulWidget {
+class SignUpLayout extends ConsumerStatefulWidget {
   const SignUpLayout({super.key});
 
   @override
-  State<SignUpLayout> createState() => _SignUpLayoutState();
+  ConsumerState<SignUpLayout> createState() => _SignUpLayoutState();
 }
 
-class _SignUpLayoutState extends State<SignUpLayout> {
+class _SignUpLayoutState extends ConsumerState<SignUpLayout> {
   final List<TextEditingController> controllers = List.generate(
     4,
     (index) => TextEditingController(),
@@ -43,7 +42,24 @@ class _SignUpLayoutState extends State<SignUpLayout> {
   final GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();
 
   bool isChecked = false;
-  Country? selectedCountry;
+  int? _selectedCountryId;
+
+  Country? get selectedCountry {
+    final defaultCountry = ref
+        .read(masterControllerProvider.notifier)
+        .materModel
+        .data
+        .defaultCountry;
+    final selectedId = _selectedCountryId ?? defaultCountry?.id;
+    final countries =
+        ref.read(countryListControllerProvider).asData?.value.data?.countries;
+    if (selectedId == null || countries == null) return null;
+    for (final country in countries) {
+      if (country.id == selectedId) return country;
+    }
+    return null;
+  }
+
   @override
   void dispose() {
     for (var element in controllers) {
@@ -52,10 +68,18 @@ class _SignUpLayoutState extends State<SignUpLayout> {
     super.dispose();
   }
 
-  String? countryCode;
+  String? get countryCode => selectedCountry?.phoneCode;
+
+  String get _phoneCodeLabel {
+    final code = countryCode;
+    if (code == null || code.isEmpty) return '+00';
+    return code.startsWith('+') ? code : '+$code';
+  }
 
   @override
   Widget build(BuildContext context) {
+    ref.watch(masterControllerProvider);
+    ref.watch(countryListControllerProvider);
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
@@ -69,53 +93,52 @@ class _SignUpLayoutState extends State<SignUpLayout> {
                 return ref.watch(authControllerProvider)
                     ? const Center(child: CircularProgressIndicator())
                     : Padding(
-                  padding: EdgeInsetsGeometry.only(
-                    top: 16.w,
-                    left: 16.w,
-                    right: 16.w,
-                    bottom: MediaQuery.of(context).viewInsets.bottom + 10,
-                  ),
-                  child: CustomButton(
-                    buttonText: S.of(context).signUp,
-                    onPressed: () {
-                      FocusScope.of(context).unfocus();
-                      if (formKey.currentState!.validate()) {
-                        final SingUp singUpInfo = SingUp(
-                          name: controllers[0].text,
-                          phone: controllers[1].text,
-                          password: controllers[3].text,
-                          country: selectedCountry?.name ?? "",
-                          phoneCode: countryCode ?? '',
-                          email: controllers[2].text,
-                        );
-                        if (isChecked) {
-                          ref
-                              .read(authControllerProvider.notifier)
-                              .singUp(singUpInfo: singUpInfo)
-                              .then((response) {
-                            if (response.isSuccess) {
-                              _navigate(ref: ref);
-                            } else {
-                              GlobalFunction.showCustomSnackbar(
-                                message: response.message,
-                                isSuccess: false,
+                        padding: EdgeInsetsGeometry.only(
+                          top: 16.w,
+                          left: 16.w,
+                          right: 16.w,
+                          bottom: MediaQuery.of(context).viewInsets.bottom + 10,
+                        ),
+                        child: CustomButton(
+                          buttonText: S.of(context).signUp,
+                          onPressed: () {
+                            FocusScope.of(context).unfocus();
+                            if (formKey.currentState!.validate()) {
+                              final SingUp singUpInfo = SingUp(
+                                name: controllers[0].text,
+                                phone: controllers[1].text,
+                                password: controllers[3].text,
+                                country: selectedCountry?.name ?? "",
+                                phoneCode: countryCode ?? '',
+                                email: controllers[2].text,
                               );
+                              if (isChecked) {
+                                ref
+                                    .read(authControllerProvider.notifier)
+                                    .singUp(singUpInfo: singUpInfo)
+                                    .then((response) {
+                                  if (response.isSuccess) {
+                                    _navigate(ref: ref);
+                                  } else {
+                                    GlobalFunction.showCustomSnackbar(
+                                      message: response.message,
+                                      isSuccess: false,
+                                    );
+                                  }
+                                });
+                              } else {
+                                GlobalFunction.showCustomSnackbar(
+                                  message:
+                                      'Please accept the terms and conditions!',
+                                  isSuccess: false,
+                                );
+                              }
                             }
-                          });
-                        } else {
-                          GlobalFunction.showCustomSnackbar(
-                            message:
-                            'Please accept the terms and conditions!',
-                            isSuccess: false,
-                          );
-                        }
-                      }
-                    },
-                  ),
-                );
+                          },
+                        ),
+                      );
               }),
             ),
-
             SizedBox(
               height: 30.h,
               child: Center(
@@ -148,6 +171,7 @@ class _SignUpLayoutState extends State<SignUpLayout> {
         body: SingleChildScrollView(
           child: FormBuilder(
             key: formKey,
+            clearValueOnUnregister: true,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -193,7 +217,8 @@ class _SignUpLayoutState extends State<SignUpLayout> {
 
   Widget buildBody(BuildContext context) {
     return Consumer(builder: (context, ref, child) {
-      final materModelData = ref.watch(masterControllerProvider.notifier).materModel.data;
+      final materModelData =
+          ref.watch(masterControllerProvider.notifier).materModel.data;
       final isPhoneRequired = materModelData.phoneRequired;
       int? phoneMinLength = materModelData.phoneMinLength;
       int? phoneMaxLength = materModelData.phoneMaxLength;
@@ -245,8 +270,10 @@ class _SignUpLayoutState extends State<SignUpLayout> {
                   error: (error, stackTrace) => Text(error.toString()),
                   data: (data) {
                     final countryList = data.data?.countries ?? [];
-                    return FormBuilderDropdown(
+                    return FormBuilderDropdown<int>(
+                      key: ValueKey(selectedCountry?.id),
                       name: 'country',
+                      initialValue: selectedCountry?.id,
                       validator: (value) {
                         if (value == null) {
                           return S.of(context).selectCountry;
@@ -256,15 +283,14 @@ class _SignUpLayoutState extends State<SignUpLayout> {
                       hint: Text(S.of(context).selectCountry),
                       onChanged: (value) {
                         setState(() {
-                          selectedCountry = value as Country;
-                          countryCode = selectedCountry?.phoneCode;
+                          _selectedCountryId = value;
                         });
                         debugPrint("Selected country: $selectedCountry");
                       },
                       items: List.generate(countryList.length, (index) {
                         final country = countryList[index];
-                        return DropdownMenuItem(
-                          value: country,
+                        return DropdownMenuItem<int>(
+                          value: country.id,
                           child: Text(country.name ?? ''),
                         );
                       }),
@@ -333,7 +359,7 @@ class _SignUpLayoutState extends State<SignUpLayout> {
                           ),
                           child: Center(
                             child: Text(
-                              countryCode ?? '+00',
+                              _phoneCodeLabel,
                               style: AppTextStyle(context).bodyText.copyWith(
                                     fontWeight: FontWeight.w500,
                                   ),
@@ -473,7 +499,6 @@ class _SignUpLayoutState extends State<SignUpLayout> {
               ],
             ),
             Gap(30.h),
-
           ],
         ),
       );
@@ -481,13 +506,19 @@ class _SignUpLayoutState extends State<SignUpLayout> {
   }
 
   _navigate({required WidgetRef ref}) {
-
-    if (ref.read(masterControllerProvider.notifier).materModel.data.registerOtpVerify == true) {
-
-
-      if(ref.read(masterControllerProvider.notifier).materModel.data.registerOtpType == 'email'){
+    if (ref
+            .read(masterControllerProvider.notifier)
+            .materModel
+            .data
+            .registerOtpVerify ==
+        true) {
+      if (ref
+              .read(masterControllerProvider.notifier)
+              .materModel
+              .data
+              .registerOtpType ==
+          'email') {
         if (context.mounted) {
-
           context.nav.pushNamed(
             Routes.registrationOtpScreen,
             arguments: RegConfirmOTPScreenArguments(
@@ -496,9 +527,8 @@ class _SignUpLayoutState extends State<SignUpLayout> {
             ),
           );
         }
-    } else{
+      } else {
         if (context.mounted) {
-
           context.nav.pushNamed(
             Routes.registrationOtpScreen,
             arguments: RegConfirmOTPScreenArguments(
@@ -508,9 +538,6 @@ class _SignUpLayoutState extends State<SignUpLayout> {
           );
         }
       }
-
-
-
     } else {
       if (context.mounted) {
         context.nav.pushNamedAndRemoveUntil(
