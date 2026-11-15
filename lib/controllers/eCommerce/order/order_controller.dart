@@ -193,8 +193,10 @@ class OrderDetailsController extends StateNotifier<AsyncValue<OrderDetails>> {
       final response = await ref
           .read(orderServiceProvider)
           .getOrderDetails(orderId: orderId);
+      if (!mounted) return;
       state = AsyncData(OrderDetails.fromJson(response.data));
     } catch (error, stackTrace) {
+      if (!mounted) return;
       debugPrint(error.toString());
       debugPrint(stackTrace.toString());
       state = AsyncError(

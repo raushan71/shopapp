@@ -1759,6 +1759,81 @@ class S {
     );
   }
 
+  /// `Cancel return request`
+  String get cancelReturnRequest {
+    return Intl.message(
+      'Cancel return request',
+      name: 'cancelReturnRequest',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cancel this return request?`
+  String get cancelReturnRequestConfirmation {
+    return Intl.message(
+      'Cancel this return request?',
+      name: 'cancelReturnRequestConfirmation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Keep request`
+  String get keepReturnRequest {
+    return Intl.message(
+      'Keep request',
+      name: 'keepReturnRequest',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Return request cancelled.`
+  String get returnCancellationSuccess {
+    return Intl.message(
+      'Return request cancelled.',
+      name: 'returnCancellationSuccess',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Unable to cancel the return request. Please try again.`
+  String get returnCancellationFailed {
+    return Intl.message(
+      'Unable to cancel the return request. Please try again.',
+      name: 'returnCancellationFailed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Unable to load return requests.`
+  String get returnRequestsLoadFailed {
+    return Intl.message(
+      'Unable to load return requests.',
+      name: 'returnRequestsLoadFailed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `View return request`
+  String get viewReturnRequest {
+    return Intl.message(
+      'View return request',
+      name: 'viewReturnRequest',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Retry`
+  String get retry {
+    return Intl.message('Retry', name: 'retry', desc: '', args: []);
+  }
+
   /// `Your request has been successfully submitted!`
   String get orderReturnSuccess {
     return Intl.message(

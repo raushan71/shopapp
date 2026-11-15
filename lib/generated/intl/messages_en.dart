@@ -55,6 +55,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "buyNow": MessageLookupByLibrary.simpleMessage("Buy Now"),
     "cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
     "cancelOrder": MessageLookupByLibrary.simpleMessage("Cancel Order"),
+    "cancelReturnRequest": MessageLookupByLibrary.simpleMessage(
+      "Cancel return request",
+    ),
+    "cancelReturnRequestConfirmation": MessageLookupByLibrary.simpleMessage(
+      "Cancel this return request?",
+    ),
     "cancellationReason": MessageLookupByLibrary.simpleMessage(
       "Cancellation Reason",
     ),
@@ -179,6 +185,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "hours": MessageLookupByLibrary.simpleMessage("Hours"),
     "isRequired": MessageLookupByLibrary.simpleMessage("is required!"),
     "justForYou": MessageLookupByLibrary.simpleMessage("Just For You"),
+    "keepReturnRequest": MessageLookupByLibrary.simpleMessage("Keep request"),
     "language": MessageLookupByLibrary.simpleMessage("Language"),
     "location": MessageLookupByLibrary.simpleMessage("Location"),
     "login": MessageLookupByLibrary.simpleMessage("Log in"),
@@ -289,9 +296,19 @@ class MessageLookup extends MessageLookupByLibrary {
     "resend": MessageLookupByLibrary.simpleMessage("Resend"),
     "resendCode": MessageLookupByLibrary.simpleMessage("Resend Code in"),
     "retrunItem": MessageLookupByLibrary.simpleMessage("Return Items"),
+    "retry": MessageLookupByLibrary.simpleMessage("Retry"),
     "returnAddress": MessageLookupByLibrary.simpleMessage("Return Address"),
+    "returnCancellationFailed": MessageLookupByLibrary.simpleMessage(
+      "Unable to cancel the return request. Please try again.",
+    ),
+    "returnCancellationSuccess": MessageLookupByLibrary.simpleMessage(
+      "Return request cancelled.",
+    ),
     "returnDate": MessageLookupByLibrary.simpleMessage("Return Date"),
     "returnOrders": MessageLookupByLibrary.simpleMessage("Return Orders"),
+    "returnRequestsLoadFailed": MessageLookupByLibrary.simpleMessage(
+      "Unable to load return requests.",
+    ),
     "returnStatus": MessageLookupByLibrary.simpleMessage("Return Status"),
     "returnYourProduct": MessageLookupByLibrary.simpleMessage(
       "Return Your Product",
@@ -363,6 +380,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "verification": MessageLookupByLibrary.simpleMessage("Verification"),
     "verifyNow": MessageLookupByLibrary.simpleMessage("Verify Now"),
     "viewMore": MessageLookupByLibrary.simpleMessage("View More"),
+    "viewReturnRequest": MessageLookupByLibrary.simpleMessage(
+      "View return request",
+    ),
     "vistiStore": MessageLookupByLibrary.simpleMessage("Visit Store"),
     "voucherFrom": MessageLookupByLibrary.simpleMessage("Voucher from:"),
     "voucherNotAvailable": MessageLookupByLibrary.simpleMessage(

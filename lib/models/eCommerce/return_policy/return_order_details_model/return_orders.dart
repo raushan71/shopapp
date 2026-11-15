@@ -19,6 +19,7 @@ class ReturnOrders {
   String? customerPhone;
   String? customerEmail;
   List<ReturnOrderProduct>? returnOrderProducts;
+  bool canCancel;
 
   ReturnOrders({
     this.id,
@@ -37,11 +38,12 @@ class ReturnOrders {
     this.customerPhone,
     this.customerEmail,
     this.returnOrderProducts,
+    this.canCancel = false,
   });
 
   factory ReturnOrders.fromMap(Map<String, dynamic> data) => ReturnOrders(
         id: data['id'] as int?,
-        orderId: data['order_id'] as String?,
+        orderId: data['order_id']?.toString(),
         reason: data['reason'] as String?,
         amount: data['amount'] as double?,
         status: data['status'] as String?,
@@ -55,6 +57,7 @@ class ReturnOrders {
         customerName: data['customer_name'] as String?,
         customerPhone: data['customer_phone'] as String?,
         customerEmail: data['customer_email'] as String?,
+        canCancel: data['can_cancel'] == true,
         returnOrderProducts: (data['return_order_products'] as List<dynamic>?)
             ?.map((e) => ReturnOrderProduct.fromMap(e as Map<String, dynamic>))
             .toList(),
@@ -76,6 +79,7 @@ class ReturnOrders {
         'customer_name': customerName,
         'customer_phone': customerPhone,
         'customer_email': customerEmail,
+        'can_cancel': canCancel,
         'return_order_products':
             returnOrderProducts?.map((e) => e.toMap()).toList(),
       };

@@ -7,4 +7,5 @@ abstract class ReturnProductService {
 
   Future<Response> getReturnOrders();
   Future<Response> getReturnOrderDetails({required int orderId});
+  Future<Response> cancelReturnRequest({required int returnRequestId});
 }

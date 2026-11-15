@@ -57,6 +57,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "buyNow": MessageLookupByLibrary.simpleMessage("এখন কিনুন"),
     "cancel": MessageLookupByLibrary.simpleMessage("বাতিল"),
     "cancelOrder": MessageLookupByLibrary.simpleMessage("আদেশ বাতিল"),
+    "cancelReturnRequest": MessageLookupByLibrary.simpleMessage(
+      "ফেরতের অনুরোধ বাতিল করুন",
+    ),
+    "cancelReturnRequestConfirmation": MessageLookupByLibrary.simpleMessage(
+      "এই ফেরতের অনুরোধ বাতিল করবেন?",
+    ),
     "cancellationReason": MessageLookupByLibrary.simpleMessage("বাতিলের কারণ"),
     "cancelled": MessageLookupByLibrary.simpleMessage("বাতিল"),
     "cashOnDelivery": MessageLookupByLibrary.simpleMessage("ডেলিভারী কাজ করুন"),
@@ -183,6 +189,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "home": MessageLookupByLibrary.simpleMessage("হোম"),
     "isRequired": MessageLookupByLibrary.simpleMessage("বাধ্যতামূলক।"),
     "justForYou": MessageLookupByLibrary.simpleMessage("আপনার জন্য"),
+    "keepReturnRequest": MessageLookupByLibrary.simpleMessage("অনুরোধ রাখুন"),
     "language": MessageLookupByLibrary.simpleMessage("ভাষা"),
     "location": MessageLookupByLibrary.simpleMessage("লোকেশন"),
     "login": MessageLookupByLibrary.simpleMessage("প্রবেশ করুন"),
@@ -295,9 +302,19 @@ class MessageLookup extends MessageLookupByLibrary {
     "resend": MessageLookupByLibrary.simpleMessage("আবার পাঠান"),
     "resendCode": MessageLookupByLibrary.simpleMessage("কোড পুনরায় পাঠান"),
     "retrunItem": MessageLookupByLibrary.simpleMessage("ফেরতের আইটেম"),
+    "retry": MessageLookupByLibrary.simpleMessage("আবার চেষ্টা করুন"),
     "returnAddress": MessageLookupByLibrary.simpleMessage("রিটার্ন ঠিকানা"),
+    "returnCancellationFailed": MessageLookupByLibrary.simpleMessage(
+      "ফেরতের অনুরোধ বাতিল করা যায়নি। আবার চেষ্টা করুন।",
+    ),
+    "returnCancellationSuccess": MessageLookupByLibrary.simpleMessage(
+      "ফেরতের অনুরোধ বাতিল হয়েছে।",
+    ),
     "returnDate": MessageLookupByLibrary.simpleMessage("রিটার্ন তারিখ"),
     "returnOrders": MessageLookupByLibrary.simpleMessage("রিটার্ন অর্ডার"),
+    "returnRequestsLoadFailed": MessageLookupByLibrary.simpleMessage(
+      "ফেরতের অনুরোধ লোড করা যায়নি।",
+    ),
     "returnStatus": MessageLookupByLibrary.simpleMessage("রিটার্ন স্ট্যাটাস"),
     "returnYourProduct": MessageLookupByLibrary.simpleMessage(
       "আপনার পণ্য ফেরত দিন",
@@ -365,6 +382,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "verification": MessageLookupByLibrary.simpleMessage("যাচাই"),
     "verifyNow": MessageLookupByLibrary.simpleMessage("নিশ্চিত করুন"),
     "viewMore": MessageLookupByLibrary.simpleMessage("আরো দেখুন"),
+    "viewReturnRequest": MessageLookupByLibrary.simpleMessage(
+      "ফেরতের অনুরোধ দেখুন",
+    ),
     "vistiStore": MessageLookupByLibrary.simpleMessage("দোকান দর্শন কর"),
     "voucherFrom": MessageLookupByLibrary.simpleMessage("ভাউচার:"),
     "voucherNotAvailable": MessageLookupByLibrary.simpleMessage(

@@ -35,6 +35,7 @@ import 'package:ready_ecommerce/views/eCommerce/checkout/layouts/checkout_layout
 import 'package:ready_ecommerce/views/eCommerce/checkout/layouts/web_payment_page.dart';
 import 'package:ready_ecommerce/views/eCommerce/order_details/components/order_details_card.dart';
 import 'package:ready_ecommerce/views/eCommerce/order_details/components/order_product_card.dart';
+import 'package:ready_ecommerce/views/eCommerce/order_details/components/order_return_requests.dart';
 import 'package:ready_ecommerce/views/eCommerce/order_track/layouts/ecommerce_order_track_layout.dart';
 import 'package:ready_ecommerce/views/eCommerce/products/layouts/product_details_layout.dart';
 
@@ -74,51 +75,15 @@ class _OrderDetailsLayoutState extends ConsumerState<OrderDetailsLayout> {
           asyncValue.maybeWhen(
             data: (orderDetails) {
               final isReturnable = orderDetails.data.order.isReturnable;
-              debugPrint("isReturnable: $isReturnable");
-              return isReturnable == true
+              final returnRequests = ref.watch(orderReturnRequestsProvider((
+                orderId: widget.orderId,
+                orderCode: orderDetails.data.order.orderCode,
+              )));
+              final hasReturnRequests =
+                  returnRequests.valueOrNull?.isNotEmpty == true;
+              return isReturnable == true || hasReturnRequests
                   ? GestureDetector(
-                      onTap: () {
-                        showDialog(
-                            barrierColor:
-                                isDark ? Color(0x99000000) : Color(0x80000000),
-                            context: context,
-                            builder: (context) {
-                              final asyncValue = ref.watch(
-                                  orderDetailsControllerProvider(
-                                      widget.orderId));
-
-                              return asyncValue.maybeWhen(
-                                data: (orderDetails) => Dialog(
-                                  clipBehavior: Clip.hardEdge,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12.r),
-                                  ),
-                                  child: Consumer(
-                                    builder: (context, ref, child) {
-                                      return SingleChildScrollView(
-                                        child: _buildServiceItemsWidget(
-                                            context,
-                                            orderDetails.data.order.products,
-                                            orderDetails.data.order.orderStatus,
-                                            orderDetails
-                                                .data.order.paymentStatus,
-                                            true, (index) {
-                                          ref
-                                              .read(
-                                                  selectedReturnProductProvider
-                                                      .notifier)
-                                              .toggleProductSelection(
-                                                  orderDetails.data.order
-                                                      .products[index]);
-                                        }, true, widget.orderId, isDark, true),
-                                      );
-                                    },
-                                  ),
-                                ),
-                                orElse: () => const SizedBox(),
-                              );
-                            });
-                      },
+                      onTap: () => _showReturnDialog(isDark: isDark),
                       child: Container(
                         margin: EdgeInsets.only(right: 16.w),
                         decoration: BoxDecoration(
@@ -204,6 +169,10 @@ class _OrderDetailsLayoutState extends ConsumerState<OrderDetailsLayout> {
                             widget.orderId,
                             isDark,
                             false),
+                        OrderReturnRequests(
+                          orderId: widget.orderId,
+                          orderCode: orderDetails.data.order.orderCode,
+                        ),
                         Gap(8.h),
                         _buildShopCardWidget(
                           context: context,
@@ -270,6 +239,65 @@ class _OrderDetailsLayoutState extends ConsumerState<OrderDetailsLayout> {
     );
   }
 
+  void _showReturnDialog({required bool isDark}) {
+    ref.read(selectedReturnProductProvider.notifier).clearSelection();
+    showDialog(
+      barrierColor: isDark ? const Color(0x99000000) : const Color(0x80000000),
+      context: context,
+      builder: (context) => Dialog(
+        clipBehavior: Clip.hardEdge,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12.r),
+        ),
+        child: Consumer(
+          builder: (context, ref, child) {
+            final details =
+                ref.watch(orderDetailsControllerProvider(widget.orderId));
+            return details.when(
+              data: (details) {
+                final order = details.data.order;
+                return SingleChildScrollView(
+                  child: _buildServiceItemsWidget(
+                    context,
+                    order.products,
+                    order.orderStatus,
+                    order.paymentStatus,
+                    true,
+                    (index) {
+                      final product = order.products[index];
+                      if (product.isReturnable != true) return;
+                      ref
+                          .read(selectedReturnProductProvider.notifier)
+                          .toggleProductSelection(product);
+                    },
+                    true,
+                    widget.orderId,
+                    isDark,
+                    true,
+                    orderCode: order.orderCode,
+                  ),
+                );
+              },
+              error: (_, __) => Padding(
+                padding: const EdgeInsets.all(16),
+                child: TextButton(
+                  onPressed: () => ref.invalidate(
+                    orderDetailsControllerProvider(widget.orderId),
+                  ),
+                  child: Text(S.of(context).retry),
+                ),
+              ),
+              loading: () => const Padding(
+                padding: EdgeInsets.all(24),
+                child: Center(child: CircularProgressIndicator()),
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+
   Widget _buildServiceItemsWidget(
       BuildContext context,
       List<Products> products,
@@ -280,7 +308,8 @@ class _OrderDetailsLayoutState extends ConsumerState<OrderDetailsLayout> {
       bool? showButton,
       int? orderId,
       bool isDark,
-      bool hideReviewButton) {
+      bool hideReviewButton,
+      {String? orderCode}) {
     return Consumer(
       builder: (context, ref, child) {
         final selectedProducts = ref.watch(selectedReturnProductProvider);
@@ -302,7 +331,7 @@ class _OrderDetailsLayoutState extends ConsumerState<OrderDetailsLayout> {
               showCheckbox == true
                   ? Center(
                       child: Text(
-                        'Select Return Items',
+                        S.of(context).selectReturnItems,
                         style: AppTextStyle(context)
                             .subTitle
                             .copyWith(fontSize: 16.sp),
@@ -317,6 +346,11 @@ class _OrderDetailsLayoutState extends ConsumerState<OrderDetailsLayout> {
                             .copyWith(fontSize: 16.sp),
                       ),
                     ),
+              if (showCheckbox == true && orderCode != null)
+                OrderReturnRequests(
+                  orderId: widget.orderId,
+                  orderCode: orderCode,
+                ),
               Gap(14.h),
               ListView.builder(
                 shrinkWrap: true,

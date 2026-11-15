@@ -15,6 +15,7 @@ import 'package:ready_ecommerce/views/eCommerce/checkout/layouts/checkout_layout
 import 'package:ready_ecommerce/views/eCommerce/return_order/componants/return_address_card.dart';
 import 'package:ready_ecommerce/views/eCommerce/return_order/componants/return_order_details_card.dart';
 import 'package:ready_ecommerce/views/eCommerce/return_order/componants/return_product_card.dart';
+import 'package:ready_ecommerce/views/eCommerce/return_order/componants/return_request_cancel_action.dart';
 
 class ReturnOrderDetailsLayout extends ConsumerStatefulWidget {
   final int orderId;
@@ -56,6 +57,15 @@ class _ReturnOrderDetailsLayoutState
                     false,
                     widget.orderId,
                   ),
+                  if (orderDetails.data?.returnOrders?.canCancel == true)
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20.w),
+                      child: ReturnRequestCancelAction(
+                        returnRequestId: orderDetails.data?.returnOrders?.id ??
+                            widget.orderId,
+                        canCancel: orderDetails.data!.returnOrders!.canCancel,
+                      ),
+                    ),
                   Gap(8.h),
                   _buildShopCardWidget(
                     context: context,

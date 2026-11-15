@@ -35,4 +35,11 @@ class ReturnProductServiceImpl implements ReturnProductService {
         );
     return response;
   }
+
+  @override
+  Future<Response> cancelReturnRequest({required int returnRequestId}) {
+    return ref.read(apiClientProvider).post(
+          '${AppConstants.returnOrdersList}/$returnRequestId/cancel',
+        );
+  }
 }

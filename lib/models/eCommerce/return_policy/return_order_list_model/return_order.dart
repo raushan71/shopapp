@@ -10,6 +10,7 @@ class ReturnOrder {
   dynamic rejectNote;
   String? returnDate;
   String? returnAddress;
+  bool canCancel;
 
   ReturnOrder({
     this.id,
@@ -21,11 +22,12 @@ class ReturnOrder {
     this.rejectNote,
     this.returnDate,
     this.returnAddress,
+    this.canCancel = false,
   });
 
   factory ReturnOrder.fromMap(Map<String, dynamic> data) => ReturnOrder(
         id: data['id'] as int?,
-        orderId: data['order_id'] as String?,
+        orderId: data['order_id']?.toString(),
         reason: data['reason'] as String?,
         amount: data['amount'] as double?,
         status: data['status'] as String?,
@@ -33,6 +35,7 @@ class ReturnOrder {
         rejectNote: data['reject_note'] as dynamic,
         returnDate: data['return_date'] as String?,
         returnAddress: data['return_address'] as String?,
+        canCancel: data['can_cancel'] == true,
       );
 
   Map<String, dynamic> toMap() => {
@@ -45,6 +48,7 @@ class ReturnOrder {
         'reject_note': rejectNote,
         'return_date': returnDate,
         'return_address': returnAddress,
+        'can_cancel': canCancel,
       };
 
   /// `dart:convert`

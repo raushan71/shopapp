@@ -55,6 +55,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "buyNow": MessageLookupByLibrary.simpleMessage("اشتري الآن"),
     "cancel": MessageLookupByLibrary.simpleMessage("يلغي"),
     "cancelOrder": MessageLookupByLibrary.simpleMessage("الغاء الطلب"),
+    "cancelReturnRequest": MessageLookupByLibrary.simpleMessage(
+      "إلغاء طلب الإرجاع",
+    ),
+    "cancelReturnRequestConfirmation": MessageLookupByLibrary.simpleMessage(
+      "هل تريد إلغاء طلب الإرجاع هذا؟",
+    ),
     "cancellationReason": MessageLookupByLibrary.simpleMessage("سبب الإلغاء"),
     "cancelled": MessageLookupByLibrary.simpleMessage("ألغيت"),
     "cashOnDelivery": MessageLookupByLibrary.simpleMessage("الدفع عند التسليم"),
@@ -159,6 +165,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "home": MessageLookupByLibrary.simpleMessage("بيت"),
     "isRequired": MessageLookupByLibrary.simpleMessage("مطلوب!"),
     "justForYou": MessageLookupByLibrary.simpleMessage("فقط لك"),
+    "keepReturnRequest": MessageLookupByLibrary.simpleMessage(
+      "الاحتفاظ بالطلب",
+    ),
     "language": MessageLookupByLibrary.simpleMessage("لغة"),
     "location": MessageLookupByLibrary.simpleMessage("الموقع"),
     "login": MessageLookupByLibrary.simpleMessage("تسجيل الدخول"),
@@ -266,9 +275,19 @@ class MessageLookup extends MessageLookupByLibrary {
     "resend": MessageLookupByLibrary.simpleMessage("إعادة إرسال"),
     "resendCode": MessageLookupByLibrary.simpleMessage("إعادة تقديم رمز في"),
     "retrunItem": MessageLookupByLibrary.simpleMessage("عناصر الإرجاع"),
+    "retry": MessageLookupByLibrary.simpleMessage("إعادة المحاولة"),
     "returnAddress": MessageLookupByLibrary.simpleMessage("عنوان الإرجاع"),
+    "returnCancellationFailed": MessageLookupByLibrary.simpleMessage(
+      "تعذر إلغاء طلب الإرجاع. يرجى المحاولة مرة أخرى.",
+    ),
+    "returnCancellationSuccess": MessageLookupByLibrary.simpleMessage(
+      "تم إلغاء طلب الإرجاع.",
+    ),
     "returnDate": MessageLookupByLibrary.simpleMessage("تاريخ الإرجاع"),
     "returnOrders": MessageLookupByLibrary.simpleMessage("طلبات الإرجاع"),
+    "returnRequestsLoadFailed": MessageLookupByLibrary.simpleMessage(
+      "تعذر تحميل طلبات الإرجاع.",
+    ),
     "returnStatus": MessageLookupByLibrary.simpleMessage("حالة الإرجاع"),
     "returnYourProduct": MessageLookupByLibrary.simpleMessage(
       "إرجاع المنتج الخاص بك",
@@ -330,6 +349,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "verification": MessageLookupByLibrary.simpleMessage("التحقق"),
     "verifyNow": MessageLookupByLibrary.simpleMessage("تحقق الان"),
     "viewMore": MessageLookupByLibrary.simpleMessage("عرض المزيد"),
+    "viewReturnRequest": MessageLookupByLibrary.simpleMessage(
+      "عرض طلب الإرجاع",
+    ),
     "vistiStore": MessageLookupByLibrary.simpleMessage(
       "قم بزيارة المعرض او المتجر",
     ),
