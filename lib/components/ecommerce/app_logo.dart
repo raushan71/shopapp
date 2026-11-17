@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
-import 'package:ready_ecommerce/gen/assets.gen.dart';
+import 'package:itrsp_shop/gen/assets.gen.dart';
 
 class AppLogo extends StatefulWidget {
   final bool isAnimation;
@@ -79,7 +79,7 @@ class _AppLogoState extends State<AppLogo> with SingleTickerProviderStateMixin {
           children: [
             Gap(14.w),
             // Text(
-            //   'eShop',
+            //   'itrsp_shop',
             //   style: TextStyle(
             //     fontSize: 24.sp,
             //     fontWeight: FontWeight.w600,

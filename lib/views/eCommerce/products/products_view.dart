@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:ready_ecommerce/models/eCommerce/category/category.dart';
-import 'package:ready_ecommerce/views/eCommerce/products/layouts/products_layout.dart';
+import 'package:itrsp_shop/models/eCommerce/category/category.dart';
+import 'package:itrsp_shop/views/eCommerce/products/layouts/products_layout.dart';
 
 class EcommerceProductsView extends StatelessWidget {
   final int? categoryId;

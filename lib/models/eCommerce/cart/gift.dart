@@ -1,7 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-import 'package:ready_ecommerce/models/eCommerce/order/order_model.dart';
+import 'package:itrsp_shop/models/eCommerce/order/order_model.dart';
 
 class Gift {
   final int id;

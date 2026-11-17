@@ -7,17 +7,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
-import 'package:ready_ecommerce/components/ecommerce/animate_image.dart';
-import 'package:ready_ecommerce/components/ecommerce/custom_button.dart';
-import 'package:ready_ecommerce/components/ecommerce/custom_text_field.dart';
-import 'package:ready_ecommerce/config/app_text_style.dart';
-import 'package:ready_ecommerce/controllers/common/master_controller.dart';
-import 'package:ready_ecommerce/gen/assets.gen.dart';
-import 'package:ready_ecommerce/generated/l10n.dart';
-import 'package:ready_ecommerce/routes.dart';
-import 'package:ready_ecommerce/utils/context_less_navigation.dart';
-import 'package:ready_ecommerce/utils/global_function.dart';
-import 'package:ready_ecommerce/views/common/authentication/layouts/confirm_otp_layout.dart';
+import 'package:itrsp_shop/components/ecommerce/animate_image.dart';
+import 'package:itrsp_shop/components/ecommerce/custom_button.dart';
+import 'package:itrsp_shop/components/ecommerce/custom_text_field.dart';
+import 'package:itrsp_shop/config/app_text_style.dart';
+import 'package:itrsp_shop/controllers/common/master_controller.dart';
+import 'package:itrsp_shop/gen/assets.gen.dart';
+import 'package:itrsp_shop/generated/l10n.dart';
+import 'package:itrsp_shop/routes.dart';
+import 'package:itrsp_shop/utils/context_less_navigation.dart';
+import 'package:itrsp_shop/utils/global_function.dart';
+import 'package:itrsp_shop/views/common/authentication/layouts/confirm_otp_layout.dart';
 
 class RecoverPasswordLayout extends ConsumerStatefulWidget {
   final bool isPasswordRecover;

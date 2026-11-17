@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:ready_ecommerce/services/eCommerce/payment/payment_service.dart';
+import 'package:itrsp_shop/services/eCommerce/payment/payment_service.dart';
 
 class PaymentController extends StateNotifier<bool> {
   final Ref ref;

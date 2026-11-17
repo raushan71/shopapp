@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:ready_ecommerce/components/ecommerce/confirmation_dialog.dart';
-import 'package:ready_ecommerce/config/theme.dart';
-import 'package:ready_ecommerce/controllers/eCommerce/cart/cart_controller.dart';
-import 'package:ready_ecommerce/controllers/misc/misc_controller.dart';
-import 'package:ready_ecommerce/gen/assets.gen.dart';
-import 'package:ready_ecommerce/generated/l10n.dart';
-import 'package:ready_ecommerce/routes.dart';
-import 'package:ready_ecommerce/services/common/hive_service_provider.dart';
-import 'package:ready_ecommerce/utils/context_less_navigation.dart';
-import 'package:ready_ecommerce/utils/global_function.dart';
-import 'package:ready_ecommerce/views/eCommerce/dashboard/components/app_bottom_navbar.dart';
-import 'package:ready_ecommerce/views/eCommerce/home/home_view.dart';
-import 'package:ready_ecommerce/views/eCommerce/more/more_view.dart';
-import 'package:ready_ecommerce/views/eCommerce/my_cart/my_cart_view.dart';
-import 'package:ready_ecommerce/views/eCommerce/my_message/my_message_view.dart';
+import 'package:itrsp_shop/components/ecommerce/confirmation_dialog.dart';
+import 'package:itrsp_shop/config/theme.dart';
+import 'package:itrsp_shop/controllers/eCommerce/cart/cart_controller.dart';
+import 'package:itrsp_shop/controllers/misc/misc_controller.dart';
+import 'package:itrsp_shop/gen/assets.gen.dart';
+import 'package:itrsp_shop/generated/l10n.dart';
+import 'package:itrsp_shop/routes.dart';
+import 'package:itrsp_shop/services/common/hive_service_provider.dart';
+import 'package:itrsp_shop/utils/context_less_navigation.dart';
+import 'package:itrsp_shop/utils/global_function.dart';
+import 'package:itrsp_shop/views/eCommerce/dashboard/components/app_bottom_navbar.dart';
+import 'package:itrsp_shop/views/eCommerce/home/home_view.dart';
+import 'package:itrsp_shop/views/eCommerce/more/more_view.dart';
+import 'package:itrsp_shop/views/eCommerce/my_cart/my_cart_view.dart';
+import 'package:itrsp_shop/views/eCommerce/my_message/my_message_view.dart';
 
 class EcommerceDashboardLayout extends ConsumerStatefulWidget {
   const EcommerceDashboardLayout({super.key});

@@ -8,16 +8,16 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:ready_ecommerce/config/theme.dart';
-import 'package:ready_ecommerce/controllers/common/master_controller.dart';
-import 'package:ready_ecommerce/controllers/eCommerce/authentication/authentication_controller.dart';
-import 'package:ready_ecommerce/generated/l10n.dart';
-import 'package:ready_ecommerce/models/common/master_model.dart';
-import 'package:ready_ecommerce/models/eCommerce/authentication/sign_up.dart';
-import 'package:ready_ecommerce/models/eCommerce/common/common_response.dart';
-import 'package:ready_ecommerce/services/common/country_service_provider.dart';
-import 'package:ready_ecommerce/services/common/master_service_provider.dart';
-import 'package:ready_ecommerce/views/common/authentication/layouts/sign_up_layout.dart';
+import 'package:itrsp_shop/config/theme.dart';
+import 'package:itrsp_shop/controllers/common/master_controller.dart';
+import 'package:itrsp_shop/controllers/eCommerce/authentication/authentication_controller.dart';
+import 'package:itrsp_shop/generated/l10n.dart';
+import 'package:itrsp_shop/models/common/master_model.dart';
+import 'package:itrsp_shop/models/eCommerce/authentication/sign_up.dart';
+import 'package:itrsp_shop/models/eCommerce/common/common_response.dart';
+import 'package:itrsp_shop/services/common/country_service_provider.dart';
+import 'package:itrsp_shop/services/common/master_service_provider.dart';
+import 'package:itrsp_shop/views/common/authentication/layouts/sign_up_layout.dart';
 
 const india = {'id': 77, 'name': 'India', 'phone_code': '91'};
 const unitedKingdom = {

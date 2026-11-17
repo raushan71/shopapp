@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:ready_ecommerce/models/eCommerce/category/category.dart';
-import 'package:ready_ecommerce/services/eCommerce/category_service/category_service.dart';
+import 'package:itrsp_shop/models/eCommerce/category/category.dart';
+import 'package:itrsp_shop/services/eCommerce/category_service/category_service.dart';
 
 final categoryControllerProvider =
     StateNotifierProvider<CategoryController, AsyncValue<List<Category>>>(

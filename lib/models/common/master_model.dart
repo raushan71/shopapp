@@ -1,4 +1,4 @@
-import 'package:ready_ecommerce/models/common/all_country_model/country.dart';
+import 'package:itrsp_shop/models/common/all_country_model/country.dart';
 
 class MasterModel {
   MasterModel({

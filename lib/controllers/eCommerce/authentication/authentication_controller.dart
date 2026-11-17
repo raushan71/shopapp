@@ -2,12 +2,12 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:ready_ecommerce/models/eCommerce/authentication/sign_up.dart';
-import 'package:ready_ecommerce/models/eCommerce/authentication/user.dart';
-import 'package:ready_ecommerce/models/eCommerce/common/common_response.dart';
-import 'package:ready_ecommerce/services/common/hive_service_provider.dart';
-import 'package:ready_ecommerce/services/eCommerce/auth_service/auth_service.dart';
-import 'package:ready_ecommerce/utils/api_client.dart';
+import 'package:itrsp_shop/models/eCommerce/authentication/sign_up.dart';
+import 'package:itrsp_shop/models/eCommerce/authentication/user.dart';
+import 'package:itrsp_shop/models/eCommerce/common/common_response.dart';
+import 'package:itrsp_shop/services/common/hive_service_provider.dart';
+import 'package:itrsp_shop/services/eCommerce/auth_service/auth_service.dart';
+import 'package:itrsp_shop/utils/api_client.dart';
 
 final authControllerProvider =
     StateNotifierProvider<AuthController, bool>((ref) => AuthController(ref));

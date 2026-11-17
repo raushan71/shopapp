@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ready_ecommerce/views/common/support/layouts/support_layout.dart';
+import 'package:itrsp_shop/views/common/support/layouts/support_layout.dart';
 
 class SupportView extends StatelessWidget {
   const SupportView({super.key});

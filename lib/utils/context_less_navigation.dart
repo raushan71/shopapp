@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ready_ecommerce/utils/global_function.dart';
+import 'package:itrsp_shop/utils/global_function.dart';
 
 class ContextLess {
   ContextLess._();

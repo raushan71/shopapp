@@ -2,10 +2,10 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pusher_channels_flutter/pusher_channels_flutter.dart';
-import 'package:ready_ecommerce/controllers/eCommerce/message/message_controller.dart';
-import 'package:ready_ecommerce/models/eCommerce/message_model/messages.dart';
-import 'package:ready_ecommerce/services/common/hive_service_provider.dart';
-import 'package:ready_ecommerce/services/eCommerce/pusher/pusher_service.dart';
+import 'package:itrsp_shop/controllers/eCommerce/message/message_controller.dart';
+import 'package:itrsp_shop/models/eCommerce/message_model/messages.dart';
+import 'package:itrsp_shop/services/common/hive_service_provider.dart';
+import 'package:itrsp_shop/services/eCommerce/pusher/pusher_service.dart';
 
 final pusherControllerProvider =
     StateNotifierProvider<PusherController, void>((ref) {

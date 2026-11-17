@@ -4,15 +4,15 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
-import 'package:ready_ecommerce/components/ecommerce/custom_button.dart';
-import 'package:ready_ecommerce/components/ecommerce/custom_text_field.dart';
-import 'package:ready_ecommerce/config/app_color.dart';
-import 'package:ready_ecommerce/config/app_text_style.dart';
-import 'package:ready_ecommerce/controllers/eCommerce/order/order_controller.dart';
-import 'package:ready_ecommerce/generated/l10n.dart';
-import 'package:ready_ecommerce/models/eCommerce/order/add_product_review_model.dart';
-import 'package:ready_ecommerce/utils/context_less_navigation.dart';
-import 'package:ready_ecommerce/utils/global_function.dart';
+import 'package:itrsp_shop/components/ecommerce/custom_button.dart';
+import 'package:itrsp_shop/components/ecommerce/custom_text_field.dart';
+import 'package:itrsp_shop/config/app_color.dart';
+import 'package:itrsp_shop/config/app_text_style.dart';
+import 'package:itrsp_shop/controllers/eCommerce/order/order_controller.dart';
+import 'package:itrsp_shop/generated/l10n.dart';
+import 'package:itrsp_shop/models/eCommerce/order/add_product_review_model.dart';
+import 'package:itrsp_shop/utils/context_less_navigation.dart';
+import 'package:itrsp_shop/utils/global_function.dart';
 import 'package:tuple/tuple.dart';
 
 class ProductReviewDialog extends StatelessWidget {

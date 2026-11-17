@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:ready_ecommerce/models/eCommerce/message_model/messages.dart';
+import 'package:itrsp_shop/models/eCommerce/message_model/messages.dart';
 
 class Data {
   List<Messages>? data;

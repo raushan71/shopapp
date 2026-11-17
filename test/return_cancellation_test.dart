@@ -5,17 +5,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:ready_ecommerce/config/app_constants.dart';
-import 'package:ready_ecommerce/controllers/eCommerce/order/order_controller.dart';
-import 'package:ready_ecommerce/controllers/eCommerce/return_policy/return_policy_controller.dart';
-import 'package:ready_ecommerce/generated/l10n.dart';
-import 'package:ready_ecommerce/models/eCommerce/order/order_details_model.dart';
-import 'package:ready_ecommerce/models/eCommerce/return_policy/return_order_details_model/return_orders.dart';
-import 'package:ready_ecommerce/models/eCommerce/return_policy/return_order_list_model/return_order.dart';
-import 'package:ready_ecommerce/models/eCommerce/return_policy/return_order_submit_model.dart';
-import 'package:ready_ecommerce/services/eCommerce/return_product/return_product_service.dart';
-import 'package:ready_ecommerce/utils/api_client.dart';
-import 'package:ready_ecommerce/views/eCommerce/order_details/components/order_return_requests.dart';
+import 'package:itrsp_shop/config/app_constants.dart';
+import 'package:itrsp_shop/controllers/eCommerce/order/order_controller.dart';
+import 'package:itrsp_shop/controllers/eCommerce/return_policy/return_policy_controller.dart';
+import 'package:itrsp_shop/generated/l10n.dart';
+import 'package:itrsp_shop/models/eCommerce/order/order_details_model.dart';
+import 'package:itrsp_shop/models/eCommerce/return_policy/return_order_details_model/return_orders.dart';
+import 'package:itrsp_shop/models/eCommerce/return_policy/return_order_list_model/return_order.dart';
+import 'package:itrsp_shop/models/eCommerce/return_policy/return_order_submit_model.dart';
+import 'package:itrsp_shop/services/eCommerce/return_product/return_product_service.dart';
+import 'package:itrsp_shop/utils/api_client.dart';
+import 'package:itrsp_shop/views/eCommerce/order_details/components/order_return_requests.dart';
 
 const originalOrder = (orderId: 42, orderCode: 'ORDER-42');
 

@@ -1,4 +1,4 @@
-import 'package:ready_ecommerce/models/eCommerce/cart/gift.dart';
+import 'package:itrsp_shop/models/eCommerce/cart/gift.dart';
 
 class CartItem {
   CartItem({

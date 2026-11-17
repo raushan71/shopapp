@@ -1,9 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:ready_ecommerce/models/eCommerce/dashboard/dashboard.dart';
-import 'package:ready_ecommerce/services/eCommerce/dashboard_service/dashboard_service.dart';
-import 'package:ready_ecommerce/utils/request_handler.dart';
+import 'package:itrsp_shop/models/eCommerce/dashboard/dashboard.dart';
+import 'package:itrsp_shop/services/eCommerce/dashboard_service/dashboard_service.dart';
+import 'package:itrsp_shop/utils/request_handler.dart';
 
 final dashboardControllerProvider =
     StateNotifierProvider<DashboardController, AsyncValue<Dashboard>>((ref) {

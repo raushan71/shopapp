@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Leave padding around the logo so Android 12's circular splash mask cannot crop it. -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <size android:width="288dp" android:height="288dp" />
+            <solid android:color="@android:color/transparent" />
+        </shape>
+    </item>
+    <item android:width="160dp" android:height="64dp" android:gravity="center">
+        <bitmap
+            android:gravity="fill"
+            android:filter="true"
+            android:src="@drawable/splash_logo" />
+    </item>
+</layer-list>

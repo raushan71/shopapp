@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ready_ecommerce/views/eCommerce/my_cart/layouts/my_cart_layout.dart';
+import 'package:itrsp_shop/views/eCommerce/my_cart/layouts/my_cart_layout.dart';
 
 class EcommerceMyCartView extends StatelessWidget {
   final bool isRoot;

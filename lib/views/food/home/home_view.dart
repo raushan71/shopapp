@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ready_ecommerce/views/food/home/layouts/home_view_layout.dart';
+import 'package:itrsp_shop/views/food/home/layouts/home_view_layout.dart';
 
 class FoodHomeView extends StatelessWidget {
   const FoodHomeView({super.key});

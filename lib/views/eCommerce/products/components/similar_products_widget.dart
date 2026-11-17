@@ -2,13 +2,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
-import 'package:ready_ecommerce/config/app_constants.dart';
-import 'package:ready_ecommerce/config/app_text_style.dart';
-import 'package:ready_ecommerce/generated/l10n.dart';
-import 'package:ready_ecommerce/models/eCommerce/product/product_details.dart';
-import 'package:ready_ecommerce/routes.dart';
-import 'package:ready_ecommerce/utils/context_less_navigation.dart';
-import 'package:ready_ecommerce/views/eCommerce/home/components/popular_product_card.dart';
+import 'package:itrsp_shop/config/app_constants.dart';
+import 'package:itrsp_shop/config/app_text_style.dart';
+import 'package:itrsp_shop/generated/l10n.dart';
+import 'package:itrsp_shop/models/eCommerce/product/product_details.dart';
+import 'package:itrsp_shop/routes.dart';
+import 'package:itrsp_shop/utils/context_less_navigation.dart';
+import 'package:itrsp_shop/views/eCommerce/home/components/popular_product_card.dart';
 
 class SimilarProductsWidget extends StatelessWidget {
   final ProductDetails productDetails;

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:ready_ecommerce/config/app_color.dart';
+import 'package:itrsp_shop/config/app_color.dart';
 
 AppColors colors(context) => Theme.of(context).extension<AppColors>()!;
 ThemeData getAppTheme(

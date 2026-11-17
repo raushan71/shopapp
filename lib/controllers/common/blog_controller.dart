@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:ready_ecommerce/models/common/blog.dart';
-import 'package:ready_ecommerce/models/common/blog_details.dart';
+import 'package:itrsp_shop/models/common/blog.dart';
+import 'package:itrsp_shop/models/common/blog_details.dart';
 
 import '../../services/common/blog_service_provider.dart';
 

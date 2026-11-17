@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
-import 'package:ready_ecommerce/components/ecommerce/custom_button.dart';
-import 'package:ready_ecommerce/config/app_color.dart';
-import 'package:ready_ecommerce/config/app_text_style.dart';
-import 'package:ready_ecommerce/config/theme.dart';
-import 'package:ready_ecommerce/generated/l10n.dart';
-import 'package:ready_ecommerce/utils/context_less_navigation.dart';
+import 'package:itrsp_shop/components/ecommerce/custom_button.dart';
+import 'package:itrsp_shop/config/app_color.dart';
+import 'package:itrsp_shop/config/app_text_style.dart';
+import 'package:itrsp_shop/config/theme.dart';
+import 'package:itrsp_shop/generated/l10n.dart';
+import 'package:itrsp_shop/utils/context_less_navigation.dart';
 
 class ConfirmationDialog extends StatelessWidget {
   final String? icon;

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ready_ecommerce/views/eCommerce/checkout/layouts/checkout_layout.dart';
+import 'package:itrsp_shop/views/eCommerce/checkout/layouts/checkout_layout.dart';
 
 class EcommerceCheckoutView extends StatelessWidget {
   final bool? isDigital;

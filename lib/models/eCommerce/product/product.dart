@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:ready_ecommerce/models/eCommerce/product/product_details.dart';
+import 'package:itrsp_shop/models/eCommerce/product/product_details.dart';
 
 class Product {
   final int id;

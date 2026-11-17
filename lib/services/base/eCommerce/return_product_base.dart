@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:ready_ecommerce/models/eCommerce/return_policy/return_order_submit_model.dart';
+import 'package:itrsp_shop/models/eCommerce/return_policy/return_order_submit_model.dart';
 
 abstract class ReturnProductService {
   Future<Response> submitReturnProduct(

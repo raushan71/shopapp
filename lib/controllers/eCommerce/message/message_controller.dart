@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:ready_ecommerce/models/eCommerce/common/common_response.dart';
-import 'package:ready_ecommerce/models/eCommerce/message_model/message_model.dart';
-import 'package:ready_ecommerce/models/eCommerce/message_model/messages.dart';
-import 'package:ready_ecommerce/models/eCommerce/shop_message_model/shop_message_model.dart';
-import 'package:ready_ecommerce/services/eCommerce/message/message_service.dart';
+import 'package:itrsp_shop/models/eCommerce/common/common_response.dart';
+import 'package:itrsp_shop/models/eCommerce/message_model/message_model.dart';
+import 'package:itrsp_shop/models/eCommerce/message_model/messages.dart';
+import 'package:itrsp_shop/models/eCommerce/shop_message_model/shop_message_model.dart';
+import 'package:itrsp_shop/services/eCommerce/message/message_service.dart';
 
 final storeMessageControllerProvider =
     StateNotifierProvider<StoreMessageController, bool>(

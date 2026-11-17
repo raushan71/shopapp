@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ready_ecommerce/views/eCommerce/shops/layouts/shop_layout.dart';
+import 'package:itrsp_shop/views/eCommerce/shops/layouts/shop_layout.dart';
 
 class EcommerceShopView extends StatelessWidget {
   final int shopId;

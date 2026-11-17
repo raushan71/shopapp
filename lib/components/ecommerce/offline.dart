@@ -1,10 +1,10 @@
 import 'package:app_settings/app_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:ready_ecommerce/components/ecommerce/custom_button.dart';
-import 'package:ready_ecommerce/config/app_text_style.dart';
-import 'package:ready_ecommerce/gen/assets.gen.dart';
-import 'package:ready_ecommerce/generated/l10n.dart';
+import 'package:itrsp_shop/components/ecommerce/custom_button.dart';
+import 'package:itrsp_shop/config/app_text_style.dart';
+import 'package:itrsp_shop/gen/assets.gen.dart';
+import 'package:itrsp_shop/generated/l10n.dart';
 
 class OfflineScreen extends StatelessWidget {
   const OfflineScreen({super.key});

@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:ready_ecommerce/models/eCommerce/shop_message_model/product.dart';
+import 'package:itrsp_shop/models/eCommerce/shop_message_model/product.dart';
 
 import 'shop.dart';
 import 'user.dart';

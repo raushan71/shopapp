@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ready_ecommerce/views/common/other/layouts/privacy_policy_layout.dart';
+import 'package:itrsp_shop/views/common/other/layouts/privacy_policy_layout.dart';
 
 class PrivacyPolicyView extends StatelessWidget {
   const PrivacyPolicyView({super.key});

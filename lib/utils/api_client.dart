@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:ready_ecommerce/utils/request_handler.dart';
+import 'package:itrsp_shop/utils/request_handler.dart';
 
 class ApiClient {
   final Dio _dio = Dio();

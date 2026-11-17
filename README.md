@@ -1,6 +1,6 @@
-# ready_ecommerce
+# itrsp_shop
 
-A new Flutter project.
+itrsp_shop shopping application.
 
 ## Getting Started
 
@@ -51,7 +51,4 @@ signed production release files, add these repository secrets under
 
 The workflow reconstructs the keystore only inside the temporary GitHub runner.
 Never commit the keystore or `android/key.properties`.
-
-# shopapp
-
 

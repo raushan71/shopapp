@@ -2,8 +2,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:ready_ecommerce/config/theme.dart';
-import 'package:ready_ecommerce/models/eCommerce/shop/shop.dart';
+import 'package:itrsp_shop/config/theme.dart';
+import 'package:itrsp_shop/models/eCommerce/shop/shop.dart';
 
 class ShopCardCircle extends StatelessWidget {
   final Shop shop;

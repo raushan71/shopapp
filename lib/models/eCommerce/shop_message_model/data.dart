@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:ready_ecommerce/models/eCommerce/shop_message_model/datum.dart';
+import 'package:itrsp_shop/models/eCommerce/shop_message_model/datum.dart';
 
 class Data {
   int? total;

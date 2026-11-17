@@ -3,14 +3,14 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
-import 'package:ready_ecommerce/components/ecommerce/custom_button.dart';
-import 'package:ready_ecommerce/components/ecommerce/custom_text_field.dart';
-import 'package:ready_ecommerce/config/app_text_style.dart';
-import 'package:ready_ecommerce/config/theme.dart';
-import 'package:ready_ecommerce/controllers/common/other_controller.dart';
-import 'package:ready_ecommerce/gen/assets.gen.dart';
-import 'package:ready_ecommerce/generated/l10n.dart';
-import 'package:ready_ecommerce/utils/global_function.dart';
+import 'package:itrsp_shop/components/ecommerce/custom_button.dart';
+import 'package:itrsp_shop/components/ecommerce/custom_text_field.dart';
+import 'package:itrsp_shop/config/app_text_style.dart';
+import 'package:itrsp_shop/config/theme.dart';
+import 'package:itrsp_shop/controllers/common/other_controller.dart';
+import 'package:itrsp_shop/gen/assets.gen.dart';
+import 'package:itrsp_shop/generated/l10n.dart';
+import 'package:itrsp_shop/utils/global_function.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SupportLayout extends StatelessWidget {

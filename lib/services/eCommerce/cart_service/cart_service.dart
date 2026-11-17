@@ -1,12 +1,12 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:ready_ecommerce/config/app_constants.dart';
-import 'package:ready_ecommerce/models/eCommerce/cart/add_to_cart_model.dart';
-import 'package:ready_ecommerce/models/eCommerce/cart/gift_add_model.dart';
-import 'package:ready_ecommerce/services/base/eCommerce/cart_provider_base.dart';
-import 'package:ready_ecommerce/services/common/hive_service_provider.dart';
-import 'package:ready_ecommerce/utils/api_client.dart';
+import 'package:itrsp_shop/config/app_constants.dart';
+import 'package:itrsp_shop/models/eCommerce/cart/add_to_cart_model.dart';
+import 'package:itrsp_shop/models/eCommerce/cart/gift_add_model.dart';
+import 'package:itrsp_shop/services/base/eCommerce/cart_provider_base.dart';
+import 'package:itrsp_shop/services/common/hive_service_provider.dart';
+import 'package:itrsp_shop/utils/api_client.dart';
 
 class CartService implements CartProviderBase {
   final Ref ref;

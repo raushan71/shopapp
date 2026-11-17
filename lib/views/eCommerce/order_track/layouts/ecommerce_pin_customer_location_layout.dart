@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:ready_ecommerce/controllers/eCommerce/order_track/location_controller.dart';
-import 'package:ready_ecommerce/gen/assets.gen.dart';
-import 'package:ready_ecommerce/models/eCommerce/address/delivery_location.dart';
-import 'package:ready_ecommerce/services/common/hive_service_provider.dart';
-import 'package:ready_ecommerce/services/eCommerce/order_track/location_services.dart';
+import 'package:itrsp_shop/controllers/eCommerce/order_track/location_controller.dart';
+import 'package:itrsp_shop/gen/assets.gen.dart';
+import 'package:itrsp_shop/models/eCommerce/address/delivery_location.dart';
+import 'package:itrsp_shop/services/common/hive_service_provider.dart';
+import 'package:itrsp_shop/services/eCommerce/order_track/location_services.dart';
 
 class EcommercePinCustomerLocationLayout extends ConsumerStatefulWidget {
   const EcommercePinCustomerLocationLayout({super.key});
@@ -282,10 +282,10 @@ class _EcommerceTrackOrderLayoutState
 // import 'package:flutter/material.dart';
 // import 'package:flutter_riverpod/flutter_riverpod.dart';
 // import 'package:google_maps_flutter/google_maps_flutter.dart';
-// import 'package:ready_ecommerce/controllers/eCommerce/order_track/location_controller.dart';
-// import 'package:ready_ecommerce/gen/assets.gen.dart';
-// import 'package:ready_ecommerce/services/common/hive_service_provider.dart';
-// import 'package:ready_ecommerce/services/eCommerce/order_track/location_services.dart';
+// import 'package:itrsp_shop/controllers/eCommerce/order_track/location_controller.dart';
+// import 'package:itrsp_shop/gen/assets.gen.dart';
+// import 'package:itrsp_shop/services/common/hive_service_provider.dart';
+// import 'package:itrsp_shop/services/eCommerce/order_track/location_services.dart';
 //
 // class EcommercePinCustomerLocationLayout extends ConsumerStatefulWidget {
 //   const EcommercePinCustomerLocationLayout({super.key});
@@ -396,10 +396,10 @@ class _EcommerceTrackOrderLayoutState
 // import 'package:flutter/material.dart';
 // import 'package:flutter_riverpod/flutter_riverpod.dart';
 // import 'package:google_maps_flutter/google_maps_flutter.dart';
-// import 'package:ready_ecommerce/controllers/eCommerce/order_track/location_controller.dart';
-// import 'package:ready_ecommerce/gen/assets.gen.dart';
-// import 'package:ready_ecommerce/services/common/hive_service_provider.dart';
-// import 'package:ready_ecommerce/services/eCommerce/order_track/location_services.dart';
+// import 'package:itrsp_shop/controllers/eCommerce/order_track/location_controller.dart';
+// import 'package:itrsp_shop/gen/assets.gen.dart';
+// import 'package:itrsp_shop/services/common/hive_service_provider.dart';
+// import 'package:itrsp_shop/services/eCommerce/order_track/location_services.dart';
 //
 // class EcommercePinCustomerLocationLayout extends ConsumerStatefulWidget {
 //   const EcommercePinCustomerLocationLayout({super.key});

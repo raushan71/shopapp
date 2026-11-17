@@ -1,14 +1,14 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:ready_ecommerce/models/eCommerce/common/common_response.dart';
-import 'package:ready_ecommerce/models/eCommerce/order/add_product_review_model.dart';
-import 'package:ready_ecommerce/models/eCommerce/order/buy_now_order_place.dart';
-import 'package:ready_ecommerce/models/eCommerce/order/order_model.dart';
-import 'package:ready_ecommerce/models/eCommerce/order/order_place_model.dart';
-import 'package:ready_ecommerce/services/eCommerce/order/order_service.dart';
-import 'package:ready_ecommerce/utils/global_function.dart';
-import 'package:ready_ecommerce/utils/request_handler.dart';
+import 'package:itrsp_shop/models/eCommerce/common/common_response.dart';
+import 'package:itrsp_shop/models/eCommerce/order/add_product_review_model.dart';
+import 'package:itrsp_shop/models/eCommerce/order/buy_now_order_place.dart';
+import 'package:itrsp_shop/models/eCommerce/order/order_model.dart';
+import 'package:itrsp_shop/models/eCommerce/order/order_place_model.dart';
+import 'package:itrsp_shop/services/eCommerce/order/order_service.dart';
+import 'package:itrsp_shop/utils/global_function.dart';
+import 'package:itrsp_shop/utils/request_handler.dart';
 
 import '../../../models/eCommerce/order/order_details_model.dart';
 

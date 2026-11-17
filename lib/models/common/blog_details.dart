@@ -1,5 +1,5 @@
-import 'package:ready_ecommerce/models/common/blog.dart';
-import 'package:ready_ecommerce/models/eCommerce/product/product.dart';
+import 'package:itrsp_shop/models/common/blog.dart';
+import 'package:itrsp_shop/models/eCommerce/product/product.dart';
 
 class BlogDetails {
   BlogDetails({

@@ -3,14 +3,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:gap/gap.dart';
-import 'package:ready_ecommerce/config/app_color.dart';
-import 'package:ready_ecommerce/config/app_text_style.dart';
-import 'package:ready_ecommerce/config/theme.dart';
-import 'package:ready_ecommerce/controllers/eCommerce/order/order_controller.dart';
-import 'package:ready_ecommerce/controllers/misc/misc_controller.dart';
-import 'package:ready_ecommerce/generated/l10n.dart';
-import 'package:ready_ecommerce/models/eCommerce/order/order_model.dart';
-import 'package:ready_ecommerce/utils/global_function.dart';
+import 'package:itrsp_shop/config/app_color.dart';
+import 'package:itrsp_shop/config/app_text_style.dart';
+import 'package:itrsp_shop/config/theme.dart';
+import 'package:itrsp_shop/controllers/eCommerce/order/order_controller.dart';
+import 'package:itrsp_shop/controllers/misc/misc_controller.dart';
+import 'package:itrsp_shop/generated/l10n.dart';
+import 'package:itrsp_shop/models/eCommerce/order/order_model.dart';
+import 'package:itrsp_shop/utils/global_function.dart';
 
 import '../components/my_order_card_widget.dart';
 

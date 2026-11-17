@@ -1,11 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:ready_ecommerce/config/app_constants.dart';
-import 'package:ready_ecommerce/models/eCommerce/order/add_product_review_model.dart';
-import 'package:ready_ecommerce/models/eCommerce/order/buy_now_order_place.dart';
-import 'package:ready_ecommerce/models/eCommerce/order/order_place_model.dart';
-import 'package:ready_ecommerce/services/base/eCommerce/order_provider_base.dart';
-import 'package:ready_ecommerce/utils/api_client.dart';
+import 'package:itrsp_shop/config/app_constants.dart';
+import 'package:itrsp_shop/models/eCommerce/order/add_product_review_model.dart';
+import 'package:itrsp_shop/models/eCommerce/order/buy_now_order_place.dart';
+import 'package:itrsp_shop/models/eCommerce/order/order_place_model.dart';
+import 'package:itrsp_shop/services/base/eCommerce/order_provider_base.dart';
+import 'package:itrsp_shop/utils/api_client.dart';
 
 class OrderService implements OrderProviderBase {
   final Ref ref;

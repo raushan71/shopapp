@@ -1,4 +1,4 @@
-import 'package:ready_ecommerce/models/eCommerce/address/add_address.dart';
+import 'package:itrsp_shop/models/eCommerce/address/add_address.dart';
 
 class OrderDetails {
   OrderDetails({

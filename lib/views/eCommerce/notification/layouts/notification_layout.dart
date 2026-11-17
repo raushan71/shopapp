@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:ready_ecommerce/config/theme.dart';
-import 'package:ready_ecommerce/models/eCommerce/notification/notification.dart';
-import 'package:ready_ecommerce/views/eCommerce/notification/components/notification_card.dart';
+import 'package:itrsp_shop/config/theme.dart';
+import 'package:itrsp_shop/models/eCommerce/notification/notification.dart';
+import 'package:itrsp_shop/views/eCommerce/notification/components/notification_card.dart';
 
 class NotificationLayout extends StatelessWidget {
   const NotificationLayout({super.key});
@@ -32,7 +32,7 @@ class NotificationLayout extends StatelessWidget {
 final List<NotificationModel> notifications = [
   NotificationModel(
     id: 1,
-    title: "Welcome to eShop. Start exploring our products",
+    title: "Welcome to itrsp_shop. Start exploring our products",
     message: "Get started",
     type: "info",
     url: "",
@@ -41,7 +41,7 @@ final List<NotificationModel> notifications = [
   ),
   NotificationModel(
     id: 2,
-    title: "Welcome to eShop",
+    title: "Welcome to itrsp_shop",
     message: "Get started explore services",
     type: "info",
     url: "",
@@ -50,7 +50,7 @@ final List<NotificationModel> notifications = [
   ),
   NotificationModel(
     id: 3,
-    title: "Welcome to eShop",
+    title: "Welcome to itrsp_shop",
     message: "Get started",
     type: "info",
     url: "",
@@ -59,7 +59,7 @@ final List<NotificationModel> notifications = [
   ),
   NotificationModel(
     id: 4,
-    title: "Welcome to eShop",
+    title: "Welcome to itrsp_shop",
     message: "Get started",
     type: "info",
     url: "",
@@ -68,7 +68,7 @@ final List<NotificationModel> notifications = [
   ),
   NotificationModel(
     id: 5,
-    title: "Welcome to eShop",
+    title: "Welcome to itrsp_shop",
     message: "Get started",
     type: "info",
     url: "",

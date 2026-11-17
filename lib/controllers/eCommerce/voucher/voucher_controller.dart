@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:ready_ecommerce/models/eCommerce/common/common_response.dart';
-import 'package:ready_ecommerce/models/eCommerce/voucher/voucher_apply_model.dart';
-import 'package:ready_ecommerce/models/eCommerce/voucher/voucher_model.dart';
-import 'package:ready_ecommerce/services/eCommerce/voucher_service/voucher_service.dart';
-import 'package:ready_ecommerce/utils/global_function.dart';
+import 'package:itrsp_shop/models/eCommerce/common/common_response.dart';
+import 'package:itrsp_shop/models/eCommerce/voucher/voucher_apply_model.dart';
+import 'package:itrsp_shop/models/eCommerce/voucher/voucher_model.dart';
+import 'package:itrsp_shop/services/eCommerce/voucher_service/voucher_service.dart';
+import 'package:itrsp_shop/utils/global_function.dart';
 import 'package:tuple/tuple.dart';
 
 final voucherControllerProvider =

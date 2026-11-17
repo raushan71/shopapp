@@ -12,14 +12,14 @@ import 'package:open_file/open_file.dart';
 // import 'package:open_file_plus/open_file_plus.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:ready_ecommerce/config/app_color.dart';
-import 'package:ready_ecommerce/config/app_text_style.dart';
-import 'package:ready_ecommerce/config/theme.dart';
-import 'package:ready_ecommerce/controllers/common/master_controller.dart';
-import 'package:ready_ecommerce/generated/l10n.dart';
-import 'package:ready_ecommerce/models/eCommerce/order/order_details_model.dart';
-import 'package:ready_ecommerce/utils/context_less_navigation.dart';
-import 'package:ready_ecommerce/utils/global_function.dart';
+import 'package:itrsp_shop/config/app_color.dart';
+import 'package:itrsp_shop/config/app_text_style.dart';
+import 'package:itrsp_shop/config/theme.dart';
+import 'package:itrsp_shop/controllers/common/master_controller.dart';
+import 'package:itrsp_shop/generated/l10n.dart';
+import 'package:itrsp_shop/models/eCommerce/order/order_details_model.dart';
+import 'package:itrsp_shop/utils/context_less_navigation.dart';
+import 'package:itrsp_shop/utils/global_function.dart';
 
 class OrderDetailsCard extends ConsumerStatefulWidget {
   final OrderDetails orderDetails;

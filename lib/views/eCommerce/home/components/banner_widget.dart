@@ -3,9 +3,9 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:ready_ecommerce/config/theme.dart';
-import 'package:ready_ecommerce/controllers/misc/misc_controller.dart';
-import 'package:ready_ecommerce/models/eCommerce/dashboard/dashboard.dart';
+import 'package:itrsp_shop/config/theme.dart';
+import 'package:itrsp_shop/controllers/misc/misc_controller.dart';
+import 'package:itrsp_shop/models/eCommerce/dashboard/dashboard.dart';
 
 class BannerWidget extends ConsumerStatefulWidget {
   final Dashboard dashboardData;

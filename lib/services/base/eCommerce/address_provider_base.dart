@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:ready_ecommerce/models/eCommerce/address/add_address.dart';
+import 'package:itrsp_shop/models/eCommerce/address/add_address.dart';
 
 abstract class AddressProviderBase {
   Future<Response> getAddress();

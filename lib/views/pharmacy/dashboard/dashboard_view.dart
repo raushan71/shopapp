@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ready_ecommerce/views/pharmacy/dashboard/layouts/dashboar_layout.dart';
+import 'package:itrsp_shop/views/pharmacy/dashboard/layouts/dashboar_layout.dart';
 
 class PharmacyDashboardView extends StatelessWidget {
   const PharmacyDashboardView({super.key});

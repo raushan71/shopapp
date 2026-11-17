@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:ready_ecommerce/models/common/master_model.dart';
-import 'package:ready_ecommerce/services/common/master_service_provider.dart';
+import 'package:itrsp_shop/models/common/master_model.dart';
+import 'package:itrsp_shop/services/common/master_service_provider.dart';
 
 class MasterController extends StateNotifier<bool> {
   final Ref ref;

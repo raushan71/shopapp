@@ -1,12 +1,12 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:ready_ecommerce/controllers/misc/misc_controller.dart';
-import 'package:ready_ecommerce/models/eCommerce/cart/add_to_cart_model.dart';
-import 'package:ready_ecommerce/models/eCommerce/cart/cart_product.dart';
-import 'package:ready_ecommerce/models/eCommerce/cart/gift_add_model.dart';
-import 'package:ready_ecommerce/models/eCommerce/cart/gift_item.dart';
-import 'package:ready_ecommerce/services/eCommerce/cart_service/cart_service.dart';
-import 'package:ready_ecommerce/utils/global_function.dart';
+import 'package:itrsp_shop/controllers/misc/misc_controller.dart';
+import 'package:itrsp_shop/models/eCommerce/cart/add_to_cart_model.dart';
+import 'package:itrsp_shop/models/eCommerce/cart/cart_product.dart';
+import 'package:itrsp_shop/models/eCommerce/cart/gift_add_model.dart';
+import 'package:itrsp_shop/models/eCommerce/cart/gift_item.dart';
+import 'package:itrsp_shop/services/eCommerce/cart_service/cart_service.dart';
+import 'package:itrsp_shop/utils/global_function.dart';
 
 class CartController extends StateNotifier<CartState> {
   final Ref ref;

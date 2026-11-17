@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ready_ecommerce/views/eCommerce/dashboard/layouts/dashboard_layout.dart';
+import 'package:itrsp_shop/views/eCommerce/dashboard/layouts/dashboard_layout.dart';
 
 class EcommerceDashboardView extends StatelessWidget {
   const EcommerceDashboardView({super.key});

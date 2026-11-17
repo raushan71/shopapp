@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
-import 'package:ready_ecommerce/models/eCommerce/cart/add_to_cart_model.dart';
-import 'package:ready_ecommerce/models/eCommerce/cart/gift_add_model.dart';
+import 'package:itrsp_shop/models/eCommerce/cart/add_to_cart_model.dart';
+import 'package:itrsp_shop/models/eCommerce/cart/gift_add_model.dart';
 
 abstract class CartProviderBase {
   Future<Response> addToCart({required AddToCartModel addToCartModel});

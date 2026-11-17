@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ready_ecommerce/views/common/other/layouts/terms_conditions_layout.dart';
+import 'package:itrsp_shop/views/common/other/layouts/terms_conditions_layout.dart';
 
 class TermsAndConditionsView extends StatelessWidget {
   const TermsAndConditionsView({super.key});

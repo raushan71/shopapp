@@ -6,13 +6,13 @@
 // import 'package:flutter_riverpod/flutter_riverpod.dart';
 // import 'package:geolocator/geolocator.dart';
 // import 'package:google_maps_flutter/google_maps_flutter.dart';
-// import 'package:ready_ecommerce/config/app_constants.dart';
-// import 'package:ready_ecommerce/controllers/eCommerce/order_track/location_controller.dart';
-// import 'package:ready_ecommerce/gen/assets.gen.dart';
-// import 'package:ready_ecommerce/services/common/hive_service_provider.dart';
-// import 'package:ready_ecommerce/services/eCommerce/order_track/direction_service.dart';
-// import 'package:ready_ecommerce/services/eCommerce/order_track/location_services.dart';
-// import 'package:ready_ecommerce/services/eCommerce/order_track/pusher_service.dart';
+// import 'package:itrsp_shop/config/app_constants.dart';
+// import 'package:itrsp_shop/controllers/eCommerce/order_track/location_controller.dart';
+// import 'package:itrsp_shop/gen/assets.gen.dart';
+// import 'package:itrsp_shop/services/common/hive_service_provider.dart';
+// import 'package:itrsp_shop/services/eCommerce/order_track/direction_service.dart';
+// import 'package:itrsp_shop/services/eCommerce/order_track/location_services.dart';
+// import 'package:itrsp_shop/services/eCommerce/order_track/pusher_service.dart';
 //
 // import '../../../../controllers/eCommerce/order/order_controller.dart';
 //
@@ -445,12 +445,12 @@
 // import 'package:flutter_riverpod/flutter_riverpod.dart';
 // import 'package:geolocator/geolocator.dart';
 // import 'package:google_maps_flutter/google_maps_flutter.dart';
-// import 'package:ready_ecommerce/config/app_constants.dart';
-// import 'package:ready_ecommerce/gen/assets.gen.dart';
-// import 'package:ready_ecommerce/services/common/hive_service_provider.dart';
-// import 'package:ready_ecommerce/services/eCommerce/order_track/direction_service.dart';
-// import 'package:ready_ecommerce/services/eCommerce/order_track/location_services.dart';
-// import 'package:ready_ecommerce/services/eCommerce/order_track/pusher_service.dart';
+// import 'package:itrsp_shop/config/app_constants.dart';
+// import 'package:itrsp_shop/gen/assets.gen.dart';
+// import 'package:itrsp_shop/services/common/hive_service_provider.dart';
+// import 'package:itrsp_shop/services/eCommerce/order_track/direction_service.dart';
+// import 'package:itrsp_shop/services/eCommerce/order_track/location_services.dart';
+// import 'package:itrsp_shop/services/eCommerce/order_track/pusher_service.dart';
 //
 // import '../../../../controllers/eCommerce/order_track/location_controller.dart';
 //
@@ -746,11 +746,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:ready_ecommerce/config/app_constants.dart';
-import 'package:ready_ecommerce/gen/assets.gen.dart';
-import 'package:ready_ecommerce/services/common/hive_service_provider.dart';
-import 'package:ready_ecommerce/services/eCommerce/order_track/direction_service.dart';
-import 'package:ready_ecommerce/services/eCommerce/order_track/pusher_service.dart';
+import 'package:itrsp_shop/config/app_constants.dart';
+import 'package:itrsp_shop/gen/assets.gen.dart';
+import 'package:itrsp_shop/services/common/hive_service_provider.dart';
+import 'package:itrsp_shop/services/eCommerce/order_track/direction_service.dart';
+import 'package:itrsp_shop/services/eCommerce/order_track/pusher_service.dart';
 
 import '../../../../controllers/eCommerce/order_track/location_controller.dart';
 

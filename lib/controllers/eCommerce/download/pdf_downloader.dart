@@ -6,8 +6,8 @@ import 'package:flutter_file_downloader/flutter_file_downloader.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:ready_ecommerce/config/app_color.dart';
-import 'package:ready_ecommerce/utils/global_function.dart';
+import 'package:itrsp_shop/config/app_color.dart';
+import 'package:itrsp_shop/utils/global_function.dart';
 
 class DownloadState {
   final double progress;

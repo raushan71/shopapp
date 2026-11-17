@@ -1,13 +1,13 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:ready_ecommerce/models/eCommerce/common/common_response.dart';
-import 'package:ready_ecommerce/models/eCommerce/common/product_filter_model.dart';
-import 'package:ready_ecommerce/models/eCommerce/product/product.dart';
-import 'package:ready_ecommerce/models/eCommerce/product/product_details.dart'
+import 'package:itrsp_shop/models/eCommerce/common/common_response.dart';
+import 'package:itrsp_shop/models/eCommerce/common/product_filter_model.dart';
+import 'package:itrsp_shop/models/eCommerce/product/product.dart';
+import 'package:itrsp_shop/models/eCommerce/product/product_details.dart'
     as product_details;
-import 'package:ready_ecommerce/services/eCommerce/product_service/product_service.dart';
-import 'package:ready_ecommerce/utils/request_handler.dart';
+import 'package:itrsp_shop/services/eCommerce/product_service/product_service.dart';
+import 'package:itrsp_shop/utils/request_handler.dart';
 
 import '../../../models/eCommerce/product/filter.dart';
 

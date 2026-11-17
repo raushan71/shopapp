@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:pusher_channels_flutter/pusher_channels_flutter.dart';
-import 'package:ready_ecommerce/config/app_constants.dart';
-import 'package:ready_ecommerce/config/app_log.dart';
+import 'package:itrsp_shop/config/app_constants.dart';
+import 'package:itrsp_shop/config/app_log.dart';
 
 class PusherService {
   static final pusher = PusherChannelsFlutter.getInstance();

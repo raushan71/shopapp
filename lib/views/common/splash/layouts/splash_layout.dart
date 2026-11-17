@@ -8,17 +8,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:ready_ecommerce/components/ecommerce/offline.dart';
-import 'package:ready_ecommerce/config/app_constants.dart';
-import 'package:ready_ecommerce/controllers/common/master_controller.dart';
-import 'package:ready_ecommerce/controllers/eCommerce/order_track/location_controller.dart';
-import 'package:ready_ecommerce/gen/assets.gen.dart';
-import 'package:ready_ecommerce/routes.dart';
-import 'package:ready_ecommerce/services/common/hive_service_provider.dart';
-import 'package:ready_ecommerce/utils/api_client.dart';
-import 'package:ready_ecommerce/utils/context_less_navigation.dart';
-import 'package:ready_ecommerce/utils/global_function.dart';
-import 'package:ready_ecommerce/views/common/onboarding/onboarding_view.dart';
+import 'package:itrsp_shop/components/ecommerce/offline.dart';
+import 'package:itrsp_shop/config/app_constants.dart';
+import 'package:itrsp_shop/controllers/common/master_controller.dart';
+import 'package:itrsp_shop/controllers/eCommerce/order_track/location_controller.dart';
+import 'package:itrsp_shop/gen/assets.gen.dart';
+import 'package:itrsp_shop/routes.dart';
+import 'package:itrsp_shop/services/common/hive_service_provider.dart';
+import 'package:itrsp_shop/utils/api_client.dart';
+import 'package:itrsp_shop/utils/context_less_navigation.dart';
+import 'package:itrsp_shop/utils/global_function.dart';
+import 'package:itrsp_shop/views/common/onboarding/onboarding_view.dart';
 
 class SplashLayout extends ConsumerStatefulWidget {
   const SplashLayout({super.key});

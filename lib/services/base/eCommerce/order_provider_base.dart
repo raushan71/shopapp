@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
-import 'package:ready_ecommerce/models/eCommerce/order/add_product_review_model.dart';
-import 'package:ready_ecommerce/models/eCommerce/order/buy_now_order_place.dart';
-import 'package:ready_ecommerce/models/eCommerce/order/order_place_model.dart';
+import 'package:itrsp_shop/models/eCommerce/order/add_product_review_model.dart';
+import 'package:itrsp_shop/models/eCommerce/order/buy_now_order_place.dart';
+import 'package:itrsp_shop/models/eCommerce/order/order_place_model.dart';
 
 abstract class OrderProviderBase {
   Future<Response> placeOrder({required OrderPlaceModel orderPlaceModel});

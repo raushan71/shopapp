@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:ready_ecommerce/models/eCommerce/category/category.dart';
-import 'package:ready_ecommerce/models/eCommerce/common/product_filter_model.dart';
-import 'package:ready_ecommerce/models/eCommerce/product/product.dart';
-import 'package:ready_ecommerce/models/eCommerce/shop/shop.dart' as shop_model;
-import 'package:ready_ecommerce/models/eCommerce/shop/shop_details.dart';
-import 'package:ready_ecommerce/models/eCommerce/shop/shop_review.dart';
-import 'package:ready_ecommerce/services/eCommerce/shop_service/shop_service.dart';
+import 'package:itrsp_shop/models/eCommerce/category/category.dart';
+import 'package:itrsp_shop/models/eCommerce/common/product_filter_model.dart';
+import 'package:itrsp_shop/models/eCommerce/product/product.dart';
+import 'package:itrsp_shop/models/eCommerce/shop/shop.dart' as shop_model;
+import 'package:itrsp_shop/models/eCommerce/shop/shop_details.dart';
+import 'package:itrsp_shop/models/eCommerce/shop/shop_review.dart';
+import 'package:itrsp_shop/services/eCommerce/shop_service/shop_service.dart';
 
 final shopControllerProvider =
     StateNotifierProvider<ShopController, bool>((ref) {

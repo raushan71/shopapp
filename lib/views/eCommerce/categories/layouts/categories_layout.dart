@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'package:ready_ecommerce/config/app_color.dart';
-import 'package:ready_ecommerce/config/app_constants.dart';
-import 'package:ready_ecommerce/controllers/eCommerce/category/category_controller.dart';
-import 'package:ready_ecommerce/routes.dart';
-import 'package:ready_ecommerce/utils/context_less_navigation.dart';
-import 'package:ready_ecommerce/utils/global_function.dart';
-import 'package:ready_ecommerce/views/eCommerce/home/components/category_card.dart';
-import 'package:ready_ecommerce/views/eCommerce/products/layouts/product_details_layout.dart';
+import 'package:itrsp_shop/config/app_color.dart';
+import 'package:itrsp_shop/config/app_constants.dart';
+import 'package:itrsp_shop/controllers/eCommerce/category/category_controller.dart';
+import 'package:itrsp_shop/routes.dart';
+import 'package:itrsp_shop/utils/context_less_navigation.dart';
+import 'package:itrsp_shop/utils/global_function.dart';
+import 'package:itrsp_shop/views/eCommerce/home/components/category_card.dart';
+import 'package:itrsp_shop/views/eCommerce/products/layouts/product_details_layout.dart';
 
 class EcommerceCategoriesLayout extends ConsumerWidget {
   const EcommerceCategoriesLayout({

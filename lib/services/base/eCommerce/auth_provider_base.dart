@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:ready_ecommerce/models/eCommerce/authentication/sign_up.dart';
-import 'package:ready_ecommerce/models/eCommerce/authentication/user.dart';
+import 'package:itrsp_shop/models/eCommerce/authentication/sign_up.dart';
+import 'package:itrsp_shop/models/eCommerce/authentication/user.dart';
 
 abstract class AuthProviderBase {
   Future<Response> signUp({required SingUp singUpInfo});

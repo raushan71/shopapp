@@ -508,7 +508,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 2.0.1;
-				PRODUCT_BUNDLE_IDENTIFIER = com.readyecommerce.apps;
+				PRODUCT_BUNDLE_IDENTIFIER = com.itrsp.shop;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -530,7 +530,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.readyecommerce.apps;
+				PRODUCT_BUNDLE_IDENTIFIER = com.itrsp.shop;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -552,7 +552,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.readyecommerce.apps;
+				PRODUCT_BUNDLE_IDENTIFIER = com.itrsp.shop;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -572,7 +572,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.readyecommerce.apps;
+				PRODUCT_BUNDLE_IDENTIFIER = com.itrsp.shop;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -707,7 +707,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 2.0.1;
-				PRODUCT_BUNDLE_IDENTIFIER = com.readyecommerce.apps;
+				PRODUCT_BUNDLE_IDENTIFIER = com.itrsp.shop;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -738,7 +738,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 2.0.1;
-				PRODUCT_BUNDLE_IDENTIFIER = com.readyecommerce.apps;
+				PRODUCT_BUNDLE_IDENTIFIER = com.itrsp.shop;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;

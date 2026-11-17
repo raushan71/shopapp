@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ready_ecommerce/views/eCommerce/my_order/layouts/my_order_layout.dart';
+import 'package:itrsp_shop/views/eCommerce/my_order/layouts/my_order_layout.dart';
 
 class MyOrderView extends StatelessWidget {
   final String? orderStatus;

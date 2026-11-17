@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:ready_ecommerce/models/common/contact_us.dart';
-import 'package:ready_ecommerce/models/eCommerce/authentication/user.dart';
-import 'package:ready_ecommerce/services/common/other_service_provider.dart';
-import 'package:ready_ecommerce/utils/global_function.dart';
+import 'package:itrsp_shop/models/common/contact_us.dart';
+import 'package:itrsp_shop/models/eCommerce/authentication/user.dart';
+import 'package:itrsp_shop/services/common/other_service_provider.dart';
+import 'package:itrsp_shop/utils/global_function.dart';
 
 import '../../models/common/html_content.dart';
 

@@ -1,9 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:ready_ecommerce/config/app_constants.dart';
-import 'package:ready_ecommerce/models/eCommerce/return_policy/return_order_submit_model.dart';
-import 'package:ready_ecommerce/services/base/eCommerce/return_product_base.dart';
-import 'package:ready_ecommerce/utils/api_client.dart';
+import 'package:itrsp_shop/config/app_constants.dart';
+import 'package:itrsp_shop/models/eCommerce/return_policy/return_order_submit_model.dart';
+import 'package:itrsp_shop/services/base/eCommerce/return_product_base.dart';
+import 'package:itrsp_shop/utils/api_client.dart';
 
 final returnProductServiceProvider =
     Provider((ref) => ReturnProductServiceImpl(ref));

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:ready_ecommerce/config/app_constants.dart';
-import 'package:ready_ecommerce/config/app_text_style.dart';
-import 'package:ready_ecommerce/controllers/eCommerce/flash_sales/flash_sales_controller.dart';
-import 'package:ready_ecommerce/routes.dart';
-import 'package:ready_ecommerce/utils/context_less_navigation.dart';
-import 'package:ready_ecommerce/views/eCommerce/home/components/product_card.dart';
+import 'package:itrsp_shop/config/app_constants.dart';
+import 'package:itrsp_shop/config/app_text_style.dart';
+import 'package:itrsp_shop/controllers/eCommerce/flash_sales/flash_sales_controller.dart';
+import 'package:itrsp_shop/routes.dart';
+import 'package:itrsp_shop/utils/context_less_navigation.dart';
+import 'package:itrsp_shop/views/eCommerce/home/components/product_card.dart';
 
 class FlashSaleDetailsLayout extends ConsumerStatefulWidget {
   String title;

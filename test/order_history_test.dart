@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:ready_ecommerce/controllers/eCommerce/order/order_controller.dart';
-import 'package:ready_ecommerce/models/eCommerce/order/order_model.dart';
-import 'package:ready_ecommerce/services/eCommerce/order/order_service.dart';
+import 'package:itrsp_shop/controllers/eCommerce/order/order_controller.dart';
+import 'package:itrsp_shop/models/eCommerce/order/order_model.dart';
+import 'package:itrsp_shop/services/eCommerce/order/order_service.dart';
 
 Map<String, dynamic> orderPayload({
   Object id = 1,

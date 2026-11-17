@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ready_ecommerce/views/eCommerce/home/layouts/home_view_layout.dart';
+import 'package:itrsp_shop/views/eCommerce/home/layouts/home_view_layout.dart';
 
 class EcommerceHomeView extends StatelessWidget {
   const EcommerceHomeView({

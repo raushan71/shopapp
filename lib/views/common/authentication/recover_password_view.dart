@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ready_ecommerce/views/common/authentication/layouts/recover_password_layout.dart';
+import 'package:itrsp_shop/views/common/authentication/layouts/recover_password_layout.dart';
 
 class RecoverPasswordView extends StatelessWidget {
   final bool isPasswordRecovery;

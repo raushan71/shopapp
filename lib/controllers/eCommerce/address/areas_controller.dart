@@ -1,9 +1,9 @@
 import 'dart:developer';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:ready_ecommerce/config/app_constants.dart';
-import 'package:ready_ecommerce/models/eCommerce/address/areas_model.dart';
-import 'package:ready_ecommerce/utils/api_client.dart';
+import 'package:itrsp_shop/config/app_constants.dart';
+import 'package:itrsp_shop/models/eCommerce/address/areas_model.dart';
+import 'package:itrsp_shop/utils/api_client.dart';
 
 class AreasControllerNotifier
     extends StateNotifier<AsyncValue<List<AreasModel>>> {

@@ -1,9 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:ready_ecommerce/config/app_constants.dart';
-import 'package:ready_ecommerce/models/eCommerce/address/add_address.dart';
-import 'package:ready_ecommerce/services/base/eCommerce/address_provider_base.dart';
-import 'package:ready_ecommerce/utils/api_client.dart';
+import 'package:itrsp_shop/config/app_constants.dart';
+import 'package:itrsp_shop/models/eCommerce/address/add_address.dart';
+import 'package:itrsp_shop/services/base/eCommerce/address_provider_base.dart';
+import 'package:itrsp_shop/utils/api_client.dart';
 
 final addressServiceProvider = Provider((ref) => AddressService(ref));
 

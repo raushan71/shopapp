@@ -7,16 +7,16 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:ready_ecommerce/config/app_color.dart';
-import 'package:ready_ecommerce/config/app_constants.dart';
-import 'package:ready_ecommerce/config/theme.dart';
-import 'package:ready_ecommerce/firebase_options.dart';
-import 'package:ready_ecommerce/generated/l10n.dart';
-import 'package:ready_ecommerce/models/eCommerce/cart/hive_cart_model.dart';
-import 'package:ready_ecommerce/routes.dart';
-import 'package:ready_ecommerce/utils/global_function.dart';
-import 'package:ready_ecommerce/utils/notification_handler.dart';
-import 'package:ready_ecommerce/views/common/splash/layouts/splash_layout.dart';
+import 'package:itrsp_shop/config/app_color.dart';
+import 'package:itrsp_shop/config/app_constants.dart';
+import 'package:itrsp_shop/config/theme.dart';
+import 'package:itrsp_shop/firebase_options.dart';
+import 'package:itrsp_shop/generated/l10n.dart';
+import 'package:itrsp_shop/models/eCommerce/cart/hive_cart_model.dart';
+import 'package:itrsp_shop/routes.dart';
+import 'package:itrsp_shop/utils/global_function.dart';
+import 'package:itrsp_shop/utils/notification_handler.dart';
+import 'package:itrsp_shop/views/common/splash/layouts/splash_layout.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -74,7 +74,7 @@ class MyApp extends StatelessWidget {
                 app: MaterialApp(
                   showPerformanceOverlay: false,
                   debugShowCheckedModeBanner: false,
-                  // title: 'eShop',
+                  title: 'itrsp_shop',
                   navigatorKey: GlobalFunction.navigatorKey,
                   locale: resolveLocal(langCode: appLocal ?? 'en'),
                   localizationsDelegates: const [

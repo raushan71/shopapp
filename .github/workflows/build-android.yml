@@ -49,7 +49,7 @@ jobs:
           java -version
 
       - name: Restore generated Android wrapper files
-        run: flutter create --platforms=android --project-name ready_ecommerce --no-pub .
+        run: flutter create --platforms=android --project-name itrsp_shop --no-pub .
 
       - name: Install Flutter dependencies
         run: flutter pub get
@@ -95,7 +95,7 @@ jobs:
       - name: Upload APK and App Bundle
         uses: actions/upload-artifact@v4
         with:
-          name: shopapp-android-${{ env.HAS_RELEASE_SIGNING == 'true' && 'release' || 'debug' }}-${{ github.run_number }}
+          name: itrsp_shop-android-${{ env.HAS_RELEASE_SIGNING == 'true' && 'release' || 'debug' }}-${{ github.run_number }}
           path: dist/
           if-no-files-found: error
           retention-days: 30

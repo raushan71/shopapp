@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-import 'package:ready_ecommerce/models/eCommerce/product/product.dart'
+import 'package:itrsp_shop/models/eCommerce/product/product.dart'
     as product;
-import 'package:ready_ecommerce/models/eCommerce/shop/shop_details.dart';
+import 'package:itrsp_shop/models/eCommerce/shop/shop_details.dart';
 
 import '../category/category.dart';
 import '../shop/shop.dart';

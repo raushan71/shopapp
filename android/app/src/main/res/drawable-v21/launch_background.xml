@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Modify this file to customize your launch splash screen -->
+<!-- The xxxhdpi asset keeps the logo compact on Android versions before API 23. -->
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="?android:colorBackground" />
+    <item android:drawable="@android:color/white" />
     <item>
         <bitmap
             android:gravity="center"
+            android:filter="true"
             android:src="@drawable/splash_logo" />
     </item>
 </layer-list>

@@ -3,11 +3,11 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:ready_ecommerce/config/app_constants.dart';
-import 'package:ready_ecommerce/models/eCommerce/authentication/sign_up.dart';
-import 'package:ready_ecommerce/models/eCommerce/authentication/user.dart';
-import 'package:ready_ecommerce/services/base/eCommerce/auth_provider_base.dart';
-import 'package:ready_ecommerce/utils/api_client.dart';
+import 'package:itrsp_shop/config/app_constants.dart';
+import 'package:itrsp_shop/models/eCommerce/authentication/sign_up.dart';
+import 'package:itrsp_shop/models/eCommerce/authentication/user.dart';
+import 'package:itrsp_shop/services/base/eCommerce/auth_provider_base.dart';
+import 'package:itrsp_shop/utils/api_client.dart';
 
 final authServiceProvider = Provider((ref) => AuthService(ref));
 

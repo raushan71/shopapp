@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:ready_ecommerce/models/common/all_country_model/all_country_model.dart';
-import 'package:ready_ecommerce/services/common/country_service_provider.dart';
+import 'package:itrsp_shop/models/common/all_country_model/all_country_model.dart';
+import 'package:itrsp_shop/services/common/country_service_provider.dart';
 
 class CountryListController extends StateNotifier<AsyncValue<AllCountryModel>> {
   final Ref ref;

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:ready_ecommerce/generated/l10n.dart';
-import 'package:ready_ecommerce/models/eCommerce/common/common_response.dart';
+import 'package:itrsp_shop/generated/l10n.dart';
+import 'package:itrsp_shop/models/eCommerce/common/common_response.dart';
 
 class CancelReturnRequestButton extends StatefulWidget {
   final Future<CommonResponse> Function() onCancel;

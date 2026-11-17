@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ready_ecommerce/views/common/authentication/layouts/sign_up_layout.dart';
+import 'package:itrsp_shop/views/common/authentication/layouts/sign_up_layout.dart';
 
 class SignUpView extends StatelessWidget {
   const SignUpView({super.key});

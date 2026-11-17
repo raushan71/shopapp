@@ -3,10 +3,10 @@ import 'dart:developer';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:ready_ecommerce/config/app_constants.dart';
-import 'package:ready_ecommerce/models/eCommerce/address/add_address.dart';
-import 'package:ready_ecommerce/models/eCommerce/authentication/user.dart';
-import 'package:ready_ecommerce/utils/global_function.dart';
+import 'package:itrsp_shop/config/app_constants.dart';
+import 'package:itrsp_shop/models/eCommerce/address/add_address.dart';
+import 'package:itrsp_shop/models/eCommerce/authentication/user.dart';
+import 'package:itrsp_shop/utils/global_function.dart';
 
 class HiveService {
   final Ref ref;

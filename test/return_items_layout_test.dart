@@ -3,11 +3,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:ready_ecommerce/config/theme.dart';
-import 'package:ready_ecommerce/controllers/common/master_controller.dart';
-import 'package:ready_ecommerce/models/common/master_model.dart';
-import 'package:ready_ecommerce/models/eCommerce/order/order_details_model.dart';
-import 'package:ready_ecommerce/views/eCommerce/order_details/components/order_product_card.dart';
+import 'package:itrsp_shop/config/theme.dart';
+import 'package:itrsp_shop/controllers/common/master_controller.dart';
+import 'package:itrsp_shop/models/common/master_model.dart';
+import 'package:itrsp_shop/models/eCommerce/order/order_details_model.dart';
+import 'package:itrsp_shop/views/eCommerce/order_details/components/order_product_card.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();

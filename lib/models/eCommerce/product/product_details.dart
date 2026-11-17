@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
-import 'package:ready_ecommerce/models/eCommerce/flash_sales_list_model/running_flash_sale.dart';
-import 'package:ready_ecommerce/models/eCommerce/product/product.dart'
+import 'package:itrsp_shop/models/eCommerce/flash_sales_list_model/running_flash_sale.dart';
+import 'package:itrsp_shop/models/eCommerce/product/product.dart'
     as productModel;
 
 class ProductDetails {

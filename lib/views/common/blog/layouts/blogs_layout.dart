@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:ready_ecommerce/config/app_text_style.dart';
-import 'package:ready_ecommerce/controllers/common/blog_controller.dart';
-import 'package:ready_ecommerce/models/common/blog.dart';
+import 'package:itrsp_shop/config/app_text_style.dart';
+import 'package:itrsp_shop/controllers/common/blog_controller.dart';
+import 'package:itrsp_shop/models/common/blog.dart';
 
 import '../../../../config/theme.dart';
 import '../../../../utils/global_function.dart';

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ready_ecommerce/views/eCommerce/order_details/layouts/order_details_layout.dart';
+import 'package:itrsp_shop/views/eCommerce/order_details/layouts/order_details_layout.dart';
 
 class OrderDetailsView extends StatelessWidget {
   final int orderId;

@@ -2,13 +2,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:ready_ecommerce/components/ecommerce/custom_dialog.dart';
-import 'package:ready_ecommerce/config/app_constants.dart';
-import 'package:ready_ecommerce/controllers/eCommerce/order/order_controller.dart';
-import 'package:ready_ecommerce/gen/assets.gen.dart';
-import 'package:ready_ecommerce/generated/l10n.dart';
-import 'package:ready_ecommerce/routes.dart';
-import 'package:ready_ecommerce/utils/context_less_navigation.dart';
+import 'package:itrsp_shop/components/ecommerce/custom_dialog.dart';
+import 'package:itrsp_shop/config/app_constants.dart';
+import 'package:itrsp_shop/controllers/eCommerce/order/order_controller.dart';
+import 'package:itrsp_shop/gen/assets.gen.dart';
+import 'package:itrsp_shop/generated/l10n.dart';
+import 'package:itrsp_shop/routes.dart';
+import 'package:itrsp_shop/utils/context_less_navigation.dart';
 
 class WebPayementScreen extends ConsumerStatefulWidget {
   final WebPaymentScreenArg webPaymentScreenAr;

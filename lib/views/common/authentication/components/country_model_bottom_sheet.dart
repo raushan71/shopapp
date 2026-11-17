@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:ready_ecommerce/components/ecommerce/custom_search_field.dart';
-import 'package:ready_ecommerce/config/app_text_style.dart';
+import 'package:itrsp_shop/components/ecommerce/custom_search_field.dart';
+import 'package:itrsp_shop/config/app_text_style.dart';
 
 class CountryModelBottomSheet extends StatefulWidget {
   final Function(Map<String, dynamic> country) onChangeCountry;

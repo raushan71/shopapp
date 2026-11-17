@@ -2,12 +2,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:ready_ecommerce/config/app_color.dart';
-import 'package:ready_ecommerce/config/theme.dart';
-import 'package:ready_ecommerce/controllers/misc/misc_controller.dart';
-import 'package:ready_ecommerce/models/eCommerce/product/product_details.dart';
-import 'package:ready_ecommerce/views/eCommerce/products/components/iframe_card.dart';
-import 'package:ready_ecommerce/views/eCommerce/products/components/video_player.dart';
+import 'package:itrsp_shop/config/app_color.dart';
+import 'package:itrsp_shop/config/theme.dart';
+import 'package:itrsp_shop/controllers/misc/misc_controller.dart';
+import 'package:itrsp_shop/models/eCommerce/product/product_details.dart';
+import 'package:itrsp_shop/views/eCommerce/products/components/iframe_card.dart';
+import 'package:itrsp_shop/views/eCommerce/products/components/video_player.dart';
 
 import '../../../../config/app_constants.dart';
 

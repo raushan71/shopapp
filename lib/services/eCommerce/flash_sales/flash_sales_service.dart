@@ -3,9 +3,9 @@ import 'dart:developer';
 import 'package:dio/src/response.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:ready_ecommerce/config/app_constants.dart';
-import 'package:ready_ecommerce/services/base/eCommerce/flash_sales_provider_base.dart';
-import 'package:ready_ecommerce/utils/api_client.dart';
+import 'package:itrsp_shop/config/app_constants.dart';
+import 'package:itrsp_shop/services/base/eCommerce/flash_sales_provider_base.dart';
+import 'package:itrsp_shop/utils/api_client.dart';
 
 final flashSalesServiceProvider = Provider((ref) => FlashSalesService(ref));
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ready_ecommerce/views/eCommerce/return_order/layouts/return_order_details_layout.dart';
+import 'package:itrsp_shop/views/eCommerce/return_order/layouts/return_order_details_layout.dart';
 
 class ReturnOrderDetailsView extends StatelessWidget {
   final int orderId;

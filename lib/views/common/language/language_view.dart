@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ready_ecommerce/views/common/language/layouts/language_layout.dart';
+import 'package:itrsp_shop/views/common/language/layouts/language_layout.dart';
 
 class LanguageView extends StatelessWidget {
   const LanguageView({super.key});

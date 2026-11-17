@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:ready_ecommerce/models/eCommerce/common/product_filter_model.dart';
+import 'package:itrsp_shop/models/eCommerce/common/product_filter_model.dart';
 
 abstract class ShopProviderBase {
   Future<Response> getShops({required int page, required int perPage});

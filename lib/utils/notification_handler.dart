@@ -5,7 +5,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:ready_ecommerce/firebase_options.dart';
+import 'package:itrsp_shop/firebase_options.dart';
 
 // Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 //   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);

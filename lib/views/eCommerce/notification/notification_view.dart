@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ready_ecommerce/views/eCommerce/notification/layouts/notification_layout.dart';
+import 'package:itrsp_shop/views/eCommerce/notification/layouts/notification_layout.dart';
 
 class NotificationView extends StatelessWidget {
   const NotificationView({super.key});

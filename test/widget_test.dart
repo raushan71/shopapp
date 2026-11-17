@@ -1,11 +1,11 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:ready_ecommerce/models/eCommerce/address/add_address.dart';
-import 'package:ready_ecommerce/models/eCommerce/address/areas_model.dart';
-import 'package:ready_ecommerce/models/eCommerce/cart/cart_product.dart';
-import 'package:ready_ecommerce/models/eCommerce/message_model/messages.dart';
-import 'package:ready_ecommerce/models/eCommerce/order/order_place_model.dart';
-import 'package:ready_ecommerce/models/eCommerce/product/product_details.dart';
-import 'package:ready_ecommerce/models/common/master_model.dart';
+import 'package:itrsp_shop/models/eCommerce/address/add_address.dart';
+import 'package:itrsp_shop/models/eCommerce/address/areas_model.dart';
+import 'package:itrsp_shop/models/eCommerce/cart/cart_product.dart';
+import 'package:itrsp_shop/models/eCommerce/message_model/messages.dart';
+import 'package:itrsp_shop/models/eCommerce/order/order_place_model.dart';
+import 'package:itrsp_shop/models/eCommerce/product/product_details.dart';
+import 'package:itrsp_shop/models/common/master_model.dart';
 
 void main() {
   test('delivery address payload keeps manual fields and pinned location', () {

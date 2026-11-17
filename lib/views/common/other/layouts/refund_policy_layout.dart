@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
-import 'package:ready_ecommerce/controllers/common/other_controller.dart';
-import 'package:ready_ecommerce/generated/l10n.dart';
+import 'package:itrsp_shop/controllers/common/other_controller.dart';
+import 'package:itrsp_shop/generated/l10n.dart';
 
 class RefundPolicyLayout extends ConsumerWidget {
   const RefundPolicyLayout({super.key});

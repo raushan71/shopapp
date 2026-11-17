@@ -8,7 +8,7 @@ plugins {
 }
 
 android {
-    namespace "com.readyecommerce.apps"
+    namespace "com.itrsp.shop"
     compileSdkVersion = 36
     ndkVersion = flutter.ndkVersion
 
@@ -25,7 +25,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.readyecommerce.apps"
+        applicationId "com.itrsp.shop"
         multiDexEnabled = true
         minSdkVersion flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion

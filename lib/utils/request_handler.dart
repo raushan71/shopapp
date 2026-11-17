@@ -1,9 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:hive/hive.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
-import 'package:ready_ecommerce/config/app_constants.dart';
-import 'package:ready_ecommerce/routes.dart';
-import 'package:ready_ecommerce/utils/global_function.dart';
+import 'package:itrsp_shop/config/app_constants.dart';
+import 'package:itrsp_shop/routes.dart';
+import 'package:itrsp_shop/utils/global_function.dart';
 
 class ApiInterceptors {
   static void addInterceptors(Dio dio) {

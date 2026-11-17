@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ready_ecommerce/views/common/authentication/layouts/confirm_otp_layout.dart';
+import 'package:itrsp_shop/views/common/authentication/layouts/confirm_otp_layout.dart';
 
 class ConfirmOTPView extends StatelessWidget {
   final ConfirmOTPScreenArguments arguments;
