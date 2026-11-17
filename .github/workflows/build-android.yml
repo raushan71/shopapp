@@ -1,4 +1,4 @@
-name: Build Android APK and App Bundle
+name: Build Android Release APKs and App Bundle
 
 on:
   workflow_dispatch:
@@ -18,16 +18,37 @@ concurrency:
 
 jobs:
   build-android:
-    name: Build Android artifacts
+    name: Build signed Android release artifacts
     runs-on: ubuntu-latest
     timeout-minutes: 45
+    defaults:
+      run:
+        shell: bash
     env:
       FLUTTER_VERSION: "3.35.5"
-      HAS_RELEASE_SIGNING: ${{ secrets.ANDROID_KEYSTORE_BASE64 != '' && secrets.ANDROID_KEY_ALIAS != '' && secrets.ANDROID_KEY_PASSWORD != '' && secrets.ANDROID_STORE_PASSWORD != '' }}
 
     steps:
       - name: Check out source
         uses: actions/checkout@v4
+
+      - name: Require release signing secrets
+        env:
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+        run: |
+          set -euo pipefail
+          missing_secrets=0
+          for signing_secret in KEYSTORE_BASE64 KEY_ALIAS KEY_PASSWORD KEYSTORE_PASSWORD; do
+            if [[ -z "${!signing_secret}" ]]; then
+              echo "::error::Missing repository secret: $signing_secret. Add it under Settings > Secrets and variables > Actions."
+              missing_secrets=1
+            fi
+          done
+          if [[ "$missing_secrets" -ne 0 ]]; then
+            exit 1
+          fi
 
       - name: Set up Java
         uses: actions/setup-java@v4
@@ -55,58 +76,103 @@ jobs:
         run: flutter pub get
 
       - name: Configure release signing
-        if: env.HAS_RELEASE_SIGNING == 'true'
         env:
-          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
-          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
-          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
-          ANDROID_STORE_PASSWORD: ${{ secrets.ANDROID_STORE_PASSWORD }}
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
         run: |
-          printf '%s' "$ANDROID_KEYSTORE_BASE64" | base64 --decode > android/app/release-keystore.jks
+          set -euo pipefail
+          umask 077
+          printf '%s' "$KEYSTORE_BASE64" | base64 --decode > android/app/release-keystore.jks
           {
-            printf 'storePassword=%s\n' "$ANDROID_STORE_PASSWORD"
-            printf 'keyPassword=%s\n' "$ANDROID_KEY_PASSWORD"
-            printf 'keyAlias=%s\n' "$ANDROID_KEY_ALIAS"
+            printf 'storePassword=%s\n' "$KEYSTORE_PASSWORD"
+            printf 'keyPassword=%s\n' "$KEY_PASSWORD"
+            printf 'keyAlias=%s\n' "$KEY_ALIAS"
             printf 'storeFile=release-keystore.jks\n'
           } > android/key.properties
 
-      - name: Build signed release APK and App Bundle
-        if: env.HAS_RELEASE_SIGNING == 'true'
-        run: |
-          flutter build apk --release
-          flutter build appbundle --release
+      - name: Build signed release APKs for each architecture
+        run: flutter build apk --release --split-per-abi
 
-      - name: Build debug APK and App Bundle
-        if: env.HAS_RELEASE_SIGNING != 'true'
-        run: |
-          echo "Release signing secrets are not configured; building debug artifacts."
-          flutter build apk --debug
-          flutter build appbundle --debug
+      - name: Build signed release App Bundle for Google Play
+        run: flutter build appbundle --release
 
-      - name: Collect build files
+      - name: Collect release files and checksums
         run: |
-          mkdir -p dist
-          find build/app/outputs -type f \( -name '*.apk' -o -name '*.aab' \) -exec cp {} dist/ \;
-          test -n "$(find dist -maxdepth 1 -type f -name '*.apk' -print -quit)"
-          test -n "$(find dist -maxdepth 1 -type f -name '*.aab' -print -quit)"
-          cd dist
-          sha256sum *.apk *.aab > SHA256SUMS.txt
+          set -euo pipefail
+          for abi in armeabi-v7a arm64-v8a x86_64; do
+            mkdir -p "dist/$abi"
+            cp "build/app/outputs/flutter-apk/app-$abi-release.apk" "dist/$abi/"
+            (
+              cd "dist/$abi"
+              sha256sum *.apk > SHA256SUMS.txt
+            )
+          done
+          mkdir -p dist/bundle
+          cp build/app/outputs/bundle/release/app-release.aab dist/bundle/
+          (
+            cd dist/bundle
+            sha256sum *.aab > SHA256SUMS.txt
+          )
 
-      - name: Upload APK and App Bundle
+      - name: Upload ARM64 release APK
         uses: actions/upload-artifact@v4
         with:
-          name: itrsp_shop-android-${{ env.HAS_RELEASE_SIGNING == 'true' && 'release' || 'debug' }}-${{ github.run_number }}
-          path: dist/
+          name: itrsp_shop-android-arm64-v8a-release-${{ github.run_number }}
+          path: dist/arm64-v8a/
           if-no-files-found: error
+          compression-level: 0
+          retention-days: 30
+
+      - name: Upload ARM32 release APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: itrsp_shop-android-armeabi-v7a-release-${{ github.run_number }}
+          path: dist/armeabi-v7a/
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 30
+
+      - name: Upload x86_64 release APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: itrsp_shop-android-x86_64-release-${{ github.run_number }}
+          path: dist/x86_64/
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 30
+
+      - name: Upload release App Bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: itrsp_shop-android-appbundle-release-${{ github.run_number }}
+          path: dist/bundle/
+          if-no-files-found: error
+          compression-level: 0
           retention-days: 30
 
       - name: Add build summary
         run: |
-          if [ "$HAS_RELEASE_SIGNING" = "true" ]; then
-            echo "### Android build: signed release" >> "$GITHUB_STEP_SUMMARY"
-          else
-            echo "### Android build: debug" >> "$GITHUB_STEP_SUMMARY"
-            echo "Add the four Android signing secrets described in README.md to generate production release files." >> "$GITHUB_STEP_SUMMARY"
-          fi
-          echo "Shop API: https://shop.itrsp.com/api" >> "$GITHUB_STEP_SUMMARY"
-          echo "Download the APK, AAB, and SHA256SUMS.txt from this workflow run's Artifacts section." >> "$GITHUB_STEP_SUMMARY"
+          {
+            echo "### Android build: signed release"
+            echo ""
+            echo "Download the artifact for your device from this run's Artifacts section:"
+            echo "- arm64-v8a: 64-bit ARM Android phones."
+            echo "- armeabi-v7a: 32-bit ARM Android phones."
+            echo "- x86_64: x86-64 Android devices and emulators."
+            echo "- appbundle: AAB for Google Play upload."
+            echo ""
+            echo "Each artifact includes its own SHA256SUMS.txt."
+            echo ""
+            echo "### Release file sizes"
+            echo '```text'
+            du -h dist/*/*.apk dist/*/*.aab
+            echo '```'
+            echo ""
+            echo "Shop API: https://shop.itrsp.com/api"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Remove temporary signing files
+        if: always()
+        run: rm -f -- android/key.properties android/app/release-keystore.jks
