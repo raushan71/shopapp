@@ -63,6 +63,25 @@ tools if any signing secret is missing. Add these repository secrets under
 - `KEY_PASSWORD`: the existing key password
 - `KEYSTORE_PASSWORD`: the existing keystore password
 
+The workflow verifies the keystore, alias, and private-key password before
+setting up Flutter or compiling the app. A successful signing report only
+checks the certificate; this verification also checks that the private key can
+be unlocked for signing.
+
+If packaging fails with `Get Key failed` or `Given final block not properly
+padded`, update `KEY_PASSWORD` to the password for the private key inside the
+uploaded keystore. For this repository's existing PKCS12 release keystore,
+`KEY_PASSWORD` and `KEYSTORE_PASSWORD` have been verified to use the same value.
+The alias is `upload`. Use the passwords from your local `android/key.properties`
+and keep their values in GitHub Actions secrets.
+
+To verify the existing local signing credentials without building an APK or
+displaying passwords, run this from the repository root:
+
+```powershell
+java .github/scripts/VerifyAndroidSigning.java android/app/keystore.jks android/key.properties
+```
+
 Use the existing release keystore at `D:\shopapp\android\app\keystore.jks`.
 To copy its Base64 value to the Windows clipboard for `KEYSTORE_BASE64`,
 run this in PowerShell and paste the clipboard contents into that GitHub secret:

@@ -57,6 +57,26 @@ jobs:
           java-version: "17"
           cache: gradle
 
+      - name: Configure release signing
+        env:
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+        run: |
+          set -euo pipefail
+          umask 077
+          printf '%s' "$KEYSTORE_BASE64" | base64 --decode > android/app/release-keystore.jks
+          {
+            printf 'storePassword=%s\n' "$KEYSTORE_PASSWORD"
+            printf 'keyPassword=%s\n' "$KEY_PASSWORD"
+            printf 'keyAlias=%s\n' "$KEY_ALIAS"
+            printf 'storeFile=release-keystore.jks\n'
+          } > android/key.properties
+
+      - name: Verify release signing credentials
+        run: java .github/scripts/VerifyAndroidSigning.java android/app/release-keystore.jks android/key.properties
+
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
@@ -74,23 +94,6 @@ jobs:
 
       - name: Install Flutter dependencies
         run: flutter pub get
-
-      - name: Configure release signing
-        env:
-          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
-          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
-          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
-          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
-        run: |
-          set -euo pipefail
-          umask 077
-          printf '%s' "$KEYSTORE_BASE64" | base64 --decode > android/app/release-keystore.jks
-          {
-            printf 'storePassword=%s\n' "$KEYSTORE_PASSWORD"
-            printf 'keyPassword=%s\n' "$KEY_PASSWORD"
-            printf 'keyAlias=%s\n' "$KEY_ALIAS"
-            printf 'storeFile=release-keystore.jks\n'
-          } > android/key.properties
 
       - name: Build signed release APKs for each architecture
         run: flutter build apk --release --split-per-abi
