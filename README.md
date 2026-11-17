@@ -1,6 +1,9 @@
-# itrsp_shop
+# eShop
 
-itrsp_shop shopping application.
+eShop shopping application.
+
+The installed app display name is `eShop`. The Flutter package is `itrsp_shop`,
+and the Android application ID and iOS bundle ID are `com.itrsp.shop`.
 
 ## Getting Started
 

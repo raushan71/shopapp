@@ -1,5 +1,5 @@
 name: itrsp_shop
-description: itrsp_shop shopping application.
+description: eShop shopping application.
 publish_to: none
 version: 1.0.10+25
 environment:

@@ -79,7 +79,7 @@ class _AppLogoState extends State<AppLogo> with SingleTickerProviderStateMixin {
           children: [
             Gap(14.w),
             // Text(
-            //   'itrsp_shop',
+            //   'eShop',
             //   style: TextStyle(
             //     fontSize: 24.sp,
             //     fontWeight: FontWeight.w600,

@@ -32,7 +32,7 @@ class NotificationLayout extends StatelessWidget {
 final List<NotificationModel> notifications = [
   NotificationModel(
     id: 1,
-    title: "Welcome to itrsp_shop. Start exploring our products",
+    title: "Welcome to eShop. Start exploring our products",
     message: "Get started",
     type: "info",
     url: "",
@@ -41,7 +41,7 @@ final List<NotificationModel> notifications = [
   ),
   NotificationModel(
     id: 2,
-    title: "Welcome to itrsp_shop",
+    title: "Welcome to eShop",
     message: "Get started explore services",
     type: "info",
     url: "",
@@ -50,7 +50,7 @@ final List<NotificationModel> notifications = [
   ),
   NotificationModel(
     id: 3,
-    title: "Welcome to itrsp_shop",
+    title: "Welcome to eShop",
     message: "Get started",
     type: "info",
     url: "",
@@ -59,7 +59,7 @@ final List<NotificationModel> notifications = [
   ),
   NotificationModel(
     id: 4,
-    title: "Welcome to itrsp_shop",
+    title: "Welcome to eShop",
     message: "Get started",
     type: "info",
     url: "",
@@ -68,7 +68,7 @@ final List<NotificationModel> notifications = [
   ),
   NotificationModel(
     id: 5,
-    title: "Welcome to itrsp_shop",
+    title: "Welcome to eShop",
     message: "Get started",
     type: "info",
     url: "",
