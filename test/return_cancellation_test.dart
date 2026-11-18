@@ -84,7 +84,8 @@ Future<void> showRequests(
 }
 
 Future<void> confirmCancel(WidgetTester tester) async {
-  await tester.tap(find.byType(OutlinedButton));
+  // Include the OutlinedButton.icon subclass used by Flutter 3.35.
+  await tester.tap(find.bySubtype<OutlinedButton>());
   await tester.pumpAndSettle();
   await tester.tap(find.widgetWithText(TextButton, 'Cancel return request'));
   await tester.pumpAndSettle();
@@ -344,12 +345,12 @@ void main() {
     };
     await showRequests(tester, container);
 
-    expect(find.byType(OutlinedButton), findsOneWidget);
+    expect(find.bySubtype<OutlinedButton>(), findsOneWidget);
     expect(find.text('Return Status: Pending'), findsOneWidget);
     await confirmCancel(tester);
 
     expect(service.cancelledIds, [123]);
-    expect(find.byType(OutlinedButton), findsNothing);
+    expect(find.bySubtype<OutlinedButton>(), findsNothing);
     expect(find.text('Return Status: Cancelled'), findsOneWidget);
     expect(find.text('Return request cancelled successfully'), findsOneWidget);
     expect(tester.takeException(), isNull);
@@ -364,7 +365,7 @@ void main() {
     await showRequests(tester, container);
 
     expect(find.text('Return Status: Pending'), findsOneWidget);
-    expect(find.byType(OutlinedButton), findsNothing);
+    expect(find.bySubtype<OutlinedButton>(), findsNothing);
     expect(tester.takeException(), isNull);
   });
 
@@ -384,7 +385,7 @@ void main() {
 
     expect(find.text('Return already processed'), findsOneWidget);
     expect(find.text('Return Status: Approved'), findsOneWidget);
-    expect(find.byType(OutlinedButton), findsNothing);
+    expect(find.bySubtype<OutlinedButton>(), findsNothing);
     expect(tester.takeException(), isNull);
   });
 }

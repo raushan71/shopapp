@@ -37,7 +37,8 @@ Future<void> showCancelButton(
 }
 
 Future<void> confirmCancellation(WidgetTester tester) async {
-  await tester.tap(find.byType(OutlinedButton));
+  // OutlinedButton.icon uses a subclass on Flutter 3.35.
+  await tester.tap(find.bySubtype<OutlinedButton>());
   await tester.pumpAndSettle();
   await tester.tap(find.widgetWithText(TextButton, 'Cancel return request'));
 }
@@ -53,7 +54,7 @@ void main() {
         },
         onCancelled: () => fail('The request was kept'));
 
-    await tester.tap(find.byType(OutlinedButton));
+    await tester.tap(find.bySubtype<OutlinedButton>());
     await tester.pumpAndSettle();
     expect(find.text('Cancel this return request?'), findsOneWidget);
     expect(calls, 0);
@@ -62,7 +63,8 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(calls, 0);
-    expect(tester.widget<OutlinedButton>(find.byType(OutlinedButton)).onPressed,
+    expect(
+        tester.widget<OutlinedButton>(find.bySubtype<OutlinedButton>()).onPressed,
         isNotNull);
   });
 
@@ -85,9 +87,10 @@ void main() {
     expect(calls, 1);
     expect(refreshes, 0);
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
-    expect(tester.widget<OutlinedButton>(find.byType(OutlinedButton)).onPressed,
+    expect(
+        tester.widget<OutlinedButton>(find.bySubtype<OutlinedButton>()).onPressed,
         isNull);
-    await tester.tap(find.byType(OutlinedButton));
+    await tester.tap(find.bySubtype<OutlinedButton>());
     expect(calls, 1);
 
     request.complete(CommonResponse(isSuccess: true, message: 'Cancelled'));
@@ -136,7 +139,8 @@ void main() {
 
     expect(find.text('Unable to cancel the return request. Please try again.'),
         findsOneWidget);
-    expect(tester.widget<OutlinedButton>(find.byType(OutlinedButton)).onPressed,
+    expect(
+        tester.widget<OutlinedButton>(find.bySubtype<OutlinedButton>()).onPressed,
         isNotNull);
     expect(tester.takeException(), isNull);
   });
