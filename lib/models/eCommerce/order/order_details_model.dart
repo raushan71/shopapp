@@ -1,5 +1,29 @@
 import 'package:itrsp_shop/models/eCommerce/address/add_address.dart';
 
+Map<String, dynamic> _requiredOrderMap(dynamic value, String field) {
+  if (value is! Map || value.isEmpty) {
+    throw FormatException('Missing or invalid $field in order details.');
+  }
+  return Map<String, dynamic>.from(value);
+}
+
+Map<String, dynamic>? _optionalOrderMap(dynamic value, String field) {
+  if (value == null || (value is Map && value.isEmpty) ||
+      (value is List && value.isEmpty)) {
+    return null;
+  }
+  return _requiredOrderMap(value, field);
+}
+
+double _orderAmount(dynamic value, {double? whenAbsent}) {
+  if (value == null && whenAbsent != null) return whenAbsent;
+  final amount = value is num ? value.toDouble() : double.tryParse('$value');
+  if (amount == null || !amount.isFinite) {
+    throw const FormatException('Invalid amount in order details.');
+  }
+  return amount;
+}
+
 class OrderDetails {
   OrderDetails({
     required this.message,
@@ -9,15 +33,12 @@ class OrderDetails {
   late final Data data;
 
   OrderDetails.fromJson(Map<String, dynamic> json) {
-    message = json['message'];
-    data = Data.fromJson(json['data']);
+    message = json['message']?.toString() ?? '';
+    data = Data.fromJson(_requiredOrderMap(json['data'], 'data'));
   }
 
   Map<String, dynamic> toJson() {
-    final data = <String, dynamic>{};
-    data['message'] = message;
-    data['data'] = data;
-    return data;
+    return {'message': message, 'data': data.toJson()};
   }
 }
 
@@ -28,7 +49,7 @@ class Data {
   late final Order order;
 
   Data.fromJson(Map<String, dynamic> json) {
-    order = Order.fromJson(json['order']);
+    order = Order.fromJson(_requiredOrderMap(json['order'], 'order'));
   }
 
   Map<String, dynamic> toJson() {
@@ -76,11 +97,11 @@ class Order {
   late final double payableAmount;
   late final int quantity;
   late final double deliveryCharge;
-  late final Shop shop;
+  late final Shop? shop;
   late final List<Products> products;
   late final String? invoiceUrl;
   late final String? paymentReceiptUrl;
-  late final AddAddress address;
+  late final AddAddress? address;
   late final bool? isReturnable;
   late final String? lastReturnDate;
   late final int? returnOrderWithinDays;
@@ -113,38 +134,48 @@ class Order {
   //
   // }
   Order.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
+    id = int.parse(json['id'].toString());
     orderCode = json['order_code'];
     orderStatus = json['order_status'];
     createdAt = json['created_at'];
-    taxAmount = json['tax_amount'];
+    taxAmount = _orderAmount(json['tax_amount'], whenAbsent: 0);
     paymentMethod = json['payment_method'];
     paymentStatus = json['payment_status'];
-    totalAmount = json['total_amount'];
-    discount = json['discount'];
-    couponDiscount = json['coupon_discount'];
-    payableAmount = json['payable_amount'];
-    quantity = json['quantity'];
-    deliveryCharge = json['delivery_charge'];
-    shop = Shop.fromJson(json['shop']);
-    products = List.from(json['products']).map((e) => Products.fromJson(e)).toList();
+    totalAmount = _orderAmount(json['total_amount']);
+    discount = _orderAmount(json['discount'], whenAbsent: 0);
+    couponDiscount = _orderAmount(json['coupon_discount'], whenAbsent: 0);
+    payableAmount = _orderAmount(json['payable_amount']);
+    quantity = int.parse(json['quantity'].toString());
+    deliveryCharge = _orderAmount(json['delivery_charge'], whenAbsent: 0);
+    final shopData = _optionalOrderMap(json['shop'], 'shop');
+    shop = shopData == null ? null : Shop.fromJson(shopData);
+    products = List.from(json['products'] ?? const []).map((e) =>
+        Products.fromJson(_requiredOrderMap(e, 'product'))).toList();
     invoiceUrl = json['invoice_url'];
     paymentReceiptUrl = json['payment_receipt_url'];
-    address = AddAddress.fromMap(json['address']);
+    final addressData = _optionalOrderMap(json['address'], 'address');
+    address = addressData == null ? null : AddAddress.fromMap(addressData);
     isReturnable = json['is_returnable'];
     lastReturnDate = json['last_return_date'];
-    returnOrderWithinDays = json['return_order_within_days'];
+    returnOrderWithinDays = int.tryParse('${json['return_order_within_days']}');
 
     // Fixed rider parsing - handle both List and Map cases
     if (json['rider'] == null) {
       rider = null;
     } else if (json['rider'] is List) {
-      // If it's a list, take the first item (or null if empty)
+      // Ignore empty or deleted entries and take the first assigned rider.
       final riderList = json['rider'] as List;
-      rider = riderList.isNotEmpty ? Rider.fromJson(riderList[0]) : null;
+      Map<String, dynamic>? riderData;
+      for (final entry in riderList) {
+        if (entry is Map && entry['id'] != null) {
+          riderData = Map<String, dynamic>.from(entry);
+          break;
+        }
+      }
+      rider = riderData == null ? null : Rider.fromJson(riderData);
     } else if (json['rider'] is Map<String, dynamic>) {
       // If it's a map, parse it directly
-      rider = Rider.fromJson(json['rider']);
+      rider = json['rider']['id'] == null ? null : Rider.fromJson(json['rider']);
     } else {
       rider = null;
     }
@@ -165,10 +196,14 @@ class Order {
     data['payable_amount'] = payableAmount;
     data['quantity'] = quantity;
     data['delivery_charge'] = deliveryCharge;
-    data['shop'] = shop.toJson();
+    data['shop'] = shop?.toJson();
     data['products'] = products.map((e) => e.toJson()).toList();
     data['invoice_url'] = invoiceUrl;
-    data['address'] = address.toJson();
+    data['address'] = address?.toMap();
+    data['payment_receipt_url'] = paymentReceiptUrl;
+    data['is_returnable'] = isReturnable;
+    data['last_return_date'] = lastReturnDate;
+    data['return_order_within_days'] = returnOrderWithinDays;
     data['rider'] = rider?.toJson();
 
     return data;
@@ -198,15 +233,15 @@ class Shop {
   late final String totalReviews;
 
   Shop.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
+    id = int.parse(json['id'].toString());
     name = json['name'];
     logo = json['logo'];
-    banner = json['banner'];
-    totalProducts = json['total_products'];
-    totalCategories = json['total_categories'];
-    rating = json['rating'];
-    shopStatus = json['shop_status'];
-    totalReviews = json['total_reviews'];
+    banner = json['banner']?.toString() ?? '';
+    totalProducts = int.tryParse('${json['total_products']}') ?? 0;
+    totalCategories = int.tryParse('${json['total_categories']}') ?? 0;
+    rating = _orderAmount(json['rating'], whenAbsent: 0);
+    shopStatus = json['shop_status']?.toString() ?? '';
+    totalReviews = json['total_reviews']?.toString() ?? '0';
   }
 
   Map<String, dynamic> toJson() {
@@ -258,25 +293,25 @@ class Products {
   List<Attachment>? attachments;
 
   Products.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
+    id = int.parse(json['id'].toString());
     name = json['name'];
     brand = json['brand'] as String?;
     thumbnail = json['thumbnail'];
-    price = json['price'];
-    orderQty = json['order_qty'];
+    price = _orderAmount(json['price']);
+    orderQty = int.parse(json['order_qty'].toString());
     color = json['color'];
     size = json['size'];
-    discountPrice = (json['discount_price'] as num).toDouble();
-    rating = json['rating'];
+    discountPrice = _orderAmount(json['discount_price'], whenAbsent: 0);
+    rating = json['rating'] == null ? null : _orderAmount(json['rating']);
     isReturnable = json['is_returned'];
     isDigital = json['is_digital'];
     licenseDownloadUrl = json['license_download_link'];
-    licenses =
-        json['licenses'] == null ? null : License.fromJson(json['licenses']);
+    final licenseData = _optionalOrderMap(json['licenses'], 'license');
+    licenses = licenseData == null ? null : License.fromJson(licenseData);
     attachments = json['attachments'] == null
         ? []
         : List<Attachment>.from(
-            json['attachments'].map((x) => Attachment.fromJson(x)));
+            (json['attachments'] as List).whereType<Map>().map((x) => Attachment.fromJson(Map<String, dynamic>.from(x))));
   }
 
   Map<String, dynamic> toJson() {
@@ -293,8 +328,9 @@ class Products {
     data['rating'] = rating;
     data['is_returned'] = isReturnable;
     data['is_digital'] = isDigital;
-    data['licenses'] = licenses;
-    data['attachments'] = attachments;
+    data['licenses'] = licenses?.toJson();
+    data['attachments'] = attachments?.map((item) => item.toJson()).toList();
+    data['license_download_link'] = licenseDownloadUrl;
     return data;
   }
 }
@@ -390,13 +426,13 @@ class Rider {
   late final String longitude;
 
   Rider.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    name = json['name'];
-    phone = json['phone'];
-    profilePhoto = json['profile_photo'];
-    assignedAt = json['assigned_at'];
-    latitude = json['latitude'];
-    longitude = json['longitude'];
+    id = int.parse(json['id'].toString());
+    name = json['name']?.toString() ?? '';
+    phone = json['phone']?.toString() ?? '';
+    profilePhoto = json['profile_photo']?.toString() ?? '';
+    assignedAt = json['assigned_at']?.toString() ?? '';
+    latitude = json['latitude']?.toString() ?? '';
+    longitude = json['longitude']?.toString() ?? '';
   }
 
   Map<String, dynamic> toJson() {

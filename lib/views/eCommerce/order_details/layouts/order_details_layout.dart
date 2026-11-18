@@ -136,15 +136,18 @@ class _OrderDetailsLayoutState extends ConsumerState<OrderDetailsLayout> {
             data: (orderDetails) => Column(
               children: [
                 Gap(8.h),
-                orderDetails.data.order.orderStatus == 'On The Way'
+                orderDetails.data.order.orderStatus == 'On The Way' &&
+                    orderDetails.data.order.address?.latitude != null &&
+                    orderDetails.data.order.address?.longitude != null &&
+                    orderDetails.data.order.rider != null
                     ? SizedBox(
                         height: 300,
                         width: double.infinity,
                         child: EcommerceOrderTrackLayout(
                           customerLatitude:
-                              orderDetails.data.order.address.latitude,
+                              orderDetails.data.order.address?.latitude,
                           customerLongitude:
-                              orderDetails.data.order.address.longitude,
+                              orderDetails.data.order.address?.longitude,
                           riderLatitude: double.tryParse(
                               orderDetails.data.order.rider?.latitude ?? ''),
                           riderLongitude: double.tryParse(
@@ -228,7 +231,16 @@ class _OrderDetailsLayoutState extends ConsumerState<OrderDetailsLayout> {
               ],
             ),
             error: ((error, stackTrace) => Center(
-                  child: Text(error.toString()),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Text('Unable to load order details. Please try again.'),
+                      TextButton(
+                        onPressed: () => ref.invalidate(orderDetailsControllerProvider(widget.orderId)),
+                        child: const Text('Retry'),
+                      ),
+                    ],
+                  ),
                 )),
             loading: () => const Center(
               child: CircularProgressIndicator(),
@@ -453,6 +465,8 @@ class _OrderDetailsLayoutState extends ConsumerState<OrderDetailsLayout> {
     required BuildContext context,
     required OrderDetails orderDetails,
   }) {
+    final seller = orderDetails.data.order.shop;
+    if (seller == null) return const SizedBox.shrink();
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 14.h),
       color: GlobalFunction.getContainerColor(),
@@ -497,7 +511,7 @@ class _OrderDetailsLayoutState extends ConsumerState<OrderDetailsLayout> {
                                       borderRadius: BorderRadius.circular(5.r),
                                       child: CachedNetworkImage(
                                         imageUrl:
-                                            orderDetails.data.order.shop.logo,
+                                            seller.logo,
                                         height: 24.h,
                                         width: 24.w,
                                         fit: BoxFit.cover,
@@ -508,7 +522,7 @@ class _OrderDetailsLayoutState extends ConsumerState<OrderDetailsLayout> {
                                   Flexible(
                                     flex: 5,
                                     child: Text(
-                                      orderDetails.data.order.shop.name,
+                                      seller.name,
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
                                       style: AppTextStyle(context)
@@ -534,7 +548,7 @@ class _OrderDetailsLayoutState extends ConsumerState<OrderDetailsLayout> {
                                 ),
                                 Gap(5.w),
                                 Text(
-                                  orderDetails.data.order.shop.rating
+                                  seller.rating
                                       .toString(),
                                   style: AppTextStyle(context)
                                       .bodyTextSmall
@@ -555,15 +569,15 @@ class _OrderDetailsLayoutState extends ConsumerState<OrderDetailsLayout> {
                   final saveUser =
                       await ref.read(hiveServiceProvider).getUserInfo();
                   final shopModel = shop.Shop(
-                    id: orderDetails.data.order.shop.id,
-                    name: orderDetails.data.order.shop.name,
-                    logo: orderDetails.data.order.shop.logo,
+                    id: seller.id,
+                    name: seller.name,
+                    logo: seller.logo,
                   );
 
                   final response = await ref
                       .read(storeMessageControllerProvider.notifier)
                       .storeMessage(
-                        shopId: orderDetails.data.order.shop.id,
+                        shopId: seller.id,
                         userId: saveUser!.id!,
 
                         // productId: productDetails.product.id,
