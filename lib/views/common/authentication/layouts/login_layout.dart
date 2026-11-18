@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -29,6 +31,7 @@ class LoginLayout extends StatefulWidget {
 }
 
 class _LoginLayoutState extends State<LoginLayout> {
+  bool _isGoogleSigningIn = false;
   final TextEditingController emailController = TextEditingController();
 
   final TextEditingController passwordController = TextEditingController();
@@ -36,6 +39,31 @@ class _LoginLayoutState extends State<LoginLayout> {
   final List<FocusNode> fNodes = [FocusNode(), FocusNode()];
 
   final GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();
+
+  Future<void> _loginWithGoogle(WidgetRef ref) async {
+    if (_isGoogleSigningIn || ref.read(authControllerProvider)) return;
+    FocusScope.of(context).unfocus();
+    setState(() => _isGoogleSigningIn = true);
+    try {
+      final response = await ref
+          .read(authControllerProvider.notifier)
+          .loginWithGoogle();
+      if (!mounted) return;
+      if (response.isSuccess) {
+        unawaited(ref.read(addressControllerProvider.notifier).getAddress());
+        context.nav.pushNamedAndRemoveUntil(
+          Routes.getCoreRouteName(AppConstants.appServiceName),
+          (route) => false,
+        );
+      } else if (response.message.isNotEmpty) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(response.message)));
+      }
+    } finally {
+      if (mounted) setState(() => _isGoogleSigningIn = false);
+    }
+  }
 
   @override
   void initState() {
@@ -49,6 +77,9 @@ class _LoginLayoutState extends State<LoginLayout> {
   void dispose() {
     emailController.dispose();
     passwordController.dispose();
+    for (final node in fNodes) {
+      node.dispose();
+    }
     super.dispose();
   }
 
@@ -65,9 +96,9 @@ class _LoginLayoutState extends State<LoginLayout> {
               children: [
                 Text(
                   S.of(context).dontHaveAccount,
-                  style: AppTextStyle(context).bodyText.copyWith(
-                        fontWeight: FontWeight.w700,
-                      ),
+                  style: AppTextStyle(
+                    context,
+                  ).bodyText.copyWith(fontWeight: FontWeight.w700),
                 ),
                 Gap(5.w),
                 GestureDetector(
@@ -75,11 +106,11 @@ class _LoginLayoutState extends State<LoginLayout> {
                   child: Text(
                     S.of(context).signUp,
                     style: AppTextStyle(context).bodyText.copyWith(
-                          fontWeight: FontWeight.w700,
-                          color: colors(context).primaryColor,
-                        ),
+                      fontWeight: FontWeight.w700,
+                      color: colors(context).primaryColor,
+                    ),
                   ),
-                )
+                ),
               ],
             ),
           ),
@@ -90,10 +121,7 @@ class _LoginLayoutState extends State<LoginLayout> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                buildHeader(context),
-                buildBody(context),
-              ],
+              children: [buildHeader(context), buildBody(context)],
             ),
           ),
         ),
@@ -115,33 +143,27 @@ class _LoginLayoutState extends State<LoginLayout> {
             color: colors(context).accentColor ?? EcommerceAppColor.offWhite,
             blurRadius: 10,
             spreadRadius: 2,
-            offset: const Offset(
-              0,
-              2,
-            ),
-          )
+            offset: const Offset(0, 2),
+          ),
         ],
       ),
-      child: const Center(
-        child: AppLogo(
-          isAnimation: true,
-        ),
-      ),
+      child: const Center(child: AppLogo(isAnimation: true)),
     );
   }
 
   Widget buildBody(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20.w)
-          .copyWith(bottom: 20.h, top: 40.h),
+      padding: EdgeInsets.symmetric(
+        horizontal: 20.w,
+      ).copyWith(bottom: 20.h, top: 40.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             S.of(context).welcomeBack,
-            style: AppTextStyle(context)
-                .title
-                .copyWith(fontWeight: FontWeight.bold),
+            style: AppTextStyle(
+              context,
+            ).title.copyWith(fontWeight: FontWeight.bold),
           ),
           Gap(20.h),
           CustomTextFormField(
@@ -158,35 +180,38 @@ class _LoginLayoutState extends State<LoginLayout> {
             ),
           ),
           Gap(20.h),
-          Consumer(builder: (context, ref, _) {
-            return CustomTextFormField(
-              name: S.of(context).password,
-              hintText: S.of(context).password,
-              textInputType: TextInputType.text,
-              focusNode: fNodes[1],
-              controller: passwordController,
-              textInputAction: TextInputAction.done,
-              obscureText: ref.watch(obscureText1),
-              widget: IconButton(
-                splashColor: Colors.transparent,
-                onPressed: () {
-                  ref.read(obscureText1.notifier).state =
-                      !ref.read(obscureText1);
-                },
-                icon: Icon(
-                  !ref.watch(obscureText1)
-                      ? Icons.visibility
-                      : Icons.visibility_off,
-                  color: colors(context).hintTextColor,
-                ),
-              ),
-              validator: (value) => GlobalFunction.passwordValidator(
-                value: value!,
+          Consumer(
+            builder: (context, ref, _) {
+              return CustomTextFormField(
+                name: S.of(context).password,
                 hintText: S.of(context).password,
-                context: context,
-              ),
-            );
-          }),
+                textInputType: TextInputType.text,
+                focusNode: fNodes[1],
+                controller: passwordController,
+                textInputAction: TextInputAction.done,
+                obscureText: ref.watch(obscureText1),
+                widget: IconButton(
+                  splashColor: Colors.transparent,
+                  onPressed: () {
+                    ref.read(obscureText1.notifier).state = !ref.read(
+                      obscureText1,
+                    );
+                  },
+                  icon: Icon(
+                    !ref.watch(obscureText1)
+                        ? Icons.visibility
+                        : Icons.visibility_off,
+                    color: colors(context).hintTextColor,
+                  ),
+                ),
+                validator: (value) => GlobalFunction.passwordValidator(
+                  value: value!,
+                  hintText: S.of(context).password,
+                  context: context,
+                ),
+              );
+            },
+          ),
           Gap(20.h),
           Align(
             alignment: Alignment.bottomRight,
@@ -202,39 +227,48 @@ class _LoginLayoutState extends State<LoginLayout> {
             ),
           ),
           Gap(30.h),
-          Consumer(builder: (context, ref, _) {
-            return ref.watch(authControllerProvider)
-                ? const Center(
-                    child: CircularProgressIndicator(),
-                  )
-                : CustomButton(
-                    buttonText: S.of(context).login,
-                    onPressed: () {
-                      FocusScope.of(context).unfocus();
-                      if (formKey.currentState!.validate()) {
-                        ref
-                            .read(authControllerProvider.notifier)
-                            .login(
-                              phone: emailController.text,
-                              password: passwordController.text,
-                            )
-                            .then((response) {
-                          if (!context.mounted) return;
-                          ref
-                              .read(addressControllerProvider.notifier)
-                              .getAddress();
-                          if (response.isSuccess) {
-                            context.nav.pushNamed(Routes.getCoreRouteName(
-                                AppConstants.appServiceName));
-                          }
-                        });
-                      }
-                    },
-                  );
-          }),
+          Consumer(
+            builder: (context, ref, _) {
+              final isAuthenticating = ref.watch(authControllerProvider);
+              return isAuthenticating && !_isGoogleSigningIn
+                  ? const Center(child: CircularProgressIndicator())
+                  : CustomButton(
+                      buttonText: S.of(context).login,
+                      onPressed: isAuthenticating
+                          ? null
+                          : () {
+                              FocusScope.of(context).unfocus();
+                              if (formKey.currentState!.validate()) {
+                                ref
+                                    .read(authControllerProvider.notifier)
+                                    .login(
+                                      phone: emailController.text,
+                                      password: passwordController.text,
+                                    )
+                                    .then((response) {
+                                      if (!context.mounted) return;
+                                      ref
+                                          .read(
+                                            addressControllerProvider.notifier,
+                                          )
+                                          .getAddress();
+                                      if (response.isSuccess) {
+                                        context.nav.pushNamed(
+                                          Routes.getCoreRouteName(
+                                            AppConstants.appServiceName,
+                                          ),
+                                        );
+                                      }
+                                    });
+                              }
+                            },
+                    );
+            },
+          ),
           Consumer(
             builder: (context, ref, _) {
               ref.watch(masterControllerProvider);
+              final isAuthenticating = ref.watch(authControllerProvider);
               final googleLoginEnabled = ref
                   .read(masterControllerProvider.notifier)
                   .materModel
@@ -247,27 +281,31 @@ class _LoginLayoutState extends State<LoginLayout> {
                 return const SizedBox.shrink();
               }
 
-              return Center(
-                child: Padding(
-                  padding: EdgeInsets.only(top: 20.h),
-                  child: Semantics(
-                    label: 'Google login',
-                    image: true,
-                    child: Container(
-                      width: 48.r,
-                      height: 48.r,
-                      padding: EdgeInsets.all(12.r),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Theme.of(context).scaffoldBackgroundColor,
-                        border: Border.all(
-                          color: colors(context).hintTextColor ??
-                              EcommerceAppColor.lightGray,
-                        ),
-                      ),
-                      child: SvgPicture.asset('assets/svg/google.svg'),
+              return Padding(
+                padding: EdgeInsets.only(top: 20.h),
+                child: OutlinedButton.icon(
+                  key: const ValueKey('google-login-button'),
+                  onPressed: isAuthenticating || _isGoogleSigningIn
+                      ? null
+                      : () => _loginWithGoogle(ref),
+                  style: OutlinedButton.styleFrom(
+                    minimumSize: Size(double.infinity, 50.h),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(50.r),
                     ),
                   ),
+                  icon: _isGoogleSigningIn
+                      ? const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        )
+                      : SvgPicture.asset(
+                          'assets/svg/google.svg',
+                          width: 20,
+                          height: 20,
+                        ),
+                  label: const Text('Continue with Google'),
                 ),
               );
             },
@@ -295,7 +333,7 @@ class _LoginLayoutState extends State<LoginLayout> {
                 ),
               );
             },
-          )
+          ),
         ],
       ),
     );

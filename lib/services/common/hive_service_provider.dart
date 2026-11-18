@@ -47,7 +47,7 @@ class HiveService {
   // save access token
   Future saveUserAuthToken({required String authToken}) async {
     final authBox = await Hive.openBox(AppConstants.authBox);
-    authBox.put(AppConstants.authToken, authToken);
+    await authBox.put(AppConstants.authToken, authToken);
   }
 
   // save app local
@@ -89,7 +89,7 @@ class HiveService {
   // save user information
   Future saveUserInfo({required User userInfo}) async {
     final userBox = await Hive.openBox(AppConstants.userBox);
-    userBox.put(AppConstants.userData, userInfo.toMap());
+    await userBox.put(AppConstants.userData, userInfo.toMap());
   }
 
   // get user information

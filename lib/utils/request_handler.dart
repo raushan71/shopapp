@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:itrsp_shop/config/app_constants.dart';
@@ -16,8 +17,9 @@ class ApiInterceptors {
   }
 
   static void _addLoggerInterceptor(Dio dio) {
+    if (!kDebugMode) return;
     dio.interceptors.add(PrettyDioLogger(
-      requestHeader: true,
+      requestHeader: false,
       requestBody: true,
       responseBody: true,
       responseHeader: false,

@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "125070104915-5ks4uq8eiaa90htld1g7i4v6btl9gdak.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.itrsp.shop",
+            "certificate_hash": "e3304e5aceba9e6155966d4c7e39184b9cea07fd"
+          }
+        },
+        {
           "client_id": "125070104915-7vlbf5ap8dp6iotscknv30qihsiqcnaq.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

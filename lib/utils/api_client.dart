@@ -79,8 +79,7 @@ class ApiClient {
 
   void updateToken({required String token}) {
     defaultHeaders[HttpHeaders.authorizationHeader] = 'Bearer $token';
-    debugPrint(
-        'Update Token:${defaultHeaders[HttpHeaders.authorizationHeader]}');
+    debugPrint('Authentication token updated.');
   }
 }
 

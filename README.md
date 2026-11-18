@@ -5,6 +5,33 @@ eShop shopping application.
 The installed app display name is `eShop`. The Flutter package is `itrsp_shop`,
 and the Android application ID and iOS bundle ID are `com.itrsp.shop`.
 
+## Google login
+
+The login screen's **Continue with Google** button opens the native account
+picker on Android and iOS. Its one-time server authorization code is sent to
+`POST /api/auth/google/token`. Only the shop backend's returned user and access
+token establish the app session; the app does not create a Firebase Auth session.
+
+Google login must be enabled in the shop admin settings. The Google web OAuth
+client ID returned by `/api/master` must belong to the same Google project as
+the native apps. Keep the OAuth client secret on the backend.
+
+The Firebase Android app `com.itrsp.shop` in `shop-f9ed5` now has the existing
+debug and release certificates registered. `android/app/google-services.json`
+includes both Android OAuth clients. Reuse the current release keystore in
+GitHub Actions. If the signing key changes, register its fingerprints and
+download the configuration again. For a future Play Store installation, also
+register the Google Play app signing certificate (which can differ from the
+upload certificate).
+
+The iOS callback scheme in `ios/Runner/Info.plist` matches the reversed OAuth
+client ID in `ios/Runner/GoogleService-Info.plist`.
+
+The Google sign-in dependencies require Dart 3.9 or later; the GitHub workflow's
+Flutter 3.35.5 satisfies this. The Android implementation is pinned to 7.2.2 to
+retain Android 21 support with that toolchain. Login regression tests run with
+`flutter test test/google_login_test.dart` and also run in the release workflow.
+
 ## Getting Started
 
 Generate image code

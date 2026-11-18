@@ -2,11 +2,15 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:itrsp_shop/controllers/common/master_controller.dart';
 import 'package:itrsp_shop/models/eCommerce/authentication/sign_up.dart';
 import 'package:itrsp_shop/models/eCommerce/authentication/user.dart';
 import 'package:itrsp_shop/models/eCommerce/common/common_response.dart';
 import 'package:itrsp_shop/services/common/hive_service_provider.dart';
+import 'package:itrsp_shop/services/common/google_sign_in_service.dart';
 import 'package:itrsp_shop/services/eCommerce/auth_service/auth_service.dart';
+import 'package:itrsp_shop/services/eCommerce/auth_service/google_auth_service.dart';
 import 'package:itrsp_shop/utils/api_client.dart';
 
 final authControllerProvider =
@@ -15,6 +19,58 @@ final authControllerProvider =
 class AuthController extends StateNotifier<bool> {
   final Ref ref;
   AuthController(this.ref) : super(false);
+
+  Future<CommonResponse> loginWithGoogle() async {
+    if (state) return CommonResponse(isSuccess: false, message: '');
+    final settings = ref
+        .read(masterControllerProvider.notifier)
+        .materModel
+        .data
+        .socialAuths
+        .google;
+    final clientId = settings.clientId?.trim();
+    if (!settings.isActive || clientId == null || clientId.isEmpty) {
+      return CommonResponse(
+        isSuccess: false,
+        message:
+            'Google sign-in is not available right now. Please try again later.',
+      );
+    }
+
+    state = true;
+    try {
+      final code = await ref
+          .read(googleSignInServiceProvider)
+          .requestAuthorizationCode(serverClientId: clientId);
+      if (code == null) return CommonResponse(isSuccess: false, message: '');
+      final session = await ref
+          .read(googleAuthServiceProvider)
+          .exchangeAuthorizationCode(code: code);
+      final storage = ref.read(hiveServiceProvider);
+      await storage.saveUserInfo(userInfo: session.user);
+      await storage.saveUserAuthToken(authToken: session.accessToken);
+      ref.read(apiClientProvider).updateToken(token: session.accessToken);
+      return CommonResponse(isSuccess: true, message: session.message);
+    } on GoogleSignInException catch (error) {
+      if (error.code == GoogleSignInExceptionCode.canceled) {
+        return CommonResponse(isSuccess: false, message: '');
+      }
+      debugPrint('Google sign-in failed: ${error.code.name}');
+      return CommonResponse(
+        isSuccess: false,
+        message: 'Google sign-in could not be completed. Please try again.',
+      );
+    } on GoogleLoginException catch (error) {
+      return CommonResponse(isSuccess: false, message: error.message);
+    } catch (_) {
+      return CommonResponse(
+        isSuccess: false,
+        message: 'Google sign-in could not be completed. Please try again.',
+      );
+    } finally {
+      state = false;
+    }
+  }
 
   Future<CommonResponse> singUp({required SingUp singUpInfo}) async {
     state = true;
