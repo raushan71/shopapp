@@ -11,14 +11,17 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:itrsp_shop/config/theme.dart';
 import 'package:itrsp_shop/controllers/common/master_controller.dart';
+import 'package:itrsp_shop/controllers/common/other_controller.dart';
 import 'package:itrsp_shop/controllers/eCommerce/address/address_controller.dart';
 import 'package:itrsp_shop/controllers/eCommerce/authentication/authentication_controller.dart';
 import 'package:itrsp_shop/generated/l10n.dart';
 import 'package:itrsp_shop/models/common/master_model.dart';
+import 'package:itrsp_shop/models/common/all_country_model/country.dart';
 import 'package:itrsp_shop/models/eCommerce/authentication/user.dart';
 import 'package:itrsp_shop/models/eCommerce/common/common_response.dart';
 import 'package:itrsp_shop/services/common/google_sign_in_service.dart';
 import 'package:itrsp_shop/services/common/hive_service_provider.dart';
+import 'package:itrsp_shop/services/common/other_service_provider.dart';
 import 'package:itrsp_shop/services/eCommerce/auth_service/google_auth_service.dart';
 import 'package:itrsp_shop/utils/api_client.dart';
 import 'package:itrsp_shop/views/common/authentication/layouts/login_layout.dart';
@@ -41,15 +44,22 @@ GoogleAuthSession session() => GoogleAuthSession(
 ProviderContainer loginContainer({
   bool active = true,
   String? clientId = webClientId,
+  Country? defaultCountry,
 }) => ProviderContainer(
   overrides: [
     masterControllerProvider.overrideWith(
-      (ref) => StubMasterController(ref, active, clientId),
+      (ref) => StubMasterController(
+        ref,
+        active,
+        clientId,
+        defaultCountry: defaultCountry,
+      ),
     ),
     googleSignInServiceProvider.overrideWith((ref) => StubGoogleSignIn()),
     googleAuthServiceProvider.overrideWith((ref) => StubGoogleAuth()),
     hiveServiceProvider.overrideWith((ref) => MemoryHiveService(ref)),
     addressControllerProvider.overrideWith((ref) => StubAddressController(ref)),
+    otherServiceProvider.overrideWith((ref) => StubProfileService(ref)),
   ],
 );
 
@@ -177,6 +187,49 @@ void main() {
   });
 
   test(
+    'new Google user receives the admin default country and dial code',
+    () async {
+      final container = loginContainer(
+        defaultCountry: Country(id: 77, name: 'India', phoneCode: '91'),
+      );
+      addTearDown(container.dispose);
+      final result = await container
+          .read(authControllerProvider.notifier)
+          .loginWithGoogle();
+      expect(result.isSuccess, isTrue);
+      final user =
+          (container.read(hiveServiceProvider) as MemoryHiveService).user;
+      expect(user?.country, 'India');
+      expect(user?.phoneCode, '91');
+      expect(user?.phone, isNull);
+    },
+  );
+
+  test(
+    'Google login refreshes an existing profile using the new shop token',
+    () async {
+      final container = loginContainer();
+      addTearDown(container.dispose);
+      final subscription = container.listen(
+        profileInfoControllerProvider,
+        (_, __) {},
+      );
+      addTearDown(subscription.close);
+      await Future<void>.delayed(Duration.zero);
+      expect(container.read(profileInfoControllerProvider).value?.id, 1);
+      final result = await container
+          .read(authControllerProvider.notifier)
+          .loginWithGoogle();
+      await Future<void>.delayed(Duration.zero);
+      expect(result.isSuccess, isTrue);
+      expect(container.read(profileInfoControllerProvider).value?.id, 42);
+      final profile =
+          container.read(otherServiceProvider) as StubProfileService;
+      expect(profile.headers, [null, 'Bearer backend-session-token']);
+    },
+  );
+
+  test(
     'API sends a server code to the shop endpoint, never a client identity',
     () async {
       final adapter = RecordingAdapter(sessionPayload());
@@ -298,10 +351,17 @@ void main() {
       native.onRequest = () => pending.future;
       await showLogin(tester, container);
       final button = find.byKey(const ValueKey('google-login-button'));
+      expect(native.prepareCalls, 1);
+      expect(native.calls, 0);
       await tester.ensureVisible(button);
       await tester.tap(button);
       await tester.pump();
       expect(native.calls, 1);
+      expect(
+        find.byKey(const ValueKey('google-login-progress')),
+        findsOneWidget,
+      );
+      expect(find.text('Signing you in…'), findsOneWidget);
       expect(tester.widget<OutlinedButton>(button).onPressed, isNull);
       expect(
         find.descendant(
@@ -315,6 +375,7 @@ void main() {
       await tester.pump();
       expect(tester.widget<OutlinedButton>(button).onPressed, isNotNull);
       expect(find.byType(SnackBar), findsNothing);
+      expect(find.byKey(const ValueKey('google-login-progress')), findsNothing);
       expect(tester.takeException(), isNull);
       await tester.pumpWidget(const SizedBox());
     },
@@ -329,6 +390,7 @@ void main() {
       final button = find.byKey(const ValueKey('google-login-button'));
       await tester.ensureVisible(button);
       await tester.tap(button);
+      await tester.pump();
       await tester.pump();
       await tester.pump(const Duration(seconds: 1));
       expect(find.text('Shop home'), findsOneWidget);
@@ -356,6 +418,36 @@ void main() {
     expect(tester.takeException(), isNull);
     await tester.pumpWidget(const SizedBox());
   });
+
+  testWidgets(
+    'progress stays visible after account selection until the shop session is ready',
+    (tester) async {
+      final container = loginContainer();
+      addTearDown(container.dispose);
+      final backend =
+          container.read(googleAuthServiceProvider) as StubGoogleAuth;
+      final pendingSession = Completer<GoogleAuthSession>();
+      backend.onExchange = () => pendingSession.future;
+      await showLogin(tester, container);
+      final button = find.byKey(const ValueKey('google-login-button'));
+      await tester.ensureVisible(button);
+      await tester.tap(button);
+      await tester.pump();
+      await tester.pump(const Duration(seconds: 2));
+      expect(backend.codes, ['one-time-code']);
+      expect(find.text('Signing you in…'), findsOneWidget);
+      expect(
+        find.byKey(const ValueKey('google-login-progress')),
+        findsOneWidget,
+      );
+      pendingSession.complete(session());
+      await tester.pump();
+      await tester.pump(const Duration(seconds: 1));
+      expect(find.text('Shop home'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+      await tester.pumpWidget(const SizedBox());
+    },
+  );
 }
 
 Future<void> showLogin(WidgetTester tester, ProviderContainer container) async {
@@ -390,7 +482,13 @@ Future<void> showLogin(WidgetTester tester, ProviderContainer container) async {
 }
 
 class StubMasterController extends MasterController {
-  StubMasterController(super.ref, this.active, this.clientId);
+  StubMasterController(
+    super.ref,
+    this.active,
+    this.clientId, {
+    this.defaultCountry,
+  });
+  final Country? defaultCountry;
   final bool active;
   final String? clientId;
   @override
@@ -407,6 +505,7 @@ class StubMasterController extends MasterController {
         'currencies': [],
         'payment_gateways': [],
         'multi_vendor': false,
+        'default_country': defaultCountry?.toMap(),
         'app_logo': '',
         'app_name': 'eShop',
         'web_logo': '',
@@ -428,8 +527,14 @@ class StubMasterController extends MasterController {
   }
 }
 
-class StubGoogleSignIn implements GoogleSignInService {
+class StubGoogleSignIn extends GoogleSignInService {
   int calls = 0;
+  int prepareCalls = 0;
+  @override
+  Future<void> prepare({required String serverClientId}) async {
+    prepareCalls++;
+  }
+
   String? clientId;
   Future<String?> Function() onRequest = () async => 'one-time-code';
   @override
@@ -443,12 +548,14 @@ class StubGoogleSignIn implements GoogleSignInService {
 class StubGoogleAuth extends GoogleAuthService {
   final codes = <String>[];
   GoogleLoginException? error;
+  Future<GoogleAuthSession> Function()? onExchange;
   @override
   Future<GoogleAuthSession> exchangeAuthorizationCode({
     required String code,
   }) async {
     codes.add(code);
     if (error != null) throw error!;
+    if (onExchange != null) return onExchange!();
     return session();
   }
 }
@@ -473,6 +580,25 @@ class StubAddressController extends AddressController {
   Future<CommonResponse> getAddress() async {
     calls++;
     return CommonResponse(isSuccess: true, message: '');
+  }
+}
+
+class StubProfileService extends OtherServiceProvider {
+  StubProfileService(super.ref);
+  final headers = <Object?>[];
+  @override
+  Future<Response> getProfileinfo() async {
+    final token = ref.read(apiClientProvider).defaultHeaders['authorization'];
+    headers.add(token);
+    return Response(
+      requestOptions: RequestOptions(path: '/profile'),
+      statusCode: 200,
+      data: {
+        'data': {
+          'user': {'id': token == null ? 1 : 42, 'name': 'Customer'},
+        },
+      },
+    );
   }
 }
 

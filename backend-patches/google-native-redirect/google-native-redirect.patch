@@ -1,0 +1,30 @@
+--- a/app/Http/Controllers/API/SocialAuthController.php
++++ b/app/Http/Controllers/API/SocialAuthController.php
+@@ -53,7 +53,7 @@
+ 
+         switch ($provider) {
+             case 'google':
+-                return $this->googleTokenExchange($request->code, $socialAuth);
++                return $this->googleTokenExchange($request->code, $socialAuth, $request);
+             case 'facebook':
+                 return $this->facebookTokenExchange($request->code, $socialAuth);
+             case 'apple':
+@@ -63,12 +63,16 @@
+         }
+     }
+ 
+-    private function googleTokenExchange($code, $socialAuth)
++    private function googleTokenExchange($code, $socialAuth, Request $request)
+     {
+         $client = new \Google_Client;
+         $client->setClientId($socialAuth->client_id);
+         $client->setClientSecret($socialAuth->client_secret);
+-        $client->setRedirectUri('postmessage');
++
++        // Omit the native redirect URI using null: the Google PHP library
++        // rejects an empty string. Keep the existing browser popup value.
++        $isNativeApp = in_array($request->input('device_type'), ['android', 'ios'], true);
++        $client->setRedirectUri($isNativeApp ? null : 'postmessage');
+ 
+         // Exchange the authorization code for an access token
+         $token = $client->fetchAccessTokenWithAuthCode($code);

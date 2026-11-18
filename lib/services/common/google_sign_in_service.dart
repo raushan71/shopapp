@@ -4,6 +4,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:itrsp_shop/firebase_options.dart';
 
 abstract class GoogleSignInService {
+  Future<void> prepare({required String serverClientId}) async {}
   Future<String?> requestAuthorizationCode({required String serverClientId});
 }
 
@@ -13,9 +14,7 @@ class NativeGoogleSignInService implements GoogleSignInService {
   final GoogleSignIn _signIn = GoogleSignIn.instance;
 
   @override
-  Future<String?> requestAuthorizationCode({
-    required String serverClientId,
-  }) async {
+  Future<void> prepare({required String serverClientId}) async {
     if (_serverClientId != null && _serverClientId != serverClientId) {
       throw StateError(
         'Google sign-in configuration changed. Restart the app.',
@@ -28,6 +27,13 @@ class NativeGoogleSignInService implements GoogleSignInService {
           : null,
       serverClientId: serverClientId,
     ));
+  }
+
+  @override
+  Future<String?> requestAuthorizationCode({
+    required String serverClientId,
+  }) async {
+    await prepare(serverClientId: serverClientId);
     if (!_signIn.supportsAuthenticate()) {
       throw UnsupportedError('Interactive Google sign-in is unavailable.');
     }
@@ -50,4 +56,9 @@ class NativeGoogleSignInService implements GoogleSignInService {
 
 final googleSignInServiceProvider = Provider<GoogleSignInService>(
   (ref) => NativeGoogleSignInService(),
+);
+
+final googleSignInPreparationProvider = FutureProvider.family<void, String>(
+  (ref, clientId) =>
+      ref.read(googleSignInServiceProvider).prepare(serverClientId: clientId),
 );

@@ -1,4 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:itrsp_shop/components/ecommerce/profile_avatar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -471,7 +471,7 @@ class _EcommerceMoreLayoutState extends ConsumerState<EcommerceMoreLayout> {
         builder: (context, box, _) {
           Map<dynamic, dynamic>? userInfo = box.get(AppConstants.userData);
           Map<String, dynamic> userInfoStringKeys =
-              userInfo!.cast<String, dynamic>();
+              userInfo?.cast<String, dynamic>() ?? <String, dynamic>{};
           final User user = User.fromMap(userInfoStringKeys);
           return _userInfoWidget(user, context);
         });
@@ -493,9 +493,9 @@ class _EcommerceMoreLayoutState extends ConsumerState<EcommerceMoreLayout> {
         children: [
           Flexible(
             flex: 2,
-            child: CircleAvatar(
-              radius: 36.sp,
-              backgroundImage: CachedNetworkImageProvider(user.profilePhoto!),
+            child: ProfileAvatar(
+              size: 72.sp,
+              imageUrl: user.profilePhoto,
             ),
           ),
           Gap(10.w),
@@ -505,7 +505,9 @@ class _EcommerceMoreLayoutState extends ConsumerState<EcommerceMoreLayout> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  user.name!,
+                  user.name?.trim().isNotEmpty == true
+                      ? user.name!
+                      : S.of(context).myProfile,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                   style: AppTextStyle(context)
@@ -514,7 +516,11 @@ class _EcommerceMoreLayoutState extends ConsumerState<EcommerceMoreLayout> {
                 ),
                 Gap(8.h),
                 Text(
-                  user.phone!,
+                  user.phone?.trim().isNotEmpty == true
+                      ? user.phone!
+                      : user.email ?? '',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: AppTextStyle(context).bodyTextSmall.copyWith(
                         color: EcommerceAppColor.white,
                         fontWeight: FontWeight.w400,

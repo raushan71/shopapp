@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:itrsp_shop/components/ecommerce/profile_avatar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -23,6 +23,7 @@ import 'package:itrsp_shop/routes.dart';
 import 'package:itrsp_shop/services/common/hive_service_provider.dart';
 import 'package:itrsp_shop/utils/context_less_navigation.dart';
 import 'package:itrsp_shop/utils/global_function.dart';
+import 'package:itrsp_shop/utils/user_country_defaults.dart';
 import 'package:itrsp_shop/views/common/authentication/components/country_model_bottom_sheet.dart';
 import 'package:itrsp_shop/views/common/authentication/layouts/confirm_otp_layout.dart';
 
@@ -42,21 +43,22 @@ class _ProfileLayoutState extends ConsumerState<ProfileLayout> {
   final GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();
   @override
   void initState() {
+    super.initState();
     initializeControllers();
     if (ref.read(selectedUserProfileImage) != null) {
       ref.refresh(selectedUserProfileImage.notifier).state;
     }
     ref.read(hiveServiceProvider).getUserInfo().then((userInfo) {
-      if (userInfo != null) {
-        nameController.text = userInfo.name!;
-        phoneController.text = userInfo.phone!;
+      if (mounted && userInfo != null) {
+        nameController.text = userInfo.name ?? '';
+        phoneController.text = userInfo.phone ?? '';
         emailController.text = userInfo.email ?? '';
         countryController.text = userInfo.country ?? '';
         phoneCodeController.text = userInfo.phoneCode ?? '';
+        _selectDefaultCountry();
         setState(() {});
       }
     });
-    super.initState();
   }
 
   void initializeControllers() {
@@ -67,16 +69,32 @@ class _ProfileLayoutState extends ConsumerState<ProfileLayout> {
     phoneCodeController = TextEditingController();
   }
 
+  void _selectDefaultCountry() {
+    final defaults = ref.read(masterControllerProvider.notifier).materModel.data.defaultCountry;
+    final user = withDefaultCountry(User.fromMap({
+      'country': countryController.text,
+      'phone_code': phoneCodeController.text,
+    }), defaults);
+    countryController.text = user.country ?? '';
+    phoneCodeController.text = user.phoneCode ?? '';
+  }
+
   @override
   void dispose() {
     nameController.dispose();
     phoneController.dispose();
     emailController.dispose();
+    countryController.dispose();
+    phoneCodeController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    ref.listen(masterControllerProvider, (_, __) {
+      if (mounted) setState(_selectDefaultCountry);
+    });
+    ref.watch(masterControllerProvider);
     final materModelData =
         ref.watch(masterControllerProvider.notifier).materModel.data;
     final isPhoneRequired = materModelData.phoneRequired;
@@ -158,33 +176,16 @@ class _ProfileLayoutState extends ConsumerState<ProfileLayout> {
                                         builder: (context, box, _) {
                                           Map<dynamic, dynamic>? userInfo =
                                               box.get(AppConstants.userData);
-                                          Map<String, dynamic>
-                                              userInfoStringKeys =
-                                              userInfo!.cast<String, dynamic>();
-                                          User user =
-                                              User.fromMap(userInfoStringKeys);
-                                          return Container(
-                                            height: 100.h,
-                                            width: 100.w,
-                                            decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              image: DecorationImage(
-                                                image: ref.watch(
-                                                            selectedUserProfileImage) !=
-                                                        null
-                                                    ? FileImage(
-                                                        File(ref
-                                                            .watch(
-                                                                selectedUserProfileImage
-                                                                    .notifier)
-                                                            .state!
-                                                            .path),
-                                                      ) as ImageProvider
-                                                    : CachedNetworkImageProvider(
-                                                        user.profilePhoto!),
-                                                fit: BoxFit.cover,
-                                              ),
-                                            ),
+                                          final avatarUser = userInfo == null
+                                              ? user
+                                              : User.fromMap(userInfo.cast<String, dynamic>());
+                                          final selectedImage = ref.watch(selectedUserProfileImage);
+                                          return ProfileAvatar(
+                                            size: 100.w,
+                                            imageUrl: avatarUser.profilePhoto,
+                                            image: selectedImage == null
+                                                ? null
+                                                : FileImage(File(selectedImage.path)),
                                           );
                                         },
                                       ),
@@ -242,7 +243,7 @@ class _ProfileLayoutState extends ConsumerState<ProfileLayout> {
                                             }
                                           } else if (registerOtpType ==
                                               'phone') {
-                                            if (user.email == null) {
+                                            if (user.phone?.trim().isNotEmpty != true) {
                                               GlobalFunction.showCustomSnackbar(
                                                   message:
                                                       "Please update your profile with phone number to verify your account",
@@ -447,6 +448,7 @@ class _ProfileLayoutState extends ConsumerState<ProfileLayout> {
                                               hintText:
                                                   S.of(context).phoneNumber,
                                               context: context,
+                                              isPhoneRequired: isPhoneRequired,
                                               minLength: phoneMinLength,
                                               maxLength: phoneMaxLength,
                                             ),
@@ -534,8 +536,18 @@ class _ProfileLayoutState extends ConsumerState<ProfileLayout> {
                   ),
                 );
               },
-              error: (error, stackTrace) =>
-                  Center(child: Text(error.toString())),
+              error: (error, stackTrace) => Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Text('Unable to load your profile. Please try again.'),
+                    TextButton(
+                      onPressed: () => ref.read(profileInfoControllerProvider.notifier).getProfileInfo(),
+                      child: const Text('Retry'),
+                    ),
+                  ],
+                ),
+              ),
               loading: () => const Center(child: CircularProgressIndicator()),
             ));
   }

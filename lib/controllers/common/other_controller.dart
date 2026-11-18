@@ -149,8 +149,10 @@ class ProfileInfoController extends StateNotifier<AsyncValue<User>> {
   Future<void> getProfileInfo() async {
     try {
       final response = await ref.read(otherServiceProvider).getProfileinfo();
+      if (!mounted) return;
       state = AsyncData(User.fromMap(response.data['data']['user']));
     } catch (error, stackTrace) {
+      if (!mounted) return;
       debugPrint(error.toString());
       state = AsyncError(error, stackTrace);
     }

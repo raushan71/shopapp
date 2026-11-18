@@ -1,0 +1,8 @@
+--- a/app/Http/Controllers/API/SocialAuthController.php
++++ b/app/Http/Controllers/API/SocialAuthController.php
+@@ -75,4 +75,4 @@
+-        $client->setRedirectUri($isNativeApp ? '' : 'postmessage');
++        $client->setRedirectUri($isNativeApp ? null : 'postmessage');
+ 
+         // Exchange the authorization code for an access token
+         $token = $client->fetchAccessTokenWithAuthCode($code);

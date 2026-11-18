@@ -20,6 +20,7 @@ import 'package:itrsp_shop/controllers/misc/misc_controller.dart';
 import 'package:itrsp_shop/generated/l10n.dart';
 import 'package:itrsp_shop/routes.dart';
 import 'package:itrsp_shop/services/common/hive_service_provider.dart';
+import 'package:itrsp_shop/services/common/google_sign_in_service.dart';
 import 'package:itrsp_shop/utils/context_less_navigation.dart';
 import 'package:itrsp_shop/utils/global_function.dart';
 
@@ -44,12 +45,17 @@ class _LoginLayoutState extends State<LoginLayout> {
     if (_isGoogleSigningIn || ref.read(authControllerProvider)) return;
     FocusScope.of(context).unfocus();
     setState(() => _isGoogleSigningIn = true);
+    var openingShop = false;
     try {
+      // Paint the progress UI before the SDK presents its native account UI.
+      await WidgetsBinding.instance.endOfFrame;
+      if (!mounted) return;
       final response = await ref
           .read(authControllerProvider.notifier)
           .loginWithGoogle();
       if (!mounted) return;
       if (response.isSuccess) {
+        openingShop = true;
         unawaited(ref.read(addressControllerProvider.notifier).getAddress());
         context.nav.pushNamedAndRemoveUntil(
           Routes.getCoreRouteName(AppConstants.appServiceName),
@@ -61,7 +67,7 @@ class _LoginLayoutState extends State<LoginLayout> {
         ).showSnackBar(SnackBar(content: Text(response.message)));
       }
     } finally {
-      if (mounted) setState(() => _isGoogleSigningIn = false);
+      if (mounted && !openingShop) setState(() => _isGoogleSigningIn = false);
     }
   }
 
@@ -87,44 +93,68 @@ class _LoginLayoutState extends State<LoginLayout> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
-      child: Scaffold(
-        bottomNavigationBar: SizedBox(
-          height: 60.h,
-          child: Center(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  S.of(context).dontHaveAccount,
-                  style: AppTextStyle(
-                    context,
-                  ).bodyText.copyWith(fontWeight: FontWeight.w700),
+      child: Stack(
+        children: [
+          Scaffold(
+            bottomNavigationBar: SizedBox(
+              height: 60.h,
+              child: Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      S.of(context).dontHaveAccount,
+                      style: AppTextStyle(
+                        context,
+                      ).bodyText.copyWith(fontWeight: FontWeight.w700),
+                    ),
+                    Gap(5.w),
+                    GestureDetector(
+                      onTap: () => context.nav.pushNamed(Routes.singUp),
+                      child: Text(
+                        S.of(context).signUp,
+                        style: AppTextStyle(context).bodyText.copyWith(
+                          fontWeight: FontWeight.w700,
+                          color: colors(context).primaryColor,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                Gap(5.w),
-                GestureDetector(
-                  onTap: () => context.nav.pushNamed(Routes.singUp),
-                  child: Text(
-                    S.of(context).signUp,
-                    style: AppTextStyle(context).bodyText.copyWith(
-                      fontWeight: FontWeight.w700,
-                      color: colors(context).primaryColor,
+              ),
+            ),
+            body: SingleChildScrollView(
+              child: FormBuilder(
+                key: formKey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [buildHeader(context), buildBody(context)],
+                ),
+              ),
+            ),
+          ),
+          if (_isGoogleSigningIn)
+            Positioned.fill(
+              child: PopScope(
+                canPop: false,
+                child: Material(
+                  key: const ValueKey('google-login-progress'),
+                  color: Theme.of(context).scaffoldBackgroundColor,
+                  child: const Center(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        CircularProgressIndicator(),
+                        SizedBox(height: 20),
+                        Text('Signing you in…'),
+                      ],
                     ),
                   ),
                 ),
-              ],
+              ),
             ),
-          ),
-        ),
-        body: SingleChildScrollView(
-          child: FormBuilder(
-            key: formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [buildHeader(context), buildBody(context)],
-            ),
-          ),
-        ),
+        ],
       ),
     );
   }
@@ -269,16 +299,21 @@ class _LoginLayoutState extends State<LoginLayout> {
             builder: (context, ref, _) {
               ref.watch(masterControllerProvider);
               final isAuthenticating = ref.watch(authControllerProvider);
-              final googleLoginEnabled = ref
+              final googleSettings = ref
                   .read(masterControllerProvider.notifier)
                   .materModel
                   .data
                   .socialAuths
-                  .google
-                  .isActive;
+                  .google;
+              final googleLoginEnabled = googleSettings.isActive;
 
               if (!googleLoginEnabled) {
                 return const SizedBox.shrink();
+              }
+
+              final clientId = googleSettings.clientId?.trim();
+              if (clientId != null && clientId.isNotEmpty) {
+                ref.watch(googleSignInPreparationProvider(clientId));
               }
 
               return Padding(

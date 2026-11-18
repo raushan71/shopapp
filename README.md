@@ -12,6 +12,11 @@ picker on Android and iOS. Its one-time server authorization code is sent to
 `POST /api/auth/google/token`. Only the shop backend's returned user and access
 token establish the app session; the app does not create a Firebase Auth session.
 
+For the server-side `redirect_uri_mismatch` fix, see
+[`backend-patches/google-native-redirect`](backend-patches/google-native-redirect/README.md).
+The included controller uses a null Google token-exchange redirect URI for
+Android/iOS requests and preserves the website's existing popup flow.
+
 Google login must be enabled in the shop admin settings. The Google web OAuth
 client ID returned by `/api/master` must belong to the same Google project as
 the native apps. Keep the OAuth client secret on the backend.

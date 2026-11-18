@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:itrsp_shop/controllers/common/master_controller.dart';
+import 'package:itrsp_shop/controllers/common/other_controller.dart';
 import 'package:itrsp_shop/models/eCommerce/authentication/sign_up.dart';
 import 'package:itrsp_shop/models/eCommerce/authentication/user.dart';
 import 'package:itrsp_shop/models/eCommerce/common/common_response.dart';
@@ -12,6 +13,7 @@ import 'package:itrsp_shop/services/common/google_sign_in_service.dart';
 import 'package:itrsp_shop/services/eCommerce/auth_service/auth_service.dart';
 import 'package:itrsp_shop/services/eCommerce/auth_service/google_auth_service.dart';
 import 'package:itrsp_shop/utils/api_client.dart';
+import 'package:itrsp_shop/utils/user_country_defaults.dart';
 
 final authControllerProvider =
     StateNotifierProvider<AuthController, bool>((ref) => AuthController(ref));
@@ -47,9 +49,13 @@ class AuthController extends StateNotifier<bool> {
           .read(googleAuthServiceProvider)
           .exchangeAuthorizationCode(code: code);
       final storage = ref.read(hiveServiceProvider);
-      await storage.saveUserInfo(userInfo: session.user);
+      final defaultCountry = ref.read(masterControllerProvider.notifier).materModel.data.defaultCountry;
+      await storage.saveUserInfo(userInfo: withDefaultCountry(session.user, defaultCountry));
       await storage.saveUserAuthToken(authToken: session.accessToken);
       ref.read(apiClientProvider).updateToken(token: session.accessToken);
+      if (ref.exists(profileInfoControllerProvider)) {
+        ref.invalidate(profileInfoControllerProvider);
+      }
       return CommonResponse(isSuccess: true, message: session.message);
     } on GoogleSignInException catch (error) {
       if (error.code == GoogleSignInExceptionCode.canceled) {

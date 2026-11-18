@@ -37,7 +37,6 @@ class _EcommerceDashboardLayoutState
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       ref.read(hiveServiceProvider).getAuthToken().then((token) {
         if (token != null) {
-          print('This is a token: $token');
           ref.read(cartController.notifier).getAllCarts();
         }
       });
